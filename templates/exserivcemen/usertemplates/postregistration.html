@@ -1,0 +1,29 @@
+{% extends 'exserivcemen/usertemplates/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="background-color: aliceblue">
+    <form method="post">
+
+        <table border="1">
+            <p>Service Details</p>
+    {{ form1 }}
+        </table>
+        <table border="1">
+            <p>Personal Details</p>
+    {{ form2 }}
+        </table>
+        <table border="1">
+            <p>Employment Details</p>
+    {{ form3 }}
+        </table>
+        <table border="1">
+            <p>Spouse Details</p>
+    {{ form4 }}
+        </table>
+        {% csrf_token %}
+        <input type="submit" class="btn btn-primary" value="submit">
+    </form>
+</div>
+
+{% endblock %}
