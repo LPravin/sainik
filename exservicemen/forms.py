@@ -1,4 +1,6 @@
 from django import forms
+from django.forms import ModelForm
+from .models import *
 
 
 class Login(forms.Form):
@@ -6,113 +8,74 @@ class Login(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput())
 
 
-class Registration(forms.Form):
+class ApplyForm(ModelForm):
+    YesNo = [
+        ('Y', 'Yes'),
+        ('N', 'No')
+    ]
     name = forms.CharField(max_length=100)
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
-    confirm_password = forms.CharField(widget=forms.PasswordInput)
-    service_number = forms.CharField(max_length=9)
-    service = forms.ChoiceField()
-    rank = forms.ChoiceField()
-    unit = forms.ChoiceField()
-    Discharge_book = forms.ImageField()
-    ppo = forms.ImageField()
-    residence = forms.ImageField()
-
-
-class Service(forms.Form):
+    mail = forms.CharField(max_length=20)
+    password = forms.CharField(max_length=16)
+    confirm_password = forms.CharField(max_length=16)
     reg_type = forms.ChoiceField()
+    have_esm = forms.ChoiceField(choices=YesNo, label="Do you have ESM Identity Card?", required=False)
+    esm_no = forms.CharField(max_length=10, label="Enter ESM No:")
+    expiry_date = forms.DateField()
+    death_certificate = forms.ImageField()
+    reg_type2 = forms.ChoiceField()
     service = forms.ChoiceField()
     corps = forms.ChoiceField()
+    records = forms.ChoiceField()
     group = forms.ChoiceField()
     trade = forms.ChoiceField()
-    service_no = forms.CharField(max_length=9)
-    rank_category = forms.ChoiceField
+    rank_category = forms.ChoiceField()
     rank = forms.ChoiceField()
-    reg_date = forms.DateField()
-    enrollment_date = forms.DateField()
-    world_war_2 = forms.RadioSelect()
-    operations_attended = forms.CharField(max_length=100)
-    decorations = forms.CharField(max_length=100)
+    service_no = forms.CharField(max_length=9)
+    state = forms.ChoiceField()
+    district = forms.ChoiceField()
+    discharge_book = forms.ImageField()
+    ppo_book = forms.ImageField()
+    residence_certificate = forms.ImageField()
+
+    class Meta:
+        model = ServiceDetail
+        fields = []
+        field_order = []
 
 
-class Personal(forms.Form):
-    Gender = forms.RadioSelect()
-    Date_of_birth = forms.DateField()
-    Mother_name = forms.CharField(max_length=100)
-    Father_name = forms.CharField(max_length=100)
-    Religion = forms.ChoiceField()
-    Caste = forms.CharField()
-    Caste_category = forms.ChoiceField()
-    Birth_place = forms.CharField(max_length=50)
-    Birth_state = forms.ChoiceField()
-    Birth_district = forms.ChoiceField()
-    Aadhar_no = forms.CharField(max_length=12, min_length=12)
-    voter_id_no = forms.CharField(max_length=12, min_length=10)
-    pan_no = forms.CharField(max_length=10)
-    csd_no = forms.CharField(max_length=19)
-    echs_no = forms.CharField(max_length=14)
-    identification_mark_1 = forms.CharField(max_length=70)
-    identification_mark_2 = forms.CharField(max_length=70)
-    Expiry_of_esm = forms.DateField()
-    Unit_last_served = forms.ChoiceField()
-    Discharge_date = forms.DateField()
-    Discharge_reason = forms.ChoiceField()
-    Medical_category_while_discharge = forms.ChoiceField()
-    Character_while_discharge = forms.ChoiceField()
-    Discharge_book_no = forms.CharField(max_length=8)
-    PPO_no = forms.CharField(max_length=8)
-    Pension_sanctioned = forms.CharField(max_length=6)
-    Present_pension = forms.CharField(max_length=6)
-    disability_pension = forms.CharField(max_length=6)
-    disability_percent = forms.CharField(max_length=3)
-    pension_account_number = forms.CharField(max_length=20)
-    bank_name = forms.ChoiceField()
-    branch_name = forms.ChoiceField()
-    House_no = forms.CharField(max_length=7)
-    House_name = forms.CharField(max_length=20)
-    Street_name = forms.CharField(max_length=30)
-    City = forms.CharField(max_length=30)
-    District = forms.ChoiceField()
-    State = forms.ChoiceField()
-    Pincode = forms.CharField(max_length=6)
-    Telephone = forms.CharField(max_length=12)
-    Mobile = forms.CharField(max_length=10)
-    Email = forms.EmailField(label="Email")
+class ServiceForm(ModelForm):
+
+    class Meta:
+        model = ServiceDetail
+        exclude = ['zila_board_id', 'ref']
+        widgets = {
+            'reg_date': forms.DateInput(attrs={'type': 'date'}),
+        }
 
 
-class Employment(forms.Form):
-    Employment_status = forms.ChoiceField()
-    Willing_for_job = forms.RadioSelect()
-    Willing_for_security_job = forms.RadioSelect()
-    Civil_qualification = forms.ChoiceField()
-    Equivalent_test_passed_in_Service = forms.ChoiceField()
-    Course_completed_in_relation_with_firesafety_and_security = forms.CharField(max_length=50)
-    Employer = forms.CharField(max_length=30)
-    Monthly_income = forms.CharField(max_length=6)
-    department = forms.CharField()
-    Civil_retirement_date = forms.DateField()
-    Civil_PPO_number = forms.CharField(max_length=8)
+class PersonalForm(ModelForm):
+
+    class Meta:
+        model = PersonalDetail
+        exclude = ['ref']
 
 
-class Spouse(forms.Form):
-    Marital_status = forms.ChoiceField()
-    Date_of_marriage = forms.DateField()
-    Spouse_name = forms.CharField(max_length=100)
-    Spouse_relation = forms.RadioSelect()
-    Spouse_date_of_birth = forms.DateField()
-    Spouse_identification_mark_1 = forms.CharField(max_length=70)
-    Spouse_identification_mark_2 = forms.CharField(max_length=70)
-    Spouse_qualification = forms.ChoiceField()
-    Spouse_employment_status = forms.RadioSelect()
-    Spouse_employed_profession = forms.CharField(max_length=30)
-    Spouse_retirement_date = forms.DateField()
-    Spouse_aadhar_no = forms.CharField(max_length=12)
-    spouse_voter_id_np = forms.CharField(max_length=12)
-    spouse_pan_no = forms.CharField(max_length=10)
-    spouse_csd_no = forms.CharField(max_length=19)
-    spouse_echs_no = forms.CharField(max_length=14)
-    Next_of_kin_name = forms.CharField(max_length=100)
-    Next_of_kin_relation = forms.CharField(max_length=30)
+class EmploymentForm(ModelForm):
 
-#class dependent(forms.Form):
+    class Meta:
+        model = EmploymentDetail
+        exclude = ['ref']
+
+
+class SpouseForm(ModelForm):
+
+    class Meta:
+        model = SpouseDetail
+        exclude = ['ref']
+
+
+class DependentForm(ModelForm):
+
+    class Meta:
+        model = DependentDetail
+        exclude = ['ref']

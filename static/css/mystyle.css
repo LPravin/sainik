@@ -2,5 +2,6 @@
     align-content: center;
 }
 p{
-    color: red;
+    font-weight: bold;
+    color: cornflowerblue;
 }

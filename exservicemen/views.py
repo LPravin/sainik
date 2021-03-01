@@ -1,26 +1,52 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from . import forms
+from django.views.generic import TemplateView
+from django.views.generic.edit import FormView
+from .forms import *
+
 # Create your views here.
 
 
-def index(request):
-    return HttpResponse("<b>hi thid id bold</b>")
+class HomeView(TemplateView):
+    template_name = "exservicemen/usertemplates/home.html"
 
 
-def login(request):
-    form = forms.Login()
-    return render(request, "exserivcemen/usertemplates/login.html", {'form':form})
+class LoginView(TemplateView):
+    template_name = "exservicemen/usertemplates/login.html"
 
 
-def registration(request):
-    form = forms.Registration()
-    return render(request, "exserivcemen/usertemplates/registration.html", {'form': form})
+class ApplyView(FormView):
+    form_class = ApplyForm
+    template_name = "exservicemen/usertemplates/apply.html"
+    #successurl
 
 
-def postregistration(request):
-    form1 = forms.Service()
-    form2 = forms.Personal()
-    form3 = forms.Employment()
-    form4 = forms.Spouse()
-    return render(request, "exserivcemen/usertemplates/postregistration.html", {'form1': form1, 'form2': form2, 'form3': form3, 'form4': form4})
+class RegistrationFormView(FormView):
+    form_class = ServiceForm
+    extra_context = {'title': 'SERVICE DETAILS'}
+    template_name = "exservicemen/usertemplates/registration.html"
+
+
+class PersonalFormView(FormView):
+    form_class = PersonalForm
+    extra_context = {'title': 'PERSONAL DETAILS'}
+    template_name = "exservicemen/usertemplates/registration.html"
+
+
+class EmploymentFormView(FormView):
+    form_class = EmploymentForm
+    extra_context = {'title': 'EMPLOYMENT DETAILS'}
+    template_name = "exservicemen/usertemplates/registration.html"
+
+
+class SpouseFormView(FormView):
+    form_class = SpouseForm
+    extra_context = {'title': 'SPOUSE DETAILS'}
+    template_name = "exservicemen/usertemplates/registration.html"
+
+
+class DependentFormView(FormView):
+    form_class = DependentForm
+    extra_context = {'title': 'DEPENDENT DETAILS'}
+    template_name = "exservicemen/usertemplates/registration.html"
+
+
