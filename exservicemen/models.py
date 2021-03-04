@@ -1,5 +1,58 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import (
+    BaseUserManager, AbstractBaseUser
+)
+
+
+class MyUserManager(BaseUserManager):
+    def create_user(self, email, password=None):
+        if not email:
+            raise ValueError('Users must have an email address')
+
+        user = self.model(
+            email=self.normalize_email(email),
+        )
+
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None):
+        user = self.create_user(
+            email,
+            password=password,
+        )
+        user.is_admin = True
+        user.save(using=self._db)
+        return user
+
+
+class MyUser(AbstractBaseUser):
+    email = models.EmailField(
+        verbose_name='Email address',
+        max_length=255,
+        unique=True,
+    )
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+
+    objects = MyUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    def __str__(self):
+        return self.email
+
+    def has_perm(self, perm, obj=None):
+        return True
+
+    def has_module_perms(self, app_label):
+        return True
+
+    @property
+    def is_staff(self):
+        return self.is_admin
 
 
 YesNo = [
@@ -22,16 +75,16 @@ class Service(models.Model):
         return self.service_name
 
 
-class Group(models.Model):
-    group = models.CharField(max_length=1)
+class TradeGroup(models.Model):
+    trade_group = models.CharField(max_length=1)
 
     def __str__(self):
-        return self.group
+        return self.trade_group
 
 
 class Trade(models.Model):
-    service_id = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
-    group = models.CharField(max_length=1)
+    service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
+    trade_group = models.ForeignKey(TradeGroup, on_delete=models.CASCADE)
     trade_name = models.CharField(max_length=45)
 
     def __str__(self):
@@ -39,7 +92,7 @@ class Trade(models.Model):
 
 
 class RankCategory(models.Model):
-    rank_category = models.CharField(max_length=6)
+    rank_category = models.CharField(max_length=10)
 
     def __str__(self):
         return self.rank_category
@@ -47,7 +100,7 @@ class RankCategory(models.Model):
 
 class Rank(models.Model):
     rank_category = models.ForeignKey(RankCategory, on_delete=models.DO_NOTHING)
-    service_id = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
+    service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
     rank = models.CharField(max_length=35)
 
     def __str__(self):
@@ -61,6 +114,14 @@ class Corp(models.Model):
         return self.corps_name
 
 
+class RecordOffice(models.Model):
+    record_office_name = models.CharField(max_length=60)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, default=None)
+
+    def __str__(self):
+        return self.record_office_name
+
+
 class Gender(models.Model):
     gender_name = models.CharField(max_length=6)
 
@@ -69,7 +130,7 @@ class Gender(models.Model):
 
 
 class MedicalCategory(models.Model):
-    service_id = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
+    service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
     mc_name = models.CharField(max_length=10)
 
     def __str__(self):
@@ -119,9 +180,8 @@ class RajyaSainikBoard(models.Model):
 
 
 class State(models.Model):
-    state_id = models.SmallIntegerField(primary_key=True)
     state_name = models.CharField(max_length=45)
-    rsb_id = models.ForeignKey(RajyaSainikBoard, on_delete=models.DO_NOTHING)
+    rsb = models.ForeignKey(RajyaSainikBoard, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return self.state_name
@@ -129,33 +189,61 @@ class State(models.Model):
 
 class ZilaSainikBoard(models.Model):
     zb_name = models.CharField(max_length=50)
-    state_id = models.ForeignKey(State, on_delete=models.DO_NOTHING)
+    state = models.ForeignKey(State, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return self.zb_name
 
 
 class District(models.Model):
-    district_id = models.SmallIntegerField(primary_key=True)
     district_name = models.CharField(max_length=50)
-    state_id = models.ForeignKey(State, on_delete=models.DO_NOTHING)
-    zb_id = models.ForeignKey(ZilaSainikBoard, on_delete=models.DO_NOTHING)
+    state = models.ForeignKey(State, on_delete=models.DO_NOTHING)
+    zila_board = models.ForeignKey(ZilaSainikBoard, on_delete=models.DO_NOTHING)
 
     def __str__(self):
         return self.district_name
 
 
 class CivilQualification(models.Model):
-    cq_id = models.SmallIntegerField(primary_key=True)
-    q_name = models.CharField(max_length=20)
+    qualification = models.CharField(max_length=20)
 
     def __str__(self):
-        return self.q_name
+        return self.qualification
+
+
+class ApplyDetail(models.Model):
+    regtypes = [
+        ('S', ' SELF'),
+        ('W', 'WIDOW')
+    ]
+    ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
+    mobile = models.CharField(max_length=10, blank=True)
+    basic_reg_type = models.CharField(max_length=1, choices=regtypes, default=None, blank=True)
+    have_esm = models.CharField(max_length=1, choices=YesNo, default=None, blank=True)
+    esm_no = models.CharField(max_length=10, blank=True)
+    expiry_date = models.DateField(default=None, blank=True, null=True)
+    death_certificate = models.ImageField(upload_to='images/death death_certificate', blank=True)
+    esm_reg_type = models.ForeignKey(RegTypeReference, on_delete=models.CASCADE, default=None, blank=True)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, default=None, blank=True)
+    corps = models.ForeignKey(Corp, on_delete=models.CASCADE, default=None, blank=True)
+    record_office = models.ForeignKey(RecordOffice, on_delete=models.CASCADE, default=None, blank=True)
+    group = models.ForeignKey(TradeGroup, on_delete=models.CASCADE, default=None, blank=True)
+    trade = models.ForeignKey(Trade, on_delete=models.CASCADE, default=None, blank=True)
+    rank_category = models.ForeignKey(RankCategory, on_delete=models.CASCADE, default=None, blank=True)
+    rank = models.ForeignKey(Rank, on_delete=models.CASCADE, default=None, blank=True)
+    service_no = models.CharField(max_length=9, blank=True)
+    state = models.ForeignKey(State, on_delete=models.CASCADE, default=None, blank=True)
+    district = models.ForeignKey(District, on_delete=models.CASCADE, default=None, blank=True)
+    discharge_book = models.ImageField(upload_to='images/discharge book', blank=True)
+    ppo_book = models.ImageField(upload_to='images/ppo book', blank=True)
+    residence_certificate = models.ImageField(upload_to='images/residence certificate', blank=True)
 
 
 class ExServiceMen(models.Model):
+
     esm_no = models.CharField(primary_key=True, max_length=10)
     reg_type = models.ForeignKey(RegTypeReference, on_delete=models.DO_NOTHING, default=None)
+    ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
 
 
 class WidowDetail(models.Model):
@@ -168,30 +256,15 @@ class WidowDetail(models.Model):
 
 
 class ServiceDetail(models.Model):
-    DischargeReasons = [
-        ('O', 'On Completion of Engagement'),
-        ('R', 'Retired'),
-        ('M', 'Medical'),
-        ('I', 'Injury'),
-        ('D', 'Dismissed'),
-        ('V', 'VRS'),
-        ('E', 'Expired')
-    ]
     ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE, default=None)
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING, default=None)
     corps = models.ForeignKey(Corp, on_delete=models.DO_NOTHING, default=None, blank=True)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, default=None)
+    record_office = models.ForeignKey(RecordOffice, on_delete=models.CASCADE, default=None)
+    group = models.ForeignKey(TradeGroup, on_delete=models.CASCADE, default=None)
     trade = models.ForeignKey(Trade, on_delete=models.DO_NOTHING, default=None)
     service_no = models.CharField(max_length=9)
     rank_category = models.ForeignKey(RankCategory, on_delete=models.DO_NOTHING, default=None)
     rank = models.ForeignKey(Rank, on_delete=models.DO_NOTHING, default=None)
-    unit_last_served = models.CharField(max_length=50)
-    discharge_date = models.DateField()
-    discharge_reason = models.CharField(max_length=1, choices=DischargeReasons, default=None)
-    medical_category = models.ForeignKey(MedicalCategory, on_delete=models.CASCADE, default=None)
-    character = models.ForeignKey(Character, on_delete=models.DO_NOTHING, default=None)
-    discharge_book_no = models.CharField(max_length=8)
-    ppo_no = models.CharField(max_length=8)
     reg_date = models.DateField()
     enrollment_date = models.DateField()
     world_war_2 = models.CharField(max_length=1, choices=YesNo, default=None)
@@ -204,6 +277,15 @@ class PersonalDetail(models.Model):
     Genders = [
         ('M', 'Male'),
         ('F', 'Female')
+    ]
+    DischargeReasons = [
+        ('O', 'On Completion of Engagement'),
+        ('R', 'Retired'),
+        ('M', 'Medical'),
+        ('I', 'Injury'),
+        ('D', 'Dismissed'),
+        ('V', 'VRS'),
+        ('E', 'Expired')
     ]
     ref = models.OneToOneField(ServiceDetail, on_delete=models.CASCADE)
     name = models.CharField(max_length=100)
@@ -224,6 +306,13 @@ class PersonalDetail(models.Model):
     echs_no = models.CharField(max_length=14)
     ident_mark_1 = models.CharField(max_length=70)
     ident_mark_2 = models.CharField(max_length=70)
+    unit_last_served = models.CharField(max_length=50)
+    discharge_date = models.DateField()
+    discharge_reason = models.CharField(max_length=1, choices=DischargeReasons, default=None)
+    medical_category = models.ForeignKey(MedicalCategory, on_delete=models.CASCADE, default=None)
+    character = models.ForeignKey(Character, on_delete=models.DO_NOTHING, default=None)
+    discharge_book_no = models.CharField(max_length=8)
+    ppo_no = models.CharField(max_length=8)
     esm_expiry_date = models.DateField(blank=True)
     pension_sanctioned = models.CharField(max_length=6)
     present_pension = models.CharField(max_length=6)
