@@ -25,70 +25,44 @@ class Login(forms.Form):
 
 
 class ApplyForm1(ModelForm):
+    have_esm = forms.CharField(required=True)
 
     class Meta:
         model = ApplyDetail
         exclude = ['mail', 'mobile', 'password', 'confirm_password', 'ref']
-        field_order = ['name', 'basic_reg_type', 'have_esm', 'esm_no', 'expiry_date', 'death_certificate',
-                       'esm_reg_type', 'service', 'corps', 'records', 'group', 'trade', 'rank_category',
-                       'rank', 'service_no', 'state', 'district', 'discharge_book', 'ppo_book', 'residence_certificate']
+        field_order = ['name', 'basic_reg_type', 'have_esm', 'esm_no', 'expiry_date', 'esm_reg_type', 'service',
+                       'corps', 'records', 'group', 'trade', 'rank_category', 'rank', 'service_no', 'state', 'district',
+                       'discharge_book', 'ppo_book', 'residence_certificate', 'death_certificate']
 
-        labels = { 'basic_reg_type': 'REGISTRATION TYPE', 'have_esm': 'DO YOU HAVE ESM ID?','esm_no': 'ESM NO',
+        labels = {'basic_reg_type': 'REGISTRATION TYPE', 'have_esm': 'DO YOU HAVE ESM ID?', 'esm_no': 'ESM NO',
                    'expiry_date': 'DATE OF EXPIRY OF ESM', 'death_certificate': 'DEATH CERTIFICATE',
                    'esm_reg_type': 'EXSERVICEMEN REGISTRATION TYPE', 'service': 'SERVICE', 'corps': 'CORPS',
                    'ppo_book': 'PPO BOOK'}
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['record_office'].queryset = RecordOffice.objects.none()
-        self.fields['trade'].queryset = Trade.objects.none()
-
-        if 'service' in self.data:
-            try:
-                service_id = int(self.data.get('service'))
-                self.fields['record_office'].queryset = RecordOffice.objects.filter(service_id=service_id).order_by('record_office_name')
-            except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty City queryset
-        elif self.instance.pk:
-            self.fields['record_office'].queryset = self.instance.service.city_set.order_by('record_office_name')
-
-        if 'service' and 'group' in self.data:
-            try:
-                service_id = int(self.data.get('service'))
-                group_id = int(self.data.get('group'))
-                self.fields['trade'].queryset = Trade.objects.filter(service_id=service_id, group_id=group_id).order_by(
-                    'trade_group')
-            except (ValueError, TypeError):
-                pass  # invalid input from the client; ignore and fallback to empty City queryset
-        elif self.instance.pk:
-            self.fields['group'].queryset = self.instance.service.city_set.order_by('trade_group')
+    # def clean(self):
+    #     cleaned_data = super().clean()
+    #     cc_myself = cleaned_data.get("cc_myself")
+    #     subject = cleaned_data.get("subject")
 
 
-
-
-'''class ApplyForm2(ModelForm):
-
-    confirm_password = forms.CharField(max_length=16)
-
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'password', 'confirm_password']
-        labels = {
-            'username': 'Name'
-        }'''
-
-
-class ServiceForm(ModelForm):
-
-    class Meta:
-        model = ServiceDetail
-        exclude = ['zila_board_id', 'ref']
-        widgets = {
-            'reg_date': forms.DateInput(attrs={'type': 'date'}),
-        }
+# class ServiceForm(ModelForm):
+#
+#     class Meta:
+#         model = ServiceDetail
+#         exclude = ['zila_board_id', 'ref']
+#         widgets = {
+#             'reg_date': forms.DateInput(attrs={'type': 'date'}),
+#         }
 
 
 class PersonalForm(ModelForm):
+
+    class Meta:
+        model = PersonalDetail
+        exclude = ['ref']
+
+
+class DischargeForm(ModelForm):
 
     class Meta:
         model = PersonalDetail

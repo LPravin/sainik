@@ -11,23 +11,25 @@
           <h1 class="mt-2"> LOGIN REQUEST FORM</h1>
           <hr class="mt-0 mb-4">
         <h3>REGISTRATION DETAILS</h3>
-            <form enctype="multipart/form-data" id="applyform" class="text-muted"
+            <form enctype="multipart/form-data" id="applyform"
                   data-records-url="{% url 'ajax_load_records' %}"
-                  data-corps-url="{% url 'ajax_load_trades' %}"
+                  data-trades-url="{% url 'ajax_load_trades' %}"
+                  data-ranks-url="{% url 'ajax_load_ranks' %}"
+                  data-districts-url="{% url 'ajax_load_districts' %}"
                   method="post" action="">
                 {% csrf_token %}
-               <div class="row">
-        {% for field in form1 %}
-            <div class="col-sm-6 ">
-                {{ field|as_crispy_field }}
-            </div>
-        {% endfor %}
-    </div>
-            <br><br>
             <h3>LOGIN DETAILS</h3>
              <div class="row">
         {% for field in form2 %}
                 {{ field|as_crispy_field }}
+        {% endfor %}
+         </div>
+            <br><br>
+                <div class="row">
+        {% for field in form1 %}
+            <div class="col-sm-6 ">
+                {{ field|as_crispy_field }}
+            </div>
         {% endfor %}
     </div>
             <button type="submit" class="btn btn-success float-end">SUBMIT</button>
@@ -40,104 +42,120 @@
 {% block script %}
     <script type="text/javascript">
 
-    function readyy(){
-        $('#div_id_basic_reg_type').val('');
-          $('#div_id_esm_no').hide();
-         $('#div_id_have_esm').hide();
-    $('#div_id_expiry_date').hide();
-    $('#div_id_death_certificate').hide();
-    hideesm();
-    }
-   function hideesm()
-   {
-    $('#esm_reg_type').hide();
-    $('#div_id_esm_reg_type').hide();
-    $('#div_id_service').hide();
-    $('#div_id_corps').hide();
-    $('#div_id_records').hide();
-    $('#div_id_group').hide();
-    $('#div_id_trade').hide();
-    $('#div_id_rank_category').hide();
-    $('#div_id_rank').hide();
-    $('#div_id_service_no').hide();
-    $('#div_id_state').hide();
-    $('#div_id_district').hide();
-    $('#div_id_discharge_book').hide();
-    $('#div_id_ppo_book').hide();
-    $('#div_id_residence_certificate').hide();
-   }
-   function showesm()
-   {
-       $('#div_id_esm_reg_type').show();
-    $('#div_id_service').show();
-    $('#div_id_corps').show();
-    $('#div_id_records').show();
-    $('#div_id_group').show();
-    $('#div_id_trade').show();
-    $('#div_id_rank_category').show();
-    $('#div_id_rank').show();
-    $('#div_id_service_no').show();
-    $('#div_id_state').show();
-    $('#div_id_district').show();
-    $('#div_id_discharge_book').show();
-    $('#div_id_ppo_book').show();
-    $('#div_id_residence_certificate').show();
-   }
 
 $(document).ready(function(){
+    $("#id_corps").attr('disabled',true);
     $("#id_service").change(function () {
-        const url = $("#applyform").attr("data-records-url");  // get the url of the `load_cities` view
-        const ServiceId = $(this).val();  // get the selected country ID from the HTML input
+        const url = $("#applyform").attr("data-records-url");
+        const ServiceId = $(this).val();
+        $.ajax({
+            url: url,
+            data: {
+                'service_id': ServiceId
+            },
+            success: function (data) {
+                $("#id_record_office").html(data);
+            }
+        });
+        if(ServiceId === '2'){
+            $("#id_corps").attr('disabled',false);
+        }
+    });
+    $("#id_state").change(function () {
+        const url = $("#applyform").attr("data-districts-url");
+        const stateid = $(this).val();
+
+        $.ajax({
+            url: url,
+            data: {
+                'stateid': stateid
+            },
+            success: function (data) {
+                $("#id_district").html(data);
+            }
+        });
+        if(ServiceId === '2'){
+            $("#id_corps").attr('disabled',false).attr('required','required')
+        }
+    });
+    $("#id_group").change(function () {
+        const url = $("#applyform").attr("data-trades-url");  // get the url of the `load_cities` view
+        const groupid = $(this).val();
+        const ServiceId = $("#id_service").val();// get the selected country ID from the HTML input
 
         $.ajax({                       // initialize an AJAX request
             url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
             data: {
-                'service_id': ServiceId       // add the country id to the GET parameters
+                'service_id': ServiceId,
+                 'groupid' :  groupid                                    // add the country id to the GET parameters
             },
             success: function (data) {   // `data` is the return of the `load_cities` view function
-                $("#id_record_office").html(data);  // replace the contents of the city input with the data that came from the server
-                /*
+                $("#id_trade").html(data);  // replace the contents of the city input with the data that came from the server
 
-                let html_data = '<option value="">---------</option>';
-                data.forEach(function (city) {
-                    html_data += `<option value="${city.id}">${city.name}</option>`
-                });
-                console.log(html_data);
-                $("#id_city").html(html_data);
+            }
+        });
 
-                */
+    });
+    $("#id_rank_category").change(function () {
+        const url = $("#applyform").attr("data-ranks-url");  // get the url of the `load_cities` view
+        const rankcatid = $(this).val();
+        const ServiceId = $("#id_service").val();// get the selected country ID from the HTML input
+
+        $.ajax({                       // initialize an AJAX request
+            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
+            data: {
+                'service_id': ServiceId,
+                 'rankcatid' :  rankcatid                                    // add the country id to the GET parameters
+            },
+            success: function (data) {   // `data` is the return of the `load_cities` view function
+                $("#id_rank").html(data);  // replace the contents of the city input with the data that came from the server
+
             }
         });
 
     });
 $('#id_basic_reg_type').change(function () {
     if ($('#id_basic_reg_type').val() === 'S') {
-        $('#div_id_have_esm').hide();
-        $('#div_id_esm_no').hide();
-        $('#id_expiry_date').hide();
-        $('#id_death_certificate').hide();
-        $('#esm_reg_type').hide();
-    showesm();
+        $('#id_have_esm').attr("disabled", true);
+        $('#id_esm_no').attr("disabled", true);
+        $('#id_expiry_date').attr("disabled", true);
+        $('#id_death_certificate').attr("disabled", true);
+        $('#esm_reg_type').attr("disabled", true);
     } else {
-        //$name.attr('hided', 'hided').val('');
+        //$name.attr('attrd"disabled', true, 'attrd"disabled', true).val('');
         //$name.removeAttr('required');
         $('#div_id_have_esm').show();
-        $('#id_have_esm').val('');
-        hideesm();
+        $('#id_have_esm').attr("disabled", false);
+        $('#id_esm_no').attr("disabled", false);
+        $('#id_expiry_date').attr("disabled", false);
+        $('#id_death_certificate').attr("disabled", false);
+        $('#esm_reg_type').attr("disabled", false);
     }
 }).trigger('change');
 $('#id_have_esm').change(function () {
     if ($('#id_have_esm').val() === 'Y') {
-        $('#div_id_esm_no').show();
-        hideesm();
+        $('#id_esm_no').attr("disabled", false).attr('required',true);
+        $('#id_esm_reg_type').attr("disbled", true);
+    $('#id_service').attr("disbled", true);
+    $('#id_corps').attr("disbled", true);
+    $('#id_records').attr("disbled", true);
+    $('#id_group').attr("disbled", true);
+    $('#id_trade').attr("disbled", true);
+    $('#id_rank_category').attr("disbled", true);
+    $('#id_rank').attr("disbled", true);
+    $('#id_service_no').attr("disbled", true);
+    $('#id_state').attr("disbled", true);
+    $('#id_district').attr("disbled", true);
+    $('#id_discharge_book').attr("disbled", true);
+    $('#id_ppo_book').attr("disbled", true);
+    $('#id_residence_certificate').attr("disbled", true);
+        //$('#id_esm_no').attr('required',true);
     } else {
-        //$name.attr('hided', 'hided').val('');
+
         //$name.removeAttr('required');
-        $('#div_id_esm_no').hide();
-        showesm();
+        $('#id_esm_no').attr("disabled", true);
     }
 }).trigger('change');
-readyy();
 });
 </script>
 {% endblock %}

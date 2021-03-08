@@ -2,26 +2,53 @@ from django.shortcuts import render
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from . import forms
-from .models import RecordOffice,Trade
-from exservicemen.forms import ApplyForm1,CustomUserCreationForm
+from .models import RecordOffice, Trade, Rank, District
+from exservicemen.forms import ApplyForm1, CustomUserCreationForm, PersonalForm, EmploymentForm, DischargeForm, \
+    SpouseForm, DependentForm
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect, HttpResponse
+from django.urls import reverse
+from django.contrib.auth.decorators import login_required
 
-# Create your views here.
+
+def HomeView(request):
+    return render(request, "exservicemen/usertemplates/home.html")
 
 
-class HomeView(TemplateView):
-    template_name = "exservicemen/usertemplates/home.html"
+def userlogin(request):
+
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        user = authenticate(email=email, password=password)
+
+        if user:
+            if user.is_active:
+                login(request, user)
+                return HttpResponseRedirect(reverse('home'))
+            else:
+                return HttpResponse("ACCOUNT IS NOT ACTIVE")
+        return HttpResponse("INVALID CREDENTIALS")
+
+    else:
+        return render(request, "exservicemen/usertemplates/user_login.html")
 
 
-class LoginView(TemplateView):
-    template_name = "exservicemen/usertemplates/login.html"
+@login_required()
+def userlogout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('home'))
+
+
+def officerlogin(request):
+    return render(request, "exservicemen/usertemplates/officer_login.html")
 
 
 def applyview(request):
-
-    registered = False
     if request.method == "POST":
-        basic_form = ApplyForm1(request.POST)
-        login_form = CustomUserCreationForm(request.POST)
+        basic_form = ApplyForm1(data=request.POST)
+        login_form = CustomUserCreationForm(data=request.POST)
 
         if basic_form.is_valid() and login_form.is_valid():
             user = login_form.save()
@@ -42,50 +69,74 @@ def applyview(request):
 def load_record_office(request):
     service_id = request.GET.get('service_id')
     record_offices = RecordOffice.objects.filter(service_id=service_id).all()
-    return render(request, 'exservicemen/usertemplates/record_office_dropdown.html', {'record_offices': record_offices})
-    # return JsonResponse(list(cities.values('id', 'name')), safe=False)
+    return render(request, 'exservicemen/usertemplates/dependent_dropdown.html', {'record_offices': record_offices})
 
-#def applysubmit(request):
 
-    #if request.method == "POST":
 def load_trades(request):
     service_id = request.GET.get('service_id')
-    group_id = request.GET.get('tradegroup_id')
-    trades = Trade.objects.filter(service_id=service_id, group_id=group_id).all()
-    return render(request, 'exservicemen/usertemplates/record_office_dropdown.html', {'trades': trades})
+    group_id = request.GET.get('groupid')
+    trades = Trade.objects.filter(service=service_id, trade_group=group_id).all()
+    return render(request, 'exservicemen/usertemplates/dependent_dropdown.html', {'record_offices': trades})
 
 
-class ApplyView(FormView):
-    form_class = forms.ApplyForm1
-    template_name = "exservicemen/usertemplates/apply.html"
-
-class RegistrationFormView(FormView):
-    form_class = forms.ServiceForm
-    extra_context = {'title': 'SERVICE DETAILS'}
-    template_name = "exservicemen/usertemplates/registration.html"
+def load_ranks(request):
+    service_id = request.GET.get('service_id')
+    rankcatid = request.GET.get('rankcatid')
+    ranks = Rank.objects.filter(service=service_id, rank_category=rankcatid).all()
+    return render(request, 'exservicemen/usertemplates/dependent_dropdown.html', {'record_offices': ranks})
 
 
-class PersonalFormView(FormView):
-    form_class = forms.PersonalForm
-    extra_context = {'title': 'PERSONAL DETAILS'}
-    template_name = "exservicemen/usertemplates/registration.html"
+def load_districts(request):
+    stateid = request.GET.get('stateid')
+    districts = District.objects.filter(state_id=stateid).all()
+    return render(request, 'exservicemen/usertemplates/dependent_dropdown.html', {'record_offices': districts})
 
 
-class EmploymentFormView(FormView):
-    form_class = forms.EmploymentForm
-    extra_context = {'title': 'EMPLOYMENT DETAILS'}
-    template_name = "exservicemen/usertemplates/registration.html"
+@login_required()
+def personalformview(request):
+
+    if request.method == "POST":
+        personal_form = PersonalForm(data=request.POST)
+
+        if personal_form.is_valid():
+            personal = personal_form.save(commit=False)
+            personal.ref = request.user
+            personal.save()
+        return render(request, 'exservicemen/usertemplates/home.html')
+    else:
+        form = PersonalForm
+        return render(request, 'exservicemen/usertemplates/registration.html', {'form': form, 'title': 'PERSONAL DETAILS'})
 
 
-class SpouseFormView(FormView):
-    form_class = forms.SpouseForm
-    extra_context = {'title': 'SPOUSE DETAILS'}
-    template_name = "exservicemen/usertemplates/registration.html"
+@login_required()
+def dischargeformview(request):
+    if request.method == "POST":
+        personal_form = PersonalForm(data=request.POST)
+
+        if personal_form.is_valid():
+            personal = personal_form.save(commit=False)
+            personal.ref = request.user
+            personal.save()
+        return render(request, 'exservicemen/usertemplates/home.html')
+    else:
+        form = DischargeForm
+        return render(request, 'exservicemen/usertemplates/registration.html', {'form': form, 'title': 'DISCHARGE DETAILS'})
+
+@login_required()
+def employementformview(request):
+    form = EmploymentForm
+    return render(request, 'exservicemen/usertemplates/registration.html', {'form': form, 'title': 'EMPLOYMENT DETAILS'})
 
 
-class DependentFormView(FormView):
-    form_class = forms.DependentForm
-    extra_context = {'title': 'DEPENDENT DETAILS'}
-    template_name = "exservicemen/usertemplates/registration.html"
+@login_required()
+def spouseformview(request):
+    form = SpouseForm
+    return render(request, 'exservicemen/usertemplates/registration.html', {'form': form, 'title': 'SPOUSE DETAILS'})
+
+
+@login_required()
+def dependentformview(request):
+    form = DependentForm
+    return render(request, 'exservicemen/usertemplates/registration.html', {'form': form, 'title': 'DEPENDENT DETAILS'})
 
 

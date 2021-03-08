@@ -132,3 +132,5 @@ STATICFILES_DIRS = [
 ]
 
 AUTH_USER_MODEL = 'exservicemen.MyUser'
+
+LOGIN_URL = 'exservicemen/user-login'

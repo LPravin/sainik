@@ -8,19 +8,24 @@
         <div class="col-8">
           <h1 class="mt-2">ESM REGISTRATION FORM</h1>
           <hr class="mt-0 mb-4">
-            <form method="post" action="{% url apply %}">
+            <form method="post" action="">
     {% csrf_token %}
       <h3>{{ title }}</h3>
       <div class="row">
         {% for field in form %}
             <div class="col-sm-6 ">
                 {{ field|as_crispy_field }}
+            <br>
             </div>
         {% endfor %}
     </div>
             <br><br>
+            {% if title != "DEPENDENT DETAILS" %}
+             <button type="submit" class="btn btn-success float-end">SAVE & NEXT</button>
+            {% else %}
+                <button type="submit" class="btn btn-success float-end">SUBMIT</button>
+            {% endif %}
                 </form>
-            <button class="btn btn-success float-end" type="submit">NEXT</button>
             </div>
       </div>
     </div>
