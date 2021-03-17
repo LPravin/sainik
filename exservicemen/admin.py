@@ -17,7 +17,7 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = MyUser
-        fields = ('email', )
+        fields = ('email',)
 
     def clean_password2(self):
         # Check that the two password entries match
@@ -63,17 +63,17 @@ class UserAdmin(BaseUserAdmin):
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
     list_display = ('email',  'is_admin')
-    list_filter = ('is_admin',)
+    list_filter = ('is_admin', 'role')
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Permissions', {'fields': ('is_admin',)}),
+        ('Permissions', {'fields': ('is_admin', 'role', 'is_active')}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
     # overrides get_fieldsets to use this attribute when creating a user.
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2'),
+            'fields': ('email', 'password1', 'password2', 'role'),
         }),
     )
     search_fields = ('email',)
@@ -118,3 +118,4 @@ admin.site.register(DependentDetail)
 admin.site.register(RecordOffice)
 admin.site.register(ApplyDetail)
 admin.site.register(TradeGroup)
+admin.site.register(PensionDetail)

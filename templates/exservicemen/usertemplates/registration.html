@@ -1,33 +1,679 @@
-{% extends 'exservicemen/base.html' %}
-{% load crispy_forms_filters %}
-{% load crispy_forms_field %}
-{% block title %} REGISTRATION FORM {% endblock %}
+{% extends 'exservicemen/usertemplates/basic.html' %}
+
+
+{% load static %}
+
 {% block content %}
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-8">
-          <h1 class="mt-2">ESM REGISTRATION FORM</h1>
-          <hr class="mt-0 mb-4">
-            <form method="post" action="">
-    {% csrf_token %}
-      <h3>{{ title }}</h3>
-      <div class="row">
-        {% for field in form %}
-            <div class="col-sm-6 ">
-                {{ field|as_crispy_field }}
-            <br>
+
+     <div class="container">
+     <div class="title">
+         <h4>ESM DETAILS</h4><br></div>
+         <div class="tabs">
+          <div><button id="defaultOpen" class="Next" onclick="details(Event,'service')" >Service</button></div>
+          <div><button class="Next" onclick="details(Event,'pension')">Pension</button></div>
+          <div><button class="Next" onclick="details(Event,'personal')">Personal</button></div>
+          <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
+          <div><button class="Next" onclick="details(Event,'contact')">Contact</button></div>
+          <div><button class="Next" onclick="details(Event,'family')">Family</button></div>
+          <div><button class="Next" onclick="details(Event,'depentant')">Depentant</button></div>
+
+        </div><br><br><br>
+    <div class="content">
+
+      <div class="form-outer">
+
+      <form action="#">
+          {% csrf_token %}
+      <div class="tab" id="service">
+        <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+            <h4>SERVICE DETAILS</h4>
+              <button class="btns">Add</button>
+              <button class="btns">Edit/View</button>
+            </div><br><br>
+          <div class="search" >
+              <input type="text" placeholder="search by ID" name="">
+              <i class="fas fa-search"></i>
+          </div><br>
+        <div class="user-details">
+            <div class="input-box">
+                <span class="details">ESM Registration No</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
             </div>
-        {% endfor %}
+          <div class="input-box">
+            <span class="details">ESM Registration Type</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+            <span class="details">Date of ESM Registration</span>
+            <input type="date"  required>
+          </div>
+          <div class="input-box">
+            <span class="details">Service </span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+
+          </div>
+            <div class="input-box">
+            <span class="details">Corps </span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+
+          </div>
+          <div class="input-box">
+            <span class="details">Name of Record Office</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+            <span class="details">Group</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+            <span class="details">Trade</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+            <span class="details">Service Number</span>
+            <input type="text" required>
+          </div>
+            <div class="input-box">
+            <span class="details">Rank Category</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+            <span class="details">Rank</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+            <span class="details">Enrolment Date</span>
+            <input type="date" required>
+          </div>
+          <div class="input-box">
+            <span class="details">World War II</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+            <span class="details">Operations attended</span>
+            <input type="text">
+          </div>
+          <div class="input-box">
+            <span class="details">Decorations
+            </span>
+            <input type="text" required>
+          </div>
+        </div>
+      <div class="btn-box">
+
+			<button type="submit" class="Next" onclick="details(Event,'pension')">NEXT</Button>
+		</div>
+  </div>
+
+      <div class="tab" id="pension">
+        <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+            <h4>PENSION DETAILS</h4>
+              <button class="btns add" >Add</button>
+              <button class="btns edit" onclick=" myFunction()" >Edit/View</button>
+            </div><br>
+           <div class="search" >
+              <input type="text" placeholder="search by ID" name="">
+              <i class="fas fa-search"></i>
+          </div><br><br>
+        <div class="user-details">
+            <div class="input-box">
+            <span class="details">Unit last Served</span>
+            <input type="text" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Date of Discharge</span>
+            <input type="date" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Reason for Discharge</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+            <span class="details">Medical category while Discharge</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+            <span class="details">Character while Discharge</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+            <span class="details">Discharge Book No</span>
+            <input type="text" required>
+          </div>
+          <div class="input-box">
+            <span class="details">PPO No</span>
+            <input type="text" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Pension Sanctioned</span>
+            <input type="text" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Present Pension</span>
+            <input type="text" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Disability Pension</span>
+            <input type="text" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Percentage of Disability</span>
+            <input type="text" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Pension Account No</span>
+            <input type="number" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Name of the Bank</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+            <span class="details">Branch Name</span>
+            <input type="text" required>
+          </div>
+          <div class="input-box">
+            <span class="details">IFSC Code</span>
+            <input type="text" required>
+          </div>
+        </div>
+        <div class="btn-box">
+			<button type="button" class="Next" onclick="details(Event,'service')">BACK</Button>
+			<button type="submit" class="Next" onclick="details(Event,'personal')">NEXT</Button>
+		</div>
     </div>
-            <br><br>
-            {% if title != "DEPENDENT DETAILS" %}
-             <button type="submit" class="btn btn-success float-end">SAVE & NEXT</button>
-            {% else %}
-                <button type="submit" class="btn btn-success float-end">SUBMIT</button>
-            {% endif %}
-                </form>
-            </div>
+
+      <div class="tab" id="personal">
+          <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+            <h4>PERSONAL DETAILS</h4>
+              <button class="btns">Add</button>
+              <button class="btns">Edit/View</button>
+            </div><br>
+           <div class="search" >
+              <input type="text" placeholder="search by ID" name="">
+              <i class="fas fa-search"></i>
+          </div><br><br>
+        <div class="user-details">
+
+          <div class="input-box">
+
+             <span class="details">ESM Name</span>
+            <input type="text" required>
+
+          </div>
+          <div class="input-box">
+
+            <span class="details">Date of Birth</span>
+            <input type="date" required>
+          </div>
+          <div class="input-box">
+
+              <span class="details">Gender</span>
+             <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+
+             <span class="details">Mother Name</span>
+            <input type="text" required>
+          </div>
+          <div class="input-box">
+
+             <span class="details">Father Name</span>
+            <input type="text" required>
+
+          </div>
+          <div class="input-box">
+
+            <span class="details">Religion</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+
+            <span class="details">Caste</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+
+            <span class="details">Caste Category</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+
+             <span class="details">Birth Place</span>
+            <input type="text" required>
+
+          </div>
+            <div class="input-box">
+
+            <span class="details">Birth State</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+            <div class="input-box">
+
+            <span class="details">Birth District</span>
+            <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+            <div class="input-box">
+             <span class="details">Aadhaar No</span>
+            <input type="text" maxlength="12" required>
+
+          </div>
+          <div class="input-box">
+             <span class="details">Voter ID No</span>
+            <input type="text" required>
+
+          </div>
+
+          <div class="input-box">
+             <span class="details">PAN No</span>
+            <input type="text" required>
+
+          </div>
+          <div class="input-box">
+             <span class="details">CSD No</span>
+            <input type="text" required>
+
+          </div>
+          <div class="input-box">
+
+             <span class="details">ECHS No</span>
+            <input type="text" required>
+
+          </div>
+          <div class="input-box">
+
+             <span class="details">Identification Mark1</span>
+            <input type="text" required>
+
+          </div>
+          <div class="input-box">
+
+             <span class="details">Identification Mark 2</span>
+            <input type="text" required>
+
+          </div>
+
+            <div class="input-box">
+
+             <span class="details">Telephone</span>
+            <input type="text" required>
+
+          </div>
+            <div class="input-box">
+
+             <span class="details">Phone</span>
+            <input type="text" required>
+
+          </div>
+            <div class="input-box">
+            <span class="details">Expiry Date</span>
+            <input type="date" required>
+          </div>
+
+        </div>
+        <div class="btn-box">
+			<button type="button" class="Next" onclick="details(Event,'pension')">BACK</Button>
+			<button type="submit" class="Next" onclick="details(Event,'Employement')">NEXT</Button>
+		</div>
+    </div>
+
+    <div class="tab" id="Employement">
+        <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+            <h4>EMPLOYMENT DETAILS</h4>
+              <button class="btns">Add</button>
+              <button class="btns">Edit/View</button>
+            </div><br>
+         <div class="search" >
+              <input type="text" placeholder="search by ID" name="">
+              <i class="fas fa-search"></i>
+          </div><br><br>
+
+      <div class="user-details">
+          <div class="input-box">
+      <span class="details">Civil Qualification</span>
+      <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+      <span class="details">Degree</span>
+      <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+        <div class="input-box">
+      <span class="details">Equivalent trade qualification</span>
+      <input type="text" required>
+          </div>
+          <div class="input-box">
+          <span class="details">Employment Status</span>
+          <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+        </div>
+          <div class="input-box">
+          <span class="details">Whether willing for Employment registration?</span>
+              <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+          <span class="details">Whether willing to Watch & Ward / Security Job?</span>
+          <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+        </div>
+          <div class="input-box">
+          <span class="details">Courses completed in relation with firesafety and security</span>
+          <input type="text" required>
+        </div>
+        <div class="input-box">
+          <span class="details">Employer</span>
+          <input type="text" required>
+        </div>
+        <div class="input-box">
+          <span class="details">Monthly Income</span>
+          <input type="number" required>
+        </div>
+        <div class="input-box">
+          <span class="details">Department</span>
+          <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+        </div>
+        <div class="input-box">
+          <span class="details">Date of Retirement from Civil Service</span>
+          <input type="date" required>
+        </div>
+        <div class="input-box">
+          <span class="details">Civil PPO No</span>
+          <input type="text" required>
+        </div>
+
+      </div>
+      <div class="btn-box">
+			<button type="button" class="Next" onclick="details(Event,'personal')">BACK</Button>
+			<button type="submit" class="Next" onclick="details(Event,'contact')">NEXT</Button>
+		</div>
+ </div>
+
+
+  <div class="tab" id="contact">
+    <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+            <h4>CONTACT DETAILS</h4>
+              <button class="btns">Add</button>
+              <button class="btns">Edit/View</button>
+            </div><br>
+       <div class="search" >
+              <input type="text" placeholder="search by ID" name="">
+              <i class="fas fa-search"></i>
+          </div><br><br>
+    <div class="user-details">
+
+      <div class="input-box">
+        <span class="details">House No</span>
+        <input type="text" required>
+      </div>
+      <div class="input-box">
+        <span class="details">House Name</span>
+        <input type="text" required>
+      </div>
+      <div class="input-box">
+        <span class="details">Street</span>
+        <input type="text" required>
+      </div>
+      <div class="input-box">
+        <span class="details">City</span>
+        <input type="text" required>
+      </div>
+      <div class="input-box">
+        <span class="details">District</span>
+        <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+      </div>
+      <div class="input-box">
+        <span class="details">State</span>
+        <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+      </div>
+      <div class="input-box">
+        <span class="details">Pincode</span>
+        <input type="text" maxlength="6" required>
+      </div>
+      <div class="input-box">
+        <span class="details">Telephone No</span>
+        <input type="number" required>
+      </div>
+      <div class="input-box">
+        <span class="details">Mobile No</span>
+        <input type="number" required>
+      </div>
+      <div class="input-box">
+        <span class="details">E-Mail Address</span>
+        <input type="email" required>
       </div>
     </div>
-    <br><br><br>
+    <div class="btn-box">
+			<button type="button" class="Next" onclick="details(Event,'Employement')">BACK</Button>
+			<button type="submit" class="Next" onclick="details(Event,'family')">NEXT</Button>
+		</div>
+</div>
+
+<div class="tab" id="family">
+ <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+            <h4>SPOUSE DETAILS</h4>
+              <button class="btns">Add</button>
+              <button class="btns">Edit/View</button>
+            </div><br>
+     <div class="search" >
+              <input type="text" placeholder="search by ID" name="">
+              <i class="fas fa-search"></i>
+          </div><br><br>
+  <div class="user-details">
+
+    <div class="input-box">
+      <span class="details">Marital Status</span>
+      <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+    </div>
+    <div class="input-box">
+      <span class="details">Date of Marriage</span>
+      <input type="date" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Spouse Relation</span>
+      <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+    </div>
+    <div class="input-box">
+      <span class="details">Spouse Name</span>
+      <input type="text" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Spouse Date of Birth</span>
+      <input type="date" >
+    </div>
+    <div class="input-box">
+      <span class="details">Spouse Qualification</span>
+      <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+    </div>
+    <div class="input-box">
+      <span class="details">Spouse Employment Status</span>
+      <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+    </div>
+    <div class="input-box">
+      <span class="details">Spouse Employed Profession</span>
+      <input type="text" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Date of Retirement of spouse</span>
+      <input type="date" >
+    </div>
+    <div class="input-box">
+      <span class="details">Spouse Aadhaar No</span>
+      <input type="number" >
+    </div>
+    <div class="input-box">
+      <span class="details">Spouse Voter ID No</span>
+      <input type="number" >
+    </div>
+    <div class="input-box">
+      <span class="details">Spouse PAN Card No</span>
+      <input type="number" >
+    </div>
+    <div class="input-box">
+      <span class="details">Spouse CSD Card No</span>
+      <input type="number">
+    </div>
+    <div class="input-box">
+      <span class="details">Spouse ECHS Card No</span>
+      <input type="number">
+    </div>
+     <div class="input-box">
+             <span class="details">Identification Mark1</span>
+            <input type="text" required>
+          </div>
+          <div class="input-box">
+             <span class="details">Identification Mark 2</span>
+            <input type="text" required>
+          </div>
+    <div class="input-box">
+      <span class="details">Name of the Next of Kin</span>
+      <input type="text" >
+    </div>
+    <div class="input-box">
+      <span class="details">Relation to the ESM</span>
+      <input type="text" required>
+    </div>
+  </div>
+  <div class="btn-box">
+			<button type="submit" class="Next" onclick="details(Event,'contact')">BACK</Button>
+			<button type="submit" class="Next" onclick="details(Event,'depentant')">NEXT</Button>
+		</div>
+</div>
+
+<div class="tab" id="depentant">
+  <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+            <h4>DEPENDENT DETAILS</h4>
+              <button class="btns">Add</button>
+              <button class="btns">Edit/View</button>
+            </div><br>
+       <div class="search" >
+              <input type="text" placeholder="search by ID" name="">
+              <i class="fas fa-search"></i>
+          </div><br><br>
+  <div class="user-details">
+
+    <div class="input-box">
+      <span class="details">Name</span>
+      <input type="text" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Relation</span>
+      <input type="text" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Date of Birth</span>
+      <input type="date" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Aadhar Card No</span>
+      <input type="number" required>
+    </div>
+    <div class="input-box">
+      <span class="details">District</span>
+      <input type="text" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Academic Year</span>
+      <input type="number" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Employement Status</span>
+      <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+    </div>
+    <div class="input-box">
+      <span class="details">Marital Status</span>
+      <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+    </div>
+  </div>
+  <div class="btn-box">
+			<button type="button" class="Next" onclick="details(Event,'family')">BACK</Button>
+			<button type="submit" class="Next">SUBMIT</Button>
+		</div>
+</div>
+      </form>
+    </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static "javascript/registration/registration.js" %}"></script>
 {% endblock %}

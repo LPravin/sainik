@@ -1,161 +1,150 @@
-{% extends 'exservicemen/base.html' %}
-{% load crispy_forms_filters %}
+{% extends 'exservicemen/usertemplates/basic.html' %}
 {% load static %}
-{% load crispy_forms_tags %}
-{% block title %} REQUEST LOGIN {% endblock %}
+    {% block title %} APPLY FOR REGISTRATION {% endblock %}
 {% block content %}
-    <br><br><br>
- <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-8">
-          <h1 class="mt-2"> LOGIN REQUEST FORM</h1>
-          <hr class="mt-0 mb-4">
-        <h3>REGISTRATION DETAILS</h3>
-            <form enctype="multipart/form-data" id="applyform"
+     <div class="container">
+     <div class="title">
+         <h4>LOGIN REQUEST</h4><br></div>
+    <div class="tabs">
+          <div><button id="defaultOpen" class="Next" onclick="details(Event,'service')" >Service</button></div>
+          <div><button class="Next" onclick="details(Event,'login')">Login</button></div>
+
+        </div><br><br><br>
+     <div class="content">
+
+      <div class="form-outer">
+
+ <form enctype="multipart/form-data" id="applyform" name="applyform"
                   data-records-url="{% url 'ajax_load_records' %}"
                   data-trades-url="{% url 'ajax_load_trades' %}"
                   data-ranks-url="{% url 'ajax_load_ranks' %}"
                   data-districts-url="{% url 'ajax_load_districts' %}"
                   method="post" action="">
-                {% csrf_token %}
-            <h3>LOGIN DETAILS</h3>
-             <div class="row">
-        {% for field in form2 %}
-                {{ field|as_crispy_field }}
-        {% endfor %}
-         </div>
-            <br><br>
-                <div class="row">
-        {% for field in form1 %}
-            <div class="col-sm-6 ">
-                {{ field|as_crispy_field }}
-            </div>
-        {% endfor %}
-    </div>
-            <button type="submit" class="btn btn-success float-end">SUBMIT</button>
-                </form>
-            </div>
+ {% csrf_token %}
+      <div class="tab" id="service">
+        <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+            <h4>SERVICE DETAILS</h4>
+            </div><br><br>
+      <div class="user-details">
+      <div class="input-box" id="div_id_name">
+            <span class="details" >Name</span>
+            {{ basicform.name }}
+          </div>
+<div class="input-box" id="div_id_basic_reg_type">
+            <span class="details">Registration Type </span>
+            {{ basicform.basic_reg_type }}
+          </div>
+
+<div class="input-box" id="div_id_esm_no">
+            <span class="details" >ESM Registration No</span>
+            {{ basicform.esm_no }}
+          </div>
+<div class="input-box" id="div_id_zsb">
+            <span class="details" >Previous Zila Sainik Board </span>
+           {{ basicform.zsb }}
+          </div>
+<div class="input-box" id="div_id_expiry_date">
+            <span class="details">Expiry Date of ESM</span>
+            {{ basicform.expiry_date }}
+          </div>
+<div class="input-box" id="div_id_esm_reg_type">
+            <span class="details">ESM Registration Type </span>
+            {{ basicform.esm_reg_type }}
+          </div>
+<div class="input-box" id="div_id_service">
+            <span class="details">Service</span>
+            {{ basicform.service }}
+          </div>
+<div class="input-box" id="div_id_corps">
+            <span class="details">Corps</span>
+            {{ basicform.corps }}
+          </div>
+
+<div class="input-box" id="div_id_record_office">
+            <span class="details" >Record Office</span>
+            {{ basicform.record_office }}
+          </div>
+<div class="input-box" id="div_id_service_no">
+            <span class="details" >Service No</span>
+            {{ basicform.service_no }}
+          </div>
+<div class="input-box" id="div_id_group">
+            <span class="details">Group</span>
+            {{ basicform.group }}
+          </div>
+<div class="input-box" id="div_id_trade">
+            <span class="details">Trade</span>
+            {{ basicform.trade }}
+          </div>
+<div class="input-box" id="div_id_rank_category">
+            <span class="details">Rank Category</span>
+            {{ basicform.rank_category }}
+          </div>
+<div class="input-box" id="div_id_rank">
+            <span class="details">Rank</span>
+            {{ basicform.rank }}
+          </div>
+<div class="input-box" id="div_id_state">
+            <span class="details">State</span>
+            {{ basicform.state }}
+          </div>
+<div class="input-box" id="div_id_district">
+            <span class="details">Districts</span>
+            {{ basicform.district }}
+
+</div>
+      <div class="input-box file" id="div_id_discharge_book">
+            <span class="details">Discharge Book</span>
+         {{ basicform.discharge_book }}
+</div>
+      <div class="input-box file" id="div_id_ppo_book">
+            <span class="details">PPO Book</span>
+          {{ basicform.ppo_book }}
+</div>
+<div class="input-box file" id="div_id_residence_certificate">
+            <span class="details">Residence Certificate</span>
+          {{ basicform.residence_certificate }}
+</div>
       </div>
+          <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+
+            <h4>LOGIN DETAILS</h4>
+            </div><br><br>
+          <div class="user-details">
+                   <div class="input-box" id="div_id_mobile">
+
+                           <span class="details">Mobile</span>
+          {{ basicform.mobile }}
+</div>
+ <div class="input-box">
+      <span class="details">Email</span>
+     {{ loginform.email }}
     </div>
-    <br><br><br>
+     <div class="input-box">
+      <span class="details">Password</span>
+      {{ loginform.password1 }}
+    </div>
+     <div class="input-box">
+      <span class="details">Confirm Password</span>
+      {{ loginform.password2 }}
+    </div>
+      </div>
+      </div>
+
+            <div class="btn-box">
+			<button type="submit" value="Submit" class="next">SUBMIT</Button>
+            </div>
+     </form>
+      </div>
+     </div>
+     </div>
 {% endblock %}
 {% block script %}
-    <script type="text/javascript">
-
-
-$(document).ready(function(){
-    $("#id_corps").attr('disabled',true);
-    $("#id_service").change(function () {
-        const url = $("#applyform").attr("data-records-url");
-        const ServiceId = $(this).val();
-        $.ajax({
-            url: url,
-            data: {
-                'service_id': ServiceId
-            },
-            success: function (data) {
-                $("#id_record_office").html(data);
-            }
-        });
-        if(ServiceId === '2'){
-            $("#id_corps").attr('disabled',false);
-        }
-    });
-    $("#id_state").change(function () {
-        const url = $("#applyform").attr("data-districts-url");
-        const stateid = $(this).val();
-
-        $.ajax({
-            url: url,
-            data: {
-                'stateid': stateid
-            },
-            success: function (data) {
-                $("#id_district").html(data);
-            }
-        });
-        if(ServiceId === '2'){
-            $("#id_corps").attr('disabled',false).attr('required','required')
-        }
-    });
-    $("#id_group").change(function () {
-        const url = $("#applyform").attr("data-trades-url");  // get the url of the `load_cities` view
-        const groupid = $(this).val();
-        const ServiceId = $("#id_service").val();// get the selected country ID from the HTML input
-
-        $.ajax({                       // initialize an AJAX request
-            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
-            data: {
-                'service_id': ServiceId,
-                 'groupid' :  groupid                                    // add the country id to the GET parameters
-            },
-            success: function (data) {   // `data` is the return of the `load_cities` view function
-                $("#id_trade").html(data);  // replace the contents of the city input with the data that came from the server
-
-            }
-        });
-
-    });
-    $("#id_rank_category").change(function () {
-        const url = $("#applyform").attr("data-ranks-url");  // get the url of the `load_cities` view
-        const rankcatid = $(this).val();
-        const ServiceId = $("#id_service").val();// get the selected country ID from the HTML input
-
-        $.ajax({                       // initialize an AJAX request
-            url: url,                    // set the url of the request (= /persons/ajax/load-cities/ )
-            data: {
-                'service_id': ServiceId,
-                 'rankcatid' :  rankcatid                                    // add the country id to the GET parameters
-            },
-            success: function (data) {   // `data` is the return of the `load_cities` view function
-                $("#id_rank").html(data);  // replace the contents of the city input with the data that came from the server
-
-            }
-        });
-
-    });
-$('#id_basic_reg_type').change(function () {
-    if ($('#id_basic_reg_type').val() === 'S') {
-        $('#id_have_esm').attr("disabled", true);
-        $('#id_esm_no').attr("disabled", true);
-        $('#id_expiry_date').attr("disabled", true);
-        $('#id_death_certificate').attr("disabled", true);
-        $('#esm_reg_type').attr("disabled", true);
-    } else {
-        //$name.attr('attrd"disabled', true, 'attrd"disabled', true).val('');
-        //$name.removeAttr('required');
-        $('#div_id_have_esm').show();
-        $('#id_have_esm').attr("disabled", false);
-        $('#id_esm_no').attr("disabled", false);
-        $('#id_expiry_date').attr("disabled", false);
-        $('#id_death_certificate').attr("disabled", false);
-        $('#esm_reg_type').attr("disabled", false);
-    }
-}).trigger('change');
-$('#id_have_esm').change(function () {
-    if ($('#id_have_esm').val() === 'Y') {
-        $('#id_esm_no').attr("disabled", false).attr('required',true);
-        $('#id_esm_reg_type').attr("disbled", true);
-    $('#id_service').attr("disbled", true);
-    $('#id_corps').attr("disbled", true);
-    $('#id_records').attr("disbled", true);
-    $('#id_group').attr("disbled", true);
-    $('#id_trade').attr("disbled", true);
-    $('#id_rank_category').attr("disbled", true);
-    $('#id_rank').attr("disbled", true);
-    $('#id_service_no').attr("disbled", true);
-    $('#id_state').attr("disbled", true);
-    $('#id_district').attr("disbled", true);
-    $('#id_discharge_book').attr("disbled", true);
-    $('#id_ppo_book').attr("disbled", true);
-    $('#id_residence_certificate').attr("disbled", true);
-        //$('#id_esm_no').attr('required',true);
-    } else {
-
-        //$name.removeAttr('required');
-        $('#id_esm_no').attr("disabled", true);
-    }
-}).trigger('change');
-});
-</script>
+    <script src="{% static "javascript/apply/apply.js" %}"></script>
 {% endblock %}
+
+

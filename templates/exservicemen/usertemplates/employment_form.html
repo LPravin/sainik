@@ -1,0 +1,75 @@
+{% extends 'exservicemen/base.html' %}
+{% load crispy_forms_filters %}
+{% load crispy_forms_field %}
+{% block title %} REGISTRATION FORM {% endblock %}
+{% block content %}
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-8">
+          <h1 class="mt-2">EMPLOYMENT FORM</h1>
+          <hr class="mt-0 mb-4">
+            <form method="post" action="">
+    {% csrf_token %}
+      <h3>{{ title }}</h3>
+      <div class="row">
+        {% for field in form %}
+            <div class="col-sm-4 ">
+                {{ field|as_crispy_field }}
+            <br>
+            </div>
+        {% endfor %}
+    </div>
+            <br><br>
+             <button type="submit" class="btn btn-success float-end">SAVE & NEXT</button>
+                </form>
+            </div>
+      </div>
+    </div>
+    <br><br><br>
+{% endblock %}
+{% block script %}
+    <script type="text/javascript">
+    function hideeveything() {
+        $('#div_id_willing_for_job').attr("hidden", true);
+        $('#div_id_security_job').attr("hidden", true);
+        $('#div_id_employer').attr("hidden", true);
+        $('#div_id_monthly_income').attr("hidden", true);
+        $('#div_id_department').attr("hidden", true);
+        $('#div_id_civil_retirement_date').attr("hidden", true);
+        $('#div_id_civil_ppo_no').attr("hidden", true);
+    }
+    function showemp(){
+         $('#div_id_employer').attr("hidden", false);
+        $('#div_id_monthly_income').attr("hidden", false);
+        $('#div_id_department').attr("hidden", false);
+    }
+    function showunemp(){
+        $('#div_id_willing_for_job').attr("hidden", false);
+    }
+    function showretired(){
+        $('#div_id_civil_retirement_date').attr("hidden", false);
+        $('#div_id_civil_ppo_no').attr("hidden", false);
+    }
+    $('#id_employment_status').change(function () {
+        hideeveything();
+        if ($(this).val() === 'E') {
+            showemp();
+        } else if ($(this).val() === 'U') {
+            showunemp();
+        } else if ($(this).val() === 'R') {
+            showretired();
+        }
+    });
+    $('#id_willing_for_job').change(function () {
+        if ($(this).val() === 'Y') {
+            $('#div_id_security_job').attr("hidden", false);
+        } else if ($(this).val() === 'N') {
+            hideeveything();
+            $('#div_id_willing_for_job').attr("hidden", false);
+        }
+    });
+    $(document).ready(function(){
+        hideeveything();
+    });
+    </script>
+{% endblock %}
