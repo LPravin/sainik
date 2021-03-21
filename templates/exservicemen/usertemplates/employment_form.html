@@ -1,33 +1,116 @@
-{% extends 'exservicemen/base.html' %}
-{% load crispy_forms_filters %}
-{% load crispy_forms_field %}
-{% block title %} REGISTRATION FORM {% endblock %}
+{% extends 'exservicemen/usertemplates/basic.html' %}
+
+
+{% load static %}
+
 {% block content %}
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-8">
-          <h1 class="mt-2">EMPLOYMENT FORM</h1>
-          <hr class="mt-0 mb-4">
-            <form method="post" action="">
-    {% csrf_token %}
-      <h3>{{ title }}</h3>
-      <div class="row">
-        {% for field in form %}
-            <div class="col-sm-4 ">
-                {{ field|as_crispy_field }}
-            <br>
-            </div>
-        {% endfor %}
+
+
+ <div class="container">
+     <div class="title">
+         <h4>ESM DETAILS</h4><br></div>
+         <div class="tabs">
+          <div><button id="defaultOpen" class="Next" onclick="details(Event,'service')" >Service</button></div>
+          <div><button class="Next" onclick="details(Event,'pension')">Pension</button></div>
+          <div><button class="Next" onclick="details(Event,'personal')">Personal</button></div>
+          <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
+          <div><button class="Next" onclick="details(Event,'contact')">Contact</button></div>
+          <div><button class="Next" onclick="details(Event,'family')">Family</button></div>
+          <div><button class="Next" onclick="details(Event,'depentant')">Depentant</button></div>
+
+        </div><br><br><br>
+    <div class="content">
+
+      <div class="form-outer">
+
+      <form action="#">
+          {% csrf_token %}
+
+
+  <div class="tab" id="pension">
+        <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+            <h4>PENSION DETAILS</h4>
+
+            </div><br>
+          <br><br>
+        <div class="user-details">
+            <div class="input-box">
+      <span class="details">Civil Qualification</span>
+      <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+      <span class="details">Degree</span>
+      <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+        <div class="input-box">
+      <span class="details">Equivalent trade qualification</span>
+      <input type="text" required>
+          </div>
+          <div class="input-box">
+          <span class="details">Employment Status</span>
+          <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+        </div>
+          <div class="input-box">
+          <span class="details">Whether willing for Employment registration?</span>
+              <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+          </div>
+          <div class="input-box">
+          <span class="details">Whether willing to Watch & Ward / Security Job?</span>
+          <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+        </div>
+          <div class="input-box">
+          <span class="details">Courses completed in relation with firesafety and security</span>
+          <input type="text" required>
+        </div>
+        <div class="input-box">
+          <span class="details">Employer</span>
+          <input type="text" required>
+        </div>
+        <div class="input-box">
+          <span class="details">Monthly Income</span>
+          <input type="number" required>
+        </div>
+        <div class="input-box">
+          <span class="details">Department</span>
+          <select required>
+              <option value="" disabled selected hidden>--Select an option--</option>
+            </select>
+        </div>
+        <div class="input-box">
+          <span class="details">Date of Retirement from Civil Service</span>
+          <input type="date" required>
+        </div>
+        <div class="input-box">
+          <span class="details">Civil PPO No</span>
+          <input type="text" required>
+        </div>
+
+        </div>
+        <div class="btn-box">
+			<button type="button" class="Next" onclick="details(Event,'service')">BACK</Button>
+			<button type="submit" class="Next" onclick="details(Event,'personal')">NEXT</Button>
+		</div>
     </div>
-            <br><br>
-             <button type="submit" class="btn btn-success float-end">SAVE & NEXT</button>
-                </form>
-            </div>
+      </form>
       </div>
     </div>
-    <br><br><br>
-{% endblock %}
-{% block script %}
+ </div>
+
+
+
+
     <script type="text/javascript">
     function hideeveything() {
         $('#div_id_willing_for_job').attr("hidden", true);
@@ -72,4 +155,3 @@
         hideeveything();
     });
     </script>
-{% endblock %}

@@ -13,5 +13,50 @@
     {% endif %}
 {% endblock %}
 {% block content %}
+    {% if request.user.role == 2 %}
+        <div class="containers">
+            <div class="box">
+                <div class="icon"> <i class="fas fa-users"></i></div>
+                <div class = "content">
+                    <h4>TOTAL USERS</h4><br>
+                    <p style="color:#5c5c5c;">150 users</p>
+                </div>
+            </div>
+           <div class="box">
+            <div class="icon"><i class="fas fa-user-plus"></i></div>
+            <div class = "content">
+                <h4>USER DETAILS</h4>
+                <a class="link"href="#">ADD</a>
+            </div>
+        </div>
+
+       <div class="box">
+        <div class="icon"><i class="fas fa-user-check"></i></div>
+        <div class = "content">
+            <h4>APPROVE USERS</h4>
+            <a class="link" href="#">APPROVE</a>
+        </div>
+    </div>
+
+       <div class="box">
+        <div class="icon"><i class="fas fa-user"></i></div>
+        <div class = "content">
+            <h4>ADD USERS</h4>
+            <a class ="link"href="#">VIEW</a>
+        </div>
+    </div>
+    <div class="box">
+        <div class="icon"><i class="fas fa-poll-h"></i></div>
+        <div class = "content">
+            <h4>REPORT</h4>
+            <a class="link" href="#">GENERATE</a>
+        </div>
+    </div>
+
+    </div>
+
+
+    {% endif %}
+    <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 {% endblock %}
 

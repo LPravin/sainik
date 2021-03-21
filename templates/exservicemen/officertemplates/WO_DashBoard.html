@@ -1,16 +1,46 @@
-{% extends 'exservicemen/base.html' %}
-{% load static %}
-{% block title %} WELFARE OFFICER HOME {% endblock %}
+{% extends 'exservicemen/usertemplates/basic.html' %}
 
-{% block top %}
-     {% if user.is_authenticated %}
-    <li><a href=""> Welcome {{ request.user.email }}</a></li>
-    <li><a href=""> My Profile</a></li>
-    <li><a href="{% url 'logout'  %}">Logout</a></li>
-    {% else %}
-      <li><a href="{% url "officer login" %}">Board Login</a></li>
-    <li><a href="{% url "user login" %}">User Login </a></li>
-    {% endif %}
-{% endblock %}
 {% block content %}
+<div class="containers">
+            <div class="box">
+                <div class="icon"> <i class="fas fa-users"></i></div>
+                <div class = "content">
+                    <h4>TOTAL USERS</h4><br>
+                    <p style="color:#5c5c5c;">150 users</p>
+                </div>
+            </div>
+           <div class="box">
+            <div class="icon"><i class="fas fa-user-plus"></i></div>
+            <div class = "content">
+                <h4>USER DETAILS</h4>
+                <a class="link"href="#">ADD</a>
+            </div>
+        </div>
+
+       <div class="box">
+        <div class="icon"><i class="fas fa-user-check"></i></div>
+        <div class = "content">
+            <h4>APPROVE USERS</h4>
+            <a class="link" href="#">APPROVE</a>
+        </div>
+    </div>
+
+       <div class="box">
+        <div class="icon"><i class="fas fa-user"></i></div>
+        <div class = "content">
+            <h4>ADD USERS</h4>
+            <a class ="link"href="#">VIEW</a>
+        </div>
+    </div>
+    <div class="box">
+        <div class="icon"><i class="fas fa-poll-h"></i></div>
+        <div class = "content">
+            <h4>REPORT</h4>
+            <a class="link" href="#">GENERATE</a>
+        </div>
+    </div>
+
+    </div>
+
+
 {% endblock %}

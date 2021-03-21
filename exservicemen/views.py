@@ -4,7 +4,7 @@ from django.views.generic.edit import FormView
 from . import forms
 from .models import *
 from exservicemen.forms import ApplyForm1, CustomUserCreationForm, PersonalForm, EmploymentForm, SpouseForm, \
-    DependentForm, PensionForm, Service
+    DependentForm, PensionForm, ServiceForm
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
@@ -25,16 +25,32 @@ def userlogin(request):
         user = authenticate(email=email, password=password)
 
         if user:
-            if user.role == MyUser.EXSERVICEMEN:
+            if user.role == 1:
                 if user.is_active:
                     login(request, user)
                     return HttpResponseRedirect(reverse('home'))
-                else:
-                    return HttpResponseRedirect("ACCOUNT IS NOT ACTIVE")
         return HttpResponse("INVALID CREDENTIALS")
 
     else:
         return render(request, "exservicemen/usertemplates/user_login.html")
+
+def officerlogin(request):
+
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        user = authenticate(email=email, password=password)
+
+        if user:
+            if user.role == 2:
+                if user.is_active:
+                    login(request, user)
+                    return HttpResponseRedirect(reverse(''))
+        return HttpResponse("INVALID CREDENTIALS")
+
+    else:
+        return render(request, 'exservicemen/officertemplates/WO_DashBoard.html')
 
 
 @login_required()
@@ -51,42 +67,10 @@ def applyview(request):
     if request.user.is_authenticated:
         return HttpResponseRedirect(reverse('home'))
     else:
-        # if request.method == "POST":
-        #     login_form = CustomUserCreationForm(data=request.POST)
-        #     if login_form.is_valid():
-        #         user = login_form.save()
-        #         a = ApplyDetail()
-        #         a.ref = user
-        #         a.basic_reg_type = request.POST.get("base_reg_type")
-        #         a.name = request.POST.get('name')
-        #         a.mobile = request.POST.get('mobile')
-        #         if ('E' or 'TE' or 'EW') in a.basic_reg_type:
-        #             a.esm_reg_type = request.POST.get("esm_reg_type")
-        #             a.service = request.POST.get("service")
-        #             a.record_office = request.POST.get("record_office")
-        #             a.service_no = request.POST("service_no")
-        #             a.group = request.POST.get("group")
-        #             a.trade = request.POST.get("trade")
-        #             a.rank_category = request.POST.get("rank_cat")
-        #             a.rank = request.POST.get("rank")
-        #             a.state = request.POST.get("state")
-        #             a.district = request.POST.get("district")
-        #
-        #             if a.esm_reg_type == "2":
-        #                 a.corps = request.POST.get("corps")
-        #         if a.basic_reg_type == "TE":
-        #             a.zsb = request.POST.get("zsb_name")
-        #         if ('W' or 'EW') in a.basic_reg_type:
-        #             a.expiry_date = request.POST.get("expiry_date")
-        #             if a.basic_reg_type == 'W':
-        #                 a.esm_no = request.POST.get("esm_no")
-        #         a.save()
-
         if request.method == "POST":
             login_form = CustomUserCreationForm(request.POST)
             basic_form = ApplyForm1(request.POST, request.FILES)
 
-            print(basic_form)
             if basic_form.is_valid() and login_form.is_valid():
                 user = login_form.save(commit=False)
                 user.is_active = False
@@ -95,10 +79,12 @@ def applyview(request):
                 basic = basic_form.save(commit=False)
                 basic.ref = user
                 basic.save()
+
             else:
                 print(login_form.errors, basic_form.errors)
-
             return redirect('home')
+
+
 
         else:
             loginform = CustomUserCreationForm
@@ -132,6 +118,46 @@ def load_districts(request):
     districts = District.objects.filter(state_id=stateid).all()
     return render(request, 'exservicemen/usertemplates/dependent_dropdown.html', {'record_offices': districts})
 
+# def load_mcs(request):
+#     user = request.user
+#     service = ServiceDetail.objects.filter(ref=user).values('service')
+#     mcs = MedicalCategory.objects.filter(service=service)
+#     return render(request, 'exservicemen/usertemplates/dependent_dropdown.html', {'record_offices': mcs})
+
+
+# @login_required()
+# def serviceformview(request):
+#     if request.method == "POST":
+#         pension_form = PensionForm(data=request.POST)
+#
+#         if pension_form.is_valid():
+#             form = pension_form.save(commit=False)
+#             form.ref = request.user
+#             form.save()
+#         return redirect('employment details')
+#     else:
+#         form = ServiceForm
+#         return render(request, 'exservicemen/usertemplates/pension_form.html', {'form': form, 'title': 'PENSION DETAILS'})
+
+@login_required()
+def pensionformview(request):
+    if request.method == "POST":
+        pension_form = PensionForm(data=request.POST)
+
+        if pension_form.is_valid():
+            form = pension_form.save(commit=False)
+            form.ref = request.user
+            form.save()
+        else:
+            print(pension_form.errors, pension_form)
+        return redirect('personal details')
+    else:
+        form = PensionForm
+        user = request.user
+        service = ApplyDetail.objects.values_list('service_id').get(ref=user)
+        mcs = MedicalCategory.objects.filter(service_id=service).all()
+        return render(request, 'exservicemen/usertemplates/pension_form.html', {'form': form, 'title': 'PENSION DETAILS','mcs': mcs})
+
 
 @login_required()
 def personalformview(request):
@@ -143,28 +169,14 @@ def personalformview(request):
             form = personal_form.save(commit=False)
             form.ref = request.user
             form.save()
-        return redirect('pension details')
+        return redirect('spouse details')
     else:
         form = PersonalForm
-        return render(request, 'exservicemen/usertemplates/registration.html', {'form': form, 'title': 'PERSONAL DETAILS'})
+        return render(request, 'exservicemen/usertemplates/personal_form.html', {'form': form, 'title': 'PERSONAL DETAILS'})
 
 
 @login_required()
-def pensionformview(request):
-    if request.method == "POST":
-        pension_form = PensionForm(data=request.POST)
-
-        if pension_form.is_valid():
-            form = pension_form.save(commit=False)
-            form.ref = request.user
-            form.save()
-        return redirect('employment details')
-    else:
-        form = PensionForm
-        return render(request, 'exservicemen/usertemplates/registration.html', {'form': form, 'title': 'PENSION DETAILS'})
-
-@login_required()
-def employementformview(request):
+def employmentformview(request):
     if request.method == "POST":
         employment_form = EmploymentForm(data=request.POST)
 
@@ -190,25 +202,26 @@ def spouseformview(request):
         return redirect('dependent details')
     else:
         form = SpouseForm
-        return render(request, 'exservicemen/usertemplates/registration.html', {'form': form, 'title': 'SPOUSE DETAILS'})
+        return render(request, 'exservicemen/usertemplates/spouse_form.html', {'form': form, 'title': 'SPOUSE DETAILS'})
 
 
 @login_required()
 def dependentformview(request):
 
-    DependentFormset = formset_factory(DependentForm, max_num=5, min_num=0)
+    dependentformset = formset_factory(DependentForm, max_num=5, min_num=0)
     if request.method == "POST":
-        formset = DependentFormset(data=request.POST or None)
+        formset = dependentformset(data=request.POST or None)
         if formset.is_valid():
             for form in formset:
                 if form.is_valid():
                     dep = form.save(commit=False)
                     dep.ref = request.user
                     form.save()
+            print(formset)
             return redirect('home')
 
     else:
-        formset = DependentFormset()
+        formset = dependentformset()
         return render(request, 'exservicemen/usertemplates/dependent_form.html', {'formset': formset, 'title': 'DEPENDENT DETAILS'})
 
 

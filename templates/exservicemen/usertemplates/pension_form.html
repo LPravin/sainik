@@ -1,0 +1,100 @@
+{% extends 'exservicemen/usertemplates/basic.html' %}
+
+
+{% load static %}
+
+{% block content %}
+
+
+ <div class="container">
+     <div class="title">
+         <h4>ESM DETAILS</h4><br></div>
+         <div class="tabs">
+          <div><button class="Next" onclick="details(Event,'service')" >Service</button></div>
+          <div><button id="defaultOpen" class="Next" onclick="details(Event,'pension')">Pension</button></div>
+          <div><button class="Next" onclick="details(Event,'personal')">Personal</button></div>
+          <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
+          <div><button class="Next" onclick="details(Event,'contact')">Contact</button></div>
+          <div><button class="Next" onclick="details(Event,'family')">Family</button></div>
+          <div><button class="Next" onclick="details(Event,'depentant')">Depentant</button></div>
+
+        </div><br><br><br>
+    <div class="content">
+
+      <div class="form-outer">
+
+      <form action="#"  name="pensionform"  id="pensionform" method="post">
+          {% csrf_token %}
+
+
+  <div class="tab" id="pension">
+        <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+            <h4>PENSION DETAILS</h4>
+            </div><br>
+        <div class="user-details">
+            <div class="input-box">
+            <span class="details">Unit last Served</span>
+            {{ form.unit_last_served }}
+          </div>
+          <div class="input-box">
+            <span class="details">Date of Discharge</span>
+            {{ form.discharge_date }}
+          </div>
+          <div class="input-box">
+            <span class="details">Reason for Discharge</span>
+            {{ form.discharge_reason }}
+          </div>
+          <div class="input-box">
+            <span class="details">Medical category while Discharge</span>
+              <select name="medical_category" required id="id_medical_category">
+              <option value="" selected>---------</option>
+                  {% for mc in mcs %}
+                  <option value="{{ mc.pk }}">{{ mc.mc_name }}</option>
+                    {% endfor %}
+            </select>
+          </div>
+          <div class="input-box">
+            <span class="details">Character while Discharge</span>
+            {{ form.character }}
+          </div>
+          <div class="input-box">
+            <span class="details">Discharge Book No</span>
+            {{ form.discharge_book_no }}
+          </div>
+          <div class="input-box">
+            <span class="details">PPO No</span>
+            {{ form.ppo_no }}
+          </div>
+          <div class="input-box">
+            <span class="details">Pension Sanctioned</span>
+            {{ form.pension_sanctioned }}
+          </div>
+          <div class="input-box">
+            <span class="details">Present Pension</span>
+            {{ form.present_pension }}
+          </div>
+          <div class="input-box">
+            <span class="details">Disability Pension</span>
+            {{ form.disability_pension }}
+          </div>
+          <div class="input-box">
+            <span class="details">Percentage of Disability</span>
+            {{ form.disability_percent }}
+          </div>
+        </div>
+        <div class="btn-box">
+			<button type="button" class="Next" onclick="details(Event,'service')">BACK</Button>
+			<button type="submit" class="Next" value="submit">NEXT</Button>
+		</div>
+    </div>
+      </form>
+      </div>
+    </div>
+ </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static "javascript/registration/pension.js" %}"></script>
+{% endblock %}

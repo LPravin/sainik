@@ -11,7 +11,6 @@ class MyUserManager(BaseUserManager):
 
         user = self.model(
             email=self.normalize_email(email),
-            role=self.role,
             **extra_fields
         )
 
@@ -22,25 +21,21 @@ class MyUserManager(BaseUserManager):
     def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault('is_admin', True)
         extra_fields.setdefault('is_active', True)
-        extra_fields.setdefault('role', 6)
+        extra_fields.setdefault('role', 8)
         return self.create_user(email, password, **extra_fields)
 
 
 class MyUser(AbstractBaseUser):
-    EXSERVICEMEN = 1
-    WELFARE_OFFICER = 2
-    DIRECTOR = 3
-    RSB = 4
-    KSB = 5
-    SUPERUSER = 6
 
     ROLE_CHOICES = (
-        (EXSERVICEMEN, 'EXSERVICEMEN'),
-        (WELFARE_OFFICER, 'WELFARE_OFFICER'),
-        (DIRECTOR, 'DIRECTOR'),
-        (RSB, 'KSB'),
-        (KSB, 'RSB'),
-        (SUPERUSER, 'ADMIN')
+        (1, 'EXSERVICEMEN'),
+        (2, 'WELFARE_OFFICER'),
+        (3, 'DIRECTOR'),
+        (4, 'RSB_HEAD'),
+        (5, 'RSB_OFFICER'),
+        (6, 'KSB_HEAD'),
+        (7, 'KSB_OFFICER'),
+        (8, 'SUPERUSER')
     )
     email = models.EmailField(
         verbose_name='Email address',
@@ -286,7 +281,7 @@ class ServiceDetail(models.Model):
     service_no = models.CharField(max_length=9)
     rank_category = models.ForeignKey(RankCategory, on_delete=models.DO_NOTHING, default=None)
     rank = models.ForeignKey(Rank, on_delete=models.DO_NOTHING, default=None)
-    reg_date = models.DateField()
+    reg_date = models.DateField(auto_now=True)
     enrollment_date = models.DateField()
     world_war_2 = models.CharField(max_length=1, choices=YesNo, default=None)
     operations = models.CharField(max_length=100, blank=True)
@@ -464,3 +459,36 @@ class DependentDetail(models.Model):
 
     def __str__(self):
         return self.dep_name
+
+
+class OfficerDetail(models.Model):
+    name = models.CharField(max_length=100)
+    bramch = models.ForeignKey(ZilaSainikBoard, on_delete=models.CASCADE)
+    ref = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+
+    class Meta:
+        abstract = True
+
+
+class WelfareOfficer(OfficerDetail):
+    pass
+
+
+class Director(OfficerDetail):
+    pass
+
+
+class RSBOfficer(OfficerDetail):
+    pass
+
+
+class RSBHead(OfficerDetail):
+    pass
+
+
+class KSBOfficer(OfficerDetail):
+    pass
+
+
+class KSBHead(OfficerDetail):
+    pass

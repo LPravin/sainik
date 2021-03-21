@@ -1,0 +1,217 @@
+.graph-container{
+
+    justify-content: center;
+    align-items: center;
+    height:100%;
+}
+.graph{
+
+    position:relative;
+    width:80%;
+    height:100%;
+    padding: 40px;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    overflow: hidden;
+    align-self: center;
+    text-align: center;
+    margin: 40px 40px 3%;
+
+}
+
+.myChart{
+    width:100%;
+    height:100%;
+}
+.containers{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.containers .box{
+    position:relative;
+    width:200px;
+    padding: 40px;
+    background: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    border-radius: 4px;
+    overflow:hidden;
+    text-align: center;
+    align-items: center;
+    margin: 20px 20px 3%;
+}
+
+
+.containers .box .icon{
+    position: relative;
+    width: 55px;
+    height: 55px;
+    color:#fff;
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    border-radius: 50%;
+    font-size: 40px;
+    font-weight: 700;
+    transition: 1s;
+
+}
+
+.containers .box .icon{
+    box-shadow: 0 0 0 0 #677eff;
+    background: #677eff;
+}
+
+.containers .box:hover .icon{
+    box-shadow: 0 0 0 400px #677eff;
+}
+.containers .box .content{
+
+    position: relative;
+    z-index: 1;
+    transition: 0.5s;
+}
+.containers .box:hover .content{
+    color: #fff;
+}
+
+.containers .box .content h4{
+    font-size: 20px;
+    font-weight: bold;
+    margin: 10px 0;
+    padding: 0;
+}
+.containers .box .content p{
+    font-weight: bold;
+
+    margin: 0;
+    padding: 0;
+}
+.link{
+    display: inline-block;
+    padding:10px 20px;
+    background: #fff;
+    border-radius: 4px;
+    text-decoration: none;
+    color:#677eff;
+    border: 1px solid #fff;
+    font-weight: 500;
+    margin-top: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+
+
+
+{% extends 'exservicemen/usertemplates/basic.html' %}
+
+{% block content %}
+
+     <div class="graph-container">
+            <div class="graph"><canvas id="myChart"></canvas></div>
+    </div>
+    <div class="containers">
+            <div class="box">
+                <div class="icon"> <i class="fas fa-users"></i></div>
+                <div class = "content">
+                    <h4>TOTAL USERS</h4><br>
+                    <p style="color:#5c5c5c;">150 users</p>
+                </div>
+            </div>
+           <div class="box">
+            <div class="icon"><i class="fas fa-user-plus"></i></div>
+            <div class = "content">
+                <h4>USER DETAILS</h4>
+                <a class="link"href="#">ADD</a>
+            </div>
+        </div>
+
+       <div class="box">
+        <div class="icon"><i class="fas fa-user-check"></i></div>
+        <div class = "content">
+            <h4>APPROVE USERS</h4>
+            <a class="link" href="#">APPROVE</a>
+        </div>
+    </div>
+
+       <div class="box">
+        <div class="icon"><i class="fas fa-user"></i></div>
+        <div class = "content">
+            <h4>VIEW USERS</h4>
+            <a class ="link"href="#">VIEW</a>
+        </div>
+    </div>
+    <div class="box">
+        <div class="icon"><i class="fas fa-poll-h"></i></div>
+        <div class = "content">
+            <h4>REPORT</h4>
+            <a class="link" href="#">GENERATE</a>
+        </div>
+    </div>
+
+    </div>
+
+{% endblock %}
+
+{% block script %}
+     <script>
+       $(document).ready(function() {
+           var endpoint = 'api/data/'
+           var DefaultData = []
+           var labels = []
+           $.ajax({
+               method: "GET",
+               url: endpoint,
+               success: function (data) {
+                   labels = data.labels
+                   DefaultData = data.DefaultData
+                   console.log(data)
+                   var ctx = document.getElementById('myChart').getContext('2d');
+                   var myChart = new Chart(ctx, {
+                       type: 'radar',
+                       data: {
+                           labels: labels,
+                           datasets: [{
+                               label: 'Daily Tablets Used',
+                               data: DefaultData,
+                               backgroundColor: [
+                                   'rgba(255, 99, 132, 0.2)',
+                                   'rgba(54, 162, 235, 0.2)',
+                                   'rgba(255, 206, 86, 0.2)',
+                                   'rgba(75, 192, 192, 0.2)',
+                                   'rgba(153, 102, 255, 0.2)',
+                                   'rgba(255, 159, 64, 0.2)'
+                               ],
+                               borderColor: [
+                                   'rgba(255, 99, 132, 1)',
+                                   'rgba(54, 162, 235, 1)',
+                                   'rgba(255, 206, 86, 1)',
+                                   'rgba(75, 192, 192, 1)',
+                                   'rgba(153, 102, 255, 1)',
+                                   'rgba(255, 159, 64, 1)'
+                               ],
+                               borderWidth: 1
+                           }]
+                       },
+                       options: {
+                           scales: {
+                               yAxes: [{
+                                   ticks: {
+                                       beginAtZero: true
+                                   }
+                               }]
+                           }
+                       }
+                   });
+               },
+               error: function (error_data) {
+                   console.log(error_data)
+               }
+           })
+       })
+         </script>
+{% endblock %}

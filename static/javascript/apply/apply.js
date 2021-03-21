@@ -11,13 +11,11 @@ function hideeveything(){
     $('#div_id_rank_category').attr("hidden", true);
     $('#div_id_rank').attr("hidden", true);
     $('#div_id_service_no').attr('hidden', true);
-    $('#div_id_state').attr("hidden", true);
-    $('#div_id_district').attr("hidden", true);
     $('#div_id_discharge_book').attr("hidden", true);
     $('#div_id_ppo_book').attr("hidden", true);
     $('#div_id_death_certificate').attr("hidden", true);
     $('#div_id_residence_certificate').attr("hidden", true);
-    $(".textinput").val("");
+    $(".form-control").val("");
     }
     function showesm(){
         $('#div_id_esm_reg_type').attr("hidden", false);
@@ -28,8 +26,6 @@ function hideeveything(){
     $('#div_id_rank_category').attr("hidden", false);
     $('#div_id_rank').attr("hidden", false);
     $('#div_id_service_no').attr("hidden", false);
-    $('#div_id_state').attr("hidden", false);
-    $('#div_id_district').attr("hidden", false);
     $('#div_id_discharge_book').attr("hidden", false);
     $('#div_id_ppo_book').attr("hidden", false);
     $('#div_id_residence_certificate').attr("hidden", false);
@@ -54,7 +50,6 @@ function hideeveything(){
         showesm();
         } else if ($(this).val() === 'W'){
         showregwidow();
-            $('#div_id_esm_no').attr('required', 'required');
         } else if ($(this).val() === 'TE'){
             showtransesm();
         } else if ($(this).val() === 'TW'){
@@ -166,33 +161,134 @@ function hideeveything(){
             }
         });
     });
+
     $(document).ready(function(){
+         const form_fields = document.getElementsByClassName('form-0')
+         const form_select = document.getElementsByTagName('select');
+        for (let f in form_fields) {
+            if(form_fields.hasOwnProperty(f)){
+                form_fields[f].className = "form-control"
+            }
+        }
+        for (let s in form_select) {
+            if(form_select.hasOwnProperty(s)){
+                form_select[s].className = "form-control"
+            }
+        }
+        $("#id_basic_reg_type").removeClass("form-control");
+        $('[name="csrfmiddlewaretoken"]').removeClass("form-control");
         hideeveything();
-
     });
-    function details(evt, tabName) {
+        const brt = document.getElementById("id_basic_reg_type");
+        const name = document.getElementById("id_name");
+        const ert = document.getElementById("id_esm_reg_type");
+        const service = document.getElementById("id_service");
+        const ro = document.getElementById("id_record_office");
+        const sno = document.getElementById("id_service_no");
+        const group = document.getElementById("id_group");
+        const trade = document.getElementById("id_trade");
+        const rcat = document.getElementById("id_rank_category");
+        const rank = document.getElementById("id_rank");
+        const state = document.getElementById("id_state");
+        const district = document.getElementById("id_district");
+        const esm_no = document.getElementById("id_esm_no");
+        const expiry_date = document.getElementById("id_expiry_date");
+        const zsb = document.getElementById("id_zsb");
 
-  var i;
-  var x = document.getElementsByClassName("tab");
-  for (i = 0; i < x.length; i++) {
-    x[i].style.display = "none";
-  }
-  document.getElementById(tabName).style.display = "block";
-}
+function alphaOnly(event) {
+  let key = event.keyCode;
+  return ((key >= 65 && key <= 90) || key === 8);
+    }
 
-     document.getElementById("defaultOpen").click();
-    // function validateForm() {
-    //   // This function deals with validation of the form fields
-    //   var x, y, i, valid = true;
-    //   x = document.getElementsByClassName("tab");
-    //   y = x[currentTab].getElementsByTagName("input");
-    //   // A loop that checks every input field in the current tab:
-    //   for (i = 0; i < y.length; i++) {
-    //     // If a field is empty...
-    //     if (y[i].value == "") {
-    //       // add an "invalid" class to the field:
-    //       y[i].className += " invalid";
-    //       // and set the current valid status to false
-    //       valid = false;
-    //     }
-    //   }
+    function numOnly(event) {
+    let key = event.keyCode;
+  return ((key >= 48 && key <= 57) || (key >= 96 && key <= 105) || key === 8);
+    }
+
+    function validateform()
+    {
+
+        if( name.value === "" ) {
+           alert( "Please provide your name!" );
+           name.focus();
+           return false;
+         }
+        if (brt.value === "")
+        {
+            alert( "Please select basic registration type" );
+            brt.focus();
+            return false;
+        }
+        if (brt.value === "E" || brt.value === "TE" || brt.value ==="UW")
+        {
+            if( ert.value === ""){
+                alert( "Please select ESM registration type" );
+            ert.focus();
+            return false;}
+            if( service.value === ""){
+                alert("Please select service");
+                service.focus();
+                return false;}
+            if(ro.value === ""){
+                alert("Please select record office");
+                ro.focus();
+            return false;}
+            if(group.value  === "") {
+                alert("Please select group");
+                group.focus();
+            return false;}
+            if(trade.value  === "") {
+                alert("Please select trade");
+                trade.focus();
+            return false;}
+            if(rcat.value  === "") {
+                alert("Please select rank category");
+                rcat.focus();
+            return false;}
+            if(rank.value  === "") {
+                alert("Please select rank");
+                rank.focus();
+            return false;}
+            if(sno.value  === "") {
+                alert("Please fill service number");
+                sno.focus();
+                return false;}
+        }
+        if (brt.value === "W"  || brt.value === "UW"){
+             if(esm_no.value  === "") {
+                alert("Please enter ESM No");
+                esm_no.focus();
+                return false;}
+            if(expiry_date.value  === "") {
+                alert("Please enter Expiry Date");
+                expiry_date.focus();
+                return false;}
+        }
+        if (brt.value === "TE"){
+            if(esm_no.value  === "")
+             {
+                 alert("Please enter ESM registration number");
+                 esm_no.focus();
+                 return false;
+             }
+            if(zsb.value  === "")
+             {
+                 alert("Please Select Previous ZSB name");
+                 zsb.focus();
+                 return false;
+             }
+        }
+        if (state.value === ""){
+                alert("Please Select the state you want to apply");
+                 state.focus();
+                 return false;
+        }
+        if (district.value === ""){
+                alert("Please Select the state you want to apply");
+                 district.focus();
+                 return false;
+        }
+
+        return true;
+
+    }

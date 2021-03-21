@@ -5,37 +5,44 @@
      <div class="container">
      <div class="title">
          <h4>LOGIN REQUEST</h4><br></div>
-    <div class="tabs">
-          <div><button id="defaultOpen" class="Next" onclick="details(Event,'service')" >Service</button></div>
-          <div><button class="Next" onclick="details(Event,'login')">Login</button></div>
-
-        </div><br><br><br>
+    <br><br><br>
      <div class="content">
 
       <div class="form-outer">
 
- <form enctype="multipart/form-data" id="applyform" name="applyform"
+ <form enctype="multipart/form-data" id="applyform" name="applyform" onsubmit="return validateform()"
                   data-records-url="{% url 'ajax_load_records' %}"
                   data-trades-url="{% url 'ajax_load_trades' %}"
                   data-ranks-url="{% url 'ajax_load_ranks' %}"
                   data-districts-url="{% url 'ajax_load_districts' %}"
                   method="post" action="">
  {% csrf_token %}
-      <div class="tab" id="service">
         <div class="detailname" style="overflow: hidden;
           border: 1px solid #ccc;
           background-color: #f1f1f1;">
             <h4>SERVICE DETAILS</h4>
             </div><br><br>
       <div class="user-details">
-      <div class="input-box" id="div_id_name">
+          <div class="input-box" id="div_id_name">
+            <span class="details" >Registration Type</span>
+            {{ basicform.basic_reg_type }}
+            </div>
+          <div class="input-box" id="div_id_name">
             <span class="details" >Name</span>
             {{ basicform.name }}
+            </div>
+          <div class="input-box" id="div_id_state">
+            <span class="details">State your applying in</span>
+            {{ basicform.state }}
           </div>
-<div class="input-box" id="div_id_basic_reg_type">
-            <span class="details">Registration Type </span>
-            {{ basicform.basic_reg_type }}
-          </div>
+<div class="input-box" id="div_id_district">
+            <span class="details">District your applying in</span>
+            {{ basicform.district }}
+            </div>
+
+
+
+
 
 <div class="input-box" id="div_id_esm_no">
             <span class="details" >ESM Registration No</span>
@@ -86,15 +93,6 @@
             <span class="details">Rank</span>
             {{ basicform.rank }}
           </div>
-<div class="input-box" id="div_id_state">
-            <span class="details">State</span>
-            {{ basicform.state }}
-          </div>
-<div class="input-box" id="div_id_district">
-            <span class="details">Districts</span>
-            {{ basicform.district }}
-
-</div>
       <div class="input-box file" id="div_id_discharge_book">
             <span class="details">Discharge Book</span>
          {{ basicform.discharge_book }}
@@ -133,10 +131,9 @@
       {{ loginform.password2 }}
     </div>
       </div>
-      </div>
-
+            {{ loginform.errors }}
             <div class="btn-box">
-			<button type="submit" value="Submit" class="next">SUBMIT</Button>
+			<button type="submit" value="Submit" class="Next">SUBMIT</Button>
             </div>
      </form>
       </div>
@@ -146,5 +143,3 @@
 {% block script %}
     <script src="{% static "javascript/apply/apply.js" %}"></script>
 {% endblock %}
-
-
