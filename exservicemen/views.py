@@ -4,12 +4,17 @@ from django.views.generic.edit import FormView
 from . import forms
 from .models import *
 from exservicemen.forms import ApplyForm1, CustomUserCreationForm, PersonalForm, EmploymentForm, SpouseForm, \
-    DependentForm, PensionForm, ServiceForm
+    DependentForm, PensionForm, ServiceForm, ContactForm1, ContactForm2, ESMBasic, ServiceDetail
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.forms import formset_factory
+from django.contrib.auth.decorators import user_passes_test
+
+
+def wo_check(user):
+    return user.role == 2
 
 
 def homeview(request):
@@ -34,6 +39,7 @@ def userlogin(request):
     else:
         return render(request, "exservicemen/usertemplates/user_login.html")
 
+
 def officerlogin(request):
 
     if request.method == 'POST':
@@ -41,26 +47,21 @@ def officerlogin(request):
         password = request.POST.get('password')
 
         user = authenticate(email=email, password=password)
-
         if user:
             if user.role == 2:
                 if user.is_active:
                     login(request, user)
-                    return HttpResponseRedirect(reverse(''))
+                    return HttpResponseRedirect(reverse('home'))
         return HttpResponse("INVALID CREDENTIALS")
 
     else:
-        return render(request, 'exservicemen/officertemplates/WO_DashBoard.html')
+        return render(request, 'exservicemen/usertemplates/officer_login.html')
 
 
 @login_required()
 def userlogout(request):
     logout(request)
     return HttpResponseRedirect(reverse('home'))
-
-
-def officerlogin(request):
-    return render(request, "exservicemen/usertemplates/officer_login.html")
 
 
 def applyview(request):
@@ -74,6 +75,7 @@ def applyview(request):
             if basic_form.is_valid() and login_form.is_valid():
                 user = login_form.save(commit=False)
                 user.is_active = False
+                user.role = 1
                 user.save()
 
                 basic = basic_form.save(commit=False)
@@ -141,35 +143,39 @@ def load_districts(request):
 
 @login_required()
 def pensionformview(request):
+    email = request.session['email']
     if request.method == "POST":
         pension_form = PensionForm(data=request.POST)
 
         if pension_form.is_valid():
+            user = MyUser.objects.get(email=email)
             form = pension_form.save(commit=False)
-            form.ref = request.user
+            form.ref = user
             form.save()
-        else:
-            print(pension_form.errors, pension_form)
-        return redirect('personal details')
+            return redirect('personal details')
+        return redirect('pension details')
     else:
         form = PensionForm
-        user = request.user
-        service = ApplyDetail.objects.values_list('service_id').get(ref=user)
-        mcs = MedicalCategory.objects.filter(service_id=service).all()
-        return render(request, 'exservicemen/usertemplates/pension_form.html', {'form': form, 'title': 'PENSION DETAILS','mcs': mcs})
+        service_id = request.session['service_id']
+        mcs = MedicalCategory.objects.filter(service_id=service_id).all()
+        return render(request, 'exservicemen/usertemplates/pension_form.html', {'form': form, 'mcs': mcs})
 
 
 @login_required()
 def personalformview(request):
-
+    email = request.session['email']
     if request.method == "POST":
         personal_form = PersonalForm(data=request.POST)
 
         if personal_form.is_valid():
+            user = MyUser.objects.get(email=email)
             form = personal_form.save(commit=False)
-            form.ref = request.user
+            form.ref = user
             form.save()
-        return redirect('spouse details')
+            return redirect('contact details')
+        else:
+            print(personal_form.errors)
+            return redirect('personal details')
     else:
         form = PersonalForm
         return render(request, 'exservicemen/usertemplates/personal_form.html', {'form': form, 'title': 'PERSONAL DETAILS'})
@@ -202,7 +208,7 @@ def spouseformview(request):
         return redirect('dependent details')
     else:
         form = SpouseForm
-        return render(request, 'exservicemen/usertemplates/spouse_form.html', {'form': form, 'title': 'SPOUSE DETAILS'})
+        return render(request, 'exservicemen/usertemplates/spouse_form.html', {'form': form})
 
 
 @login_required()
@@ -217,11 +223,74 @@ def dependentformview(request):
                     dep = form.save(commit=False)
                     dep.ref = request.user
                     form.save()
-            print(formset)
             return redirect('home')
 
     else:
         formset = dependentformset()
-        return render(request, 'exservicemen/usertemplates/dependent_form.html', {'formset': formset, 'title': 'DEPENDENT DETAILS'})
+        return render(request, 'exservicemen/usertemplates/dependent_form.html', {'formset': formset})
+
+@login_required()
+def contactformview(request):
+    email = request.session['email']
+    if request.method == "POST":
+        contactform1 = ContactForm1(data=request.POST)
+
+        if contactform1.is_valid():
+            user = MyUser.objects.get(email=email)
+            form = contactform1.save(commit=False)
+            form.ref = user
+            form.save()
+            if contactform1.cleaned_data['is_address_same'] == 'N':
+                contactform2 = ContactForm2(data=request.POST)
+                if contactform2.is_valid():
+                    form = contactform2.save(commit=False)
+                    form.ref = user
+                    form.save()
+                    return redirect('spouse details')
+                else:
+                    print(contactform2.errors)
+            else:
+                return redirect('spouse details')
+        else:
+            print(contactform1.errors)
+
+    form1 = ContactForm1
+    form2 = ContactForm2
+    return render(request, 'exservicemen/usertemplates/contact_form.html', {'form1': form1, 'form2': form2})
 
 
+@login_required()
+@user_passes_test(wo_check)
+def addesm(request):
+    if request.method == "POST":
+        login_form = CustomUserCreationForm(request.POST)
+        esmbasic = ESMBasic(request.POST)
+        serviceform = ServiceForm(request.POST)
+        WO = request.user
+        zid = WelfareOfficer.objects.get(ref=WO)
+
+        if esmbasic.is_valid() and serviceform.is_valid() and login_form.is_valid():
+
+            user = login_form.save(commit=False)
+            user.is_active = True
+            user.role = 1
+            user.save()
+
+            basic = esmbasic.save(commit=False)
+            basic.ref = user
+            basic.save()
+
+            service = serviceform.save(commit=False)
+            service.zila_board_id = zid.zila_board_id
+            service.ref = user
+            request.session['service_id'] = serviceform.cleaned_data["service"].id
+            request.session['email'] = login_form.cleaned_data['email']
+            service.save()
+            return redirect('pension details')
+        else:
+            print(esmbasic.errors, serviceform.errors, login_form.errors)
+    loginform = CustomUserCreationForm
+    esmbasic  = ESMBasic
+    serviceform = ServiceForm
+    return render(request, "exservicemen/usertemplates/WO_registration_home.html",
+                  {'loginform': loginform, 'serviceform': serviceform, 'esmbasic': esmbasic})

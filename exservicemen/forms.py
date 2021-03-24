@@ -4,6 +4,7 @@ from .models import *
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.validators import ValidationError
 
+
 class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm):
@@ -36,17 +37,61 @@ class ApplyForm1(ModelForm):
 
         widgets = {
             'expiry_date': forms.DateInput(attrs={'type': 'date'}),
-            'name': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)", 'onpaste': "return false"}),
+            'name': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)", 'onpaste': "return false",
+                                           "style": "text-transform: uppercase;"}),
             'service_no': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
             'mobile': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
         }
 
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)
-    #
+    #     self.fields['record_office'].queryset = RecordOffice.objects.none()
     #     self.fields['trade'].queryset = Trade.objects.none()
     #     self.fields['rank'].queryset = Rank.objects.none()
-    #     self.fields['record_office'].queryset = RecordOffice.objects.none()
+    #     self.fields['district'].queryset = District.objects.none()
+    #
+    #     if 'service' in self.data:
+    #         try:
+    #             service_id = int(self.data.get('service'))
+    #             self.fields['record_office'].queryset = RecordOffice.objects.filter(service_id=service_id).order_by(
+    #                 'record_office_name')
+    #         except (ValueError, TypeError):
+    #             pass  # invalid input from the client; ignore and fallback to empty City queryset
+    #     elif self.instance.pk:
+    #         self.fields['record_office'].queryset = self.instance..order_by('record_office_name')
+    #
+    #     if 'service' and 'group' in self.data:
+    #         try:
+    #             service_id = int(self.data.get('service'))
+    #             group_id = int(self.data.get('group'))
+    #             self.fields['trade'].queryset = Trade.objects.filter(service_id=service_id, trade_group_id=group_id).order_by(
+    #                 'trade_group')
+    #         except (ValueError, TypeError):
+    #             pass  # invalid input from the client; ignore and fallback to empty City queryset
+    #     elif self.instance.pk:
+    #         self.fields['group'].queryset = self.instance.service.order_by('trade_group')
+    #
+    #     if 'rank_category' in self.data:
+    #         try:
+    #             rank_category_id = int(self.data.get('rank_category'))
+    #             self.fields['rank'].queryset = Rank.objects.filter(rank_category=rank_category_id).order_by(
+    #                 'rank')
+    #         except (ValueError, TypeError):
+    #             pass  # invalid input from the client; ignore and fallback to empty City queryset
+    #     elif self.instance.pk:
+    #         self.fields['rank'].queryset = self.instance.service.order_by('rank_category')
+    #
+    #     if 'state' in self.data:
+    #         try:
+    #             state_id = int(self.data.get('state_id'))
+    #             self.fields['state_id'].queryset = District.objects.filter(rank_category=state_id).order_by(
+    #                 'district_name')
+    #         except (ValueError, TypeError):
+    #             pass  # invalid input from the client; ignore and fallback to empty City queryset
+    #     elif self.instance.pk:
+    #         self.fields['district'].queryset = self.instance.service.order_by('district_name')
+
+
 
     def clean(self):
         # data from the form is fetched using super function
@@ -123,7 +168,11 @@ class ServiceForm(ModelForm):
 
     class Meta:
         model = ServiceDetail
-        exclude = ['ref']
+        exclude = ['ref', 'zila_board']
+        widgets = {
+            'reg_date': forms.DateInput(attrs={'type': 'date'}),
+            'enrollment_date': forms.DateInput(attrs={'type':'date'}),
+        }
 
 
 class PersonalForm(ModelForm):
@@ -175,7 +224,7 @@ class SpouseForm(ModelForm):
 
         widgets = {
             'dob': forms.DateInput(attrs={'type': 'date'}),
-            'name': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)"}),
+            'name': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)", }),
             'aadhaar_no': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
             'marriage_date': forms.DateInput(attrs={'type': 'date'}),
             'spouse_retirement_date': forms.DateInput(attrs={'type': 'date'}),
@@ -189,5 +238,34 @@ class DependentForm(ModelForm):
         exclude = ['ref']
 
         widgets = {
-            'dep_dob': forms.DateInput(attrs={'type': 'date'})
+            'dep_dob': forms.DateInput(attrs={'type': 'date'}),
+            'dep_name': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)"}),
+            'aadhaar_no': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
         }
+
+
+class ContactForm1(ModelForm):
+
+    class Meta:
+        model = PermanentAddress
+        exclude = ['ref']
+
+        widgets = {
+            'is_address_same': forms.CheckboxInput()
+        }
+
+class ContactForm2(ModelForm):
+    class Meta:
+        model = PresentAddress
+        exclude = ['ref']
+
+        widgets = {
+            'house_no': forms.TextInput(attrs={'id': "hno"}),
+        }
+
+
+class ESMBasic(ModelForm):
+    class Meta:
+        model = ExServiceMen
+        fields = ['esm_no', 'reg_type']
+

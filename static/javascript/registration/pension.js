@@ -1,19 +1,3 @@
-// $(document).ready(function (){
-//         const url = $("#pensionform").attr("data-mcs-url");
-//
-//         $.ajax({
-//             url: url,
-//             data: {
-//                 'service_id': serviceid,
-//                  'groupid' :  groupid
-//             },
-//             success: function (data) {
-//                 $("#id_trade").html(data);
-//
-//             }
-//         });
-//     });
-
 function details(evt, tabName) {
 
   var i;

@@ -23,7 +23,7 @@
 
       <div class="form-outer">
 
-      <form action="#">
+      <form action="#" method="post">
           {% csrf_token %}
 
 
@@ -31,70 +31,58 @@
         <div class="detailname" style="overflow: hidden;
           border: 1px solid #ccc;
           background-color: #f1f1f1;">
-            <h4>PENSION DETAILS</h4>
+            <h4>EMPLOYMENT DETAILS</h4>
 
             </div><br>
           <br><br>
         <div class="user-details">
             <div class="input-box">
       <span class="details">Civil Qualification</span>
-      <select required>
-              <option value="" disabled selected hidden>--Select an option--</option>
-            </select>
+      {{ form.civil_qualification }}
           </div>
-          <div class="input-box">
-      <span class="details">Degree</span>
-      <select required>
-              <option value="" disabled selected hidden>--Select an option--</option>
-            </select>
-          </div>
+{#          <div class="input-box">#}
+{#      <span class="details">Degree</span>#}
+{#      {{ form }}#}
+{#          </div>#}
         <div class="input-box">
       <span class="details">Equivalent trade qualification</span>
       <input type="text" required>
           </div>
           <div class="input-box">
           <span class="details">Employment Status</span>
-          <select required>
-              <option value="" disabled selected hidden>--Select an option--</option>
-            </select>
+          {{ form.employment_status }}
         </div>
           <div class="input-box">
           <span class="details">Whether willing for Employment registration?</span>
-              <select required>
-              <option value="" disabled selected hidden>--Select an option--</option>
-            </select>
+              {{ form.willing_for_job }}
           </div>
-          <div class="input-box">
+          <div class="input-box" id="div_id_security_job">
           <span class="details">Whether willing to Watch & Ward / Security Job?</span>
-          <select required>
-              <option value="" disabled selected hidden>--Select an option--</option>
-            </select>
+          {{ form.security_job }}
         </div>
-          <div class="input-box">
+          <div class="input-box" id="div_id_firesafety_sec_qualification">
           <span class="details">Courses completed in relation with firesafety and security</span>
-          <input type="text" required>
+          {{ form.firesafety_sec_qualification }}
         </div>
-        <div class="input-box">
+        <div class="input-box" id="div_id_employer">
           <span class="details">Employer</span>
-          <input type="text" required>
+          {{ form.employer }}
         </div>
-        <div class="input-box">
+        <div class="input-box" id="div_id_monthly_income">
           <span class="details">Monthly Income</span>
-          <input type="number" required>
+          {{ form.monthly_income }}
         </div>
-        <div class="input-box">
+        <div class="input-box" id="div_id_department">
           <span class="details">Department</span>
-          <select required>
-              <option value="" disabled selected hidden>--Select an option--</option>
-            </select>
+          {{ form.department }}
         </div>
-        <div class="input-box">
+        <div class="input-box" id="div_id_civil_retirement_date">
           <span class="details">Date of Retirement from Civil Service</span>
-          <input type="date" required>
+          {{ form.civil_retirement_date }}
         </div>
-        <div class="input-box">
+        <div class="input-box" id="div_id_civil_ppo_no">
           <span class="details">Civil PPO No</span>
-          <input type="text" required>
+          {{ form.civil_ppo_no }}
         </div>
 
         </div>
@@ -107,51 +95,8 @@
       </div>
     </div>
  </div>
+{% endblock %}
 
-
-
-
-    <script type="text/javascript">
-    function hideeveything() {
-        $('#div_id_willing_for_job').attr("hidden", true);
-        $('#div_id_security_job').attr("hidden", true);
-        $('#div_id_employer').attr("hidden", true);
-        $('#div_id_monthly_income').attr("hidden", true);
-        $('#div_id_department').attr("hidden", true);
-        $('#div_id_civil_retirement_date').attr("hidden", true);
-        $('#div_id_civil_ppo_no').attr("hidden", true);
-    }
-    function showemp(){
-         $('#div_id_employer').attr("hidden", false);
-        $('#div_id_monthly_income').attr("hidden", false);
-        $('#div_id_department').attr("hidden", false);
-    }
-    function showunemp(){
-        $('#div_id_willing_for_job').attr("hidden", false);
-    }
-    function showretired(){
-        $('#div_id_civil_retirement_date').attr("hidden", false);
-        $('#div_id_civil_ppo_no').attr("hidden", false);
-    }
-    $('#id_employment_status').change(function () {
-        hideeveything();
-        if ($(this).val() === 'E') {
-            showemp();
-        } else if ($(this).val() === 'U') {
-            showunemp();
-        } else if ($(this).val() === 'R') {
-            showretired();
-        }
-    });
-    $('#id_willing_for_job').change(function () {
-        if ($(this).val() === 'Y') {
-            $('#div_id_security_job').attr("hidden", false);
-        } else if ($(this).val() === 'N') {
-            hideeveything();
-            $('#div_id_willing_for_job').attr("hidden", false);
-        }
-    });
-    $(document).ready(function(){
-        hideeveything();
-    });
-    </script>
+{% block script %}
+    <script src="{% static "javascript/registration/employment.js" %}"></script>
+{% endblock %}

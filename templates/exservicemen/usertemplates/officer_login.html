@@ -1,27 +1,30 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
- <div class = "container" id="user-login">
-<div class = "user loginbx" id="officer">
-                      <div class = " formbx">
-                          <form>
-                              <div class="logo"><img src="{% static "images/Login/logo.png" %}" width=42px height =42px style="margin-top: -60px;"></div>
-                              <h1>SAINIK WELFARE DEPARTMENT</h1>
-                              <h2>Officer Login</h2>
-                              <input type = "text" name = "" placeholder="Username">
-                              <input type = "password" name = "" placeholder="Password">
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name = "viewport" content = "width=device-width, initial-scale=1.0">
+        <title>ESM Login</title>
+        <link rel = "stylesheet" href="{% static "css/Login/index.css" %}">
+    </head>
+    <body>
+        <section>
+            <div class = "container" id="user-login">
+                <div class = "user signinbx">
+                  <div class = "imgbx"><img src="{% static "images/Login/army-day.jpg" %}" ></div>
+                    <div class = " formbx">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="logo"><img src="{% static "images/Login/logo.png" %}" width=42px height =42px style="margin-top: -60px;"></div>
+                            <h1>SAINIK WELFARE DEPARTMENT</h1>                              <h2>Officer Login</h2>
+                              <input type = "text" name = "email" placeholder="Email">
+                              <input type = "password" name = "password" placeholder="Password">
                               <input type = "submit" name = "" value="LOGIN">
-                              <p class = "signup">Switch to <a href = "#" onclick="toggleForm();">User Login</a></p>
-                          </form>
-                      </div>
-                      <div class = "imgbx"><img src="{% static "images/Login/login_image.jpg" %}" ></div>
+                              <p class = "signup">Switch to <a href ="{% url 'user login' %}">User Login</a></p>
+                         </form>
                     </div>
- </div>
-
-</body>
+                  </div>
+            </div>
+        </section>
+    </body>
 </html>

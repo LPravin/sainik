@@ -22,18 +22,11 @@
                             <input type = "password" name = "password" placeholder="Password">
                             <input type = "submit" name = "" value="LOGIN">
                             <p class = "signup">Don't have an account ? <a href ={% url 'apply' %}>Register Here</a></p> <br>
-                            <p class = "admin"> Switch to <a href = "#" onclick="toggleForm();">Officer Login</a></p>
+                            <p class = "admin"> Switch to <a href = "{% url 'officer login' %}">Officer Login</a></p>
                         </form>
                     </div>
                   </div>
             </div>
         </section>
-        <script type="text/javascript">
-            function toggleForm(){
-                var container = document.querySelector('.container');
-                container.classList.toggle('active')
-            }
-        </script>
-
     </body>
 </html>

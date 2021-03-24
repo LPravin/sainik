@@ -7,9 +7,7 @@
          <h4>LOGIN REQUEST</h4><br></div>
     <br><br><br>
      <div class="content">
-
       <div class="form-outer">
-
  <form enctype="multipart/form-data" id="applyform" name="applyform" onsubmit="return validateform()"
                   data-records-url="{% url 'ajax_load_records' %}"
                   data-trades-url="{% url 'ajax_load_trades' %}"
@@ -39,11 +37,6 @@
             <span class="details">District your applying in</span>
             {{ basicform.district }}
             </div>
-
-
-
-
-
 <div class="input-box" id="div_id_esm_no">
             <span class="details" >ESM Registration No</span>
             {{ basicform.esm_no }}
@@ -68,7 +61,6 @@
             <span class="details">Corps</span>
             {{ basicform.corps }}
           </div>
-
 <div class="input-box" id="div_id_record_office">
             <span class="details" >Record Office</span>
             {{ basicform.record_office }}

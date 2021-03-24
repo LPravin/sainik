@@ -206,6 +206,7 @@ class ZilaSainikBoard(models.Model):
         return self.zb_name
 
 
+
 class District(models.Model):
     district_name = models.CharField(max_length=50)
     state = models.ForeignKey(State, on_delete=models.DO_NOTHING)
@@ -251,7 +252,7 @@ class ApplyDetail(models.Model):
     discharge_book = models.FileField(upload_to='images/discharge book', null=True, blank=True)
     ppo_book = models.ImageField(upload_to='images/ppo book', null=True, blank=True,verbose_name="PPO BOOK")
     residence_certificate = models.ImageField(upload_to='images/residence certificate', null=True, blank=True)
-    death_certificate = models.ImageField(upload_to='images/death death_certificate', null=True, blank=True)
+    death_certificate = models.ImageField(upload_to='images/death_certificate', null=True, blank=True)
 
 
 class ExServiceMen(models.Model):
@@ -263,6 +264,7 @@ class ExServiceMen(models.Model):
 class WidowDetail(models.Model):
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
     esm_no = models.CharField(primary_key=True, max_length=10)
+    name = models.CharField(max_length=100)
     family_pension = models.CharField(max_length=6)
     widow_next_of_kin = models.CharField(max_length=100)
     widow_next_of_kin_relation = models.CharField(max_length=30)
@@ -273,6 +275,8 @@ class WidowDetail(models.Model):
 
 class ServiceDetail(models.Model):
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE, default=None)
+    name = models.CharField(max_length=100)
+    mobile = models.CharField(max_length=10)
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING, default=None)
     corps = models.ForeignKey(Corp, on_delete=models.DO_NOTHING, default=None, blank=True)
     record_office = models.ForeignKey(RecordOffice, on_delete=models.CASCADE, default=None)
@@ -281,12 +285,12 @@ class ServiceDetail(models.Model):
     service_no = models.CharField(max_length=9)
     rank_category = models.ForeignKey(RankCategory, on_delete=models.DO_NOTHING, default=None)
     rank = models.ForeignKey(Rank, on_delete=models.DO_NOTHING, default=None)
-    reg_date = models.DateField(auto_now=True)
+    reg_date = models.DateField()
     enrollment_date = models.DateField()
     world_war_2 = models.CharField(max_length=1, choices=YesNo, default=None)
-    operations = models.CharField(max_length=100, blank=True)
-    decorations = models.CharField(max_length=100, blank=True)
-    zila_board_id = models.ForeignKey(ZilaSainikBoard, on_delete=models.DO_NOTHING, default=None)
+    operations = models.CharField(max_length=100, blank=True, null=True)
+    decorations = models.CharField(max_length=100, blank=True, null=True)
+    zila_board = models.ForeignKey(ZilaSainikBoard, on_delete=models.DO_NOTHING, default=None)
 
 
 class PensionDetail(models.Model):
@@ -315,7 +319,6 @@ class PensionDetail(models.Model):
 
 
 class PersonalRef(models.Model):
-    name = models.CharField(max_length=100)
     dob = models.DateField(verbose_name="Date Of Birth")
     aadhaar_no = models.CharField(max_length=12)
     voter_id_no = models.CharField(max_length=12, verbose_name="Voter ID Number")
@@ -341,13 +344,10 @@ class PersonalDetail(PersonalRef):
     mother = models.CharField(max_length=100)
     father = models.CharField(max_length=100)
     religion = models.ForeignKey(Religion, on_delete=models.DO_NOTHING)
-    caste = models.ForeignKey(Caste, on_delete=models.DO_NOTHING)
     caste_category = models.ForeignKey(CasteCategory, on_delete=models.DO_NOTHING, default=None)
     birth_place = models.CharField(max_length=50)
     birth_state = models.ForeignKey(State, on_delete=models.DO_NOTHING)
     birth_district = models.ForeignKey(District, on_delete=models.DO_NOTHING)
-    telephone = models.CharField(max_length=12)
-    mobile = models.CharField(max_length=10)
     expiry_date = models.DateField(blank=True)
 
 
@@ -364,14 +364,14 @@ class Address(models.Model):
         abstract = True
 
 
-class PresentAddress(Address):
-    ref = models.OneToOneField(MyUser, on_delete=models.CASCADE, default=None)
-    is_address_same = models.BooleanField()
-
-
 class PermanentAddress(Address):
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE, default=None)
-    esm_no = models.CharField(max_length=10)
+    telephone = models.CharField(max_length=12, blank=True, null=True)
+    is_address_same = models.CharField(max_length=1, choices=YesNo)
+
+
+class PresentAddress(Address):
+    ref = models.OneToOneField(MyUser, on_delete=models.CASCADE, default=None)
 
 
 class EmploymentDetail(models.Model):
@@ -414,6 +414,7 @@ class SpouseDetail(PersonalRef):
         ('U', 'UnEmployed')
     ]
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
+    name = models.CharField(max_length=100)
     marital_status = models.CharField(max_length=1, choices=MaritalStates, default=None)
     marriage_date = models.DateField()
     spouse_relation = models.CharField(max_length=1, choices=SpouseRelation, default=None)
@@ -463,7 +464,6 @@ class DependentDetail(models.Model):
 
 class OfficerDetail(models.Model):
     name = models.CharField(max_length=100)
-    bramch = models.ForeignKey(ZilaSainikBoard, on_delete=models.CASCADE)
     ref = models.ForeignKey(MyUser, on_delete=models.CASCADE)
 
     class Meta:
@@ -471,24 +471,42 @@ class OfficerDetail(models.Model):
 
 
 class WelfareOfficer(OfficerDetail):
-    pass
+    zila_board = models.ForeignKey(ZilaSainikBoard, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 
 class Director(OfficerDetail):
-    pass
+    zila_board = models.ForeignKey(ZilaSainikBoard, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 
 class RSBOfficer(OfficerDetail):
-    pass
+    rsb = models.ForeignKey(RajyaSainikBoard, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 
 class RSBHead(OfficerDetail):
-    pass
+    rsb = models.ForeignKey(RajyaSainikBoard, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
 
 
 class KSBOfficer(OfficerDetail):
     pass
 
+    def __str__(self):
+        return self.name
+
 
 class KSBHead(OfficerDetail):
     pass
+
+    def __str__(self):
+        return self.name

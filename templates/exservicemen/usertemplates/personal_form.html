@@ -23,7 +23,7 @@
 
       <div class="form-outer">
 
-      <form action="#" name="personalform" id="personalform" data-districts-url="{% url 'ajax_load_districts' %}">
+      <form action="#" name="personalform" id="personalform" method="post" data-districts-url="{% url 'ajax_load_districts' %}">
           {% csrf_token %}
 
 
@@ -36,12 +36,6 @@
             </div><br>
           <br><br>
         <div class="user-details">
-            <div class="input-box">
-
-             <span class="details">ESM Name</span>
-            {{ form.name }}
-
-          </div>
           <div class="input-box">
 
             <span class="details">Date of Birth</span>
@@ -68,11 +62,6 @@
 
             <span class="details">Religion</span>
             {{ form.religion }}
-          </div>
-          <div class="input-box">
-
-            <span class="details">Caste</span>
-           {{ form.caste }}
           </div>
           <div class="input-box">
 
@@ -139,8 +128,8 @@
 
         </div>
         <div class="btn-box">
-			<button type="button" class="Next" onclick="details(Event,'service')">BACK</Button>
-			<button type="submit" class="Next" onclick="details(Event,'personal')">NEXT</Button>
+			<button type="button" class="Next">BACK</Button>
+			<button type="submit" value="Submit" class="Next">NEXT</Button>
 		</div>
     </div>
       </form>
