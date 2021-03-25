@@ -172,6 +172,9 @@ class ServiceForm(ModelForm):
         widgets = {
             'reg_date': forms.DateInput(attrs={'type': 'date'}),
             'enrollment_date': forms.DateInput(attrs={'type':'date'}),
+            'name': forms.DateInput(attrs={"style": "text-transform: uppercase;",
+                                           'onkeydown': "return alphaOnly(event)"})
+
         }
 
 
@@ -251,7 +254,14 @@ class ContactForm1(ModelForm):
         exclude = ['ref']
 
         widgets = {
-            'is_address_same': forms.CheckboxInput()
+            'is_address_same': forms.CheckboxInput(),
+            'house_no': forms.TextInput(attrs={'class':'cf1'}),
+            'house_name': forms.TextInput(attrs={'class': 'cf1'}),
+            'street_name': forms.TextInput(attrs={'class': 'cf1'}),
+            'city': forms.TextInput(attrs={'class': 'cf1'}),
+            'district': forms.Select(attrs={'class': 'cf1'}),
+            'state': forms.Select(attrs={'class': 'cf1'}),
+            'pincode': forms.TextInput(attrs={'class': 'cf1'})
         }
 
 class ContactForm2(ModelForm):
@@ -261,6 +271,12 @@ class ContactForm2(ModelForm):
 
         widgets = {
             'house_no': forms.TextInput(attrs={'id': "hno"}),
+            'house_name': forms.TextInput(attrs={'id': "hname"}),
+            'street_name': forms.TextInput(attrs={'id': "sname"}),
+            'city': forms.TextInput(attrs={'id': "city"}),
+            'district': forms.Select(attrs={'id': "district"}),
+            'state': forms.Select(attrs={'id': "state"}),
+            'pincode': forms.TextInput(attrs={'id': "pincode"}),
         }
 
 

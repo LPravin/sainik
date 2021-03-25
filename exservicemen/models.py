@@ -140,6 +140,13 @@ class Gender(models.Model):
         return self.gender_name
 
 
+class DischargeReason(models.Model):
+    reason = models.CharField(max_length=40)
+
+    def __str__(self):
+        return self.reason
+
+
 class MedicalCategory(models.Model):
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
     mc_name = models.CharField(max_length=10)
@@ -204,7 +211,6 @@ class ZilaSainikBoard(models.Model):
 
     def __str__(self):
         return self.zb_name
-
 
 
 class District(models.Model):
@@ -278,7 +284,7 @@ class ServiceDetail(models.Model):
     name = models.CharField(max_length=100)
     mobile = models.CharField(max_length=10)
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING, default=None)
-    corps = models.ForeignKey(Corp, on_delete=models.DO_NOTHING, default=None, blank=True)
+    corps = models.ForeignKey(Corp, on_delete=models.DO_NOTHING, default=None, blank=True, null=True)
     record_office = models.ForeignKey(RecordOffice, on_delete=models.CASCADE, default=None)
     group = models.ForeignKey(TradeGroup, on_delete=models.CASCADE, default=None)
     trade = models.ForeignKey(Trade, on_delete=models.DO_NOTHING, default=None)
@@ -291,6 +297,9 @@ class ServiceDetail(models.Model):
     operations = models.CharField(max_length=100, blank=True, null=True)
     decorations = models.CharField(max_length=100, blank=True, null=True)
     zila_board = models.ForeignKey(ZilaSainikBoard, on_delete=models.DO_NOTHING, default=None)
+
+    def __str__(self):
+        return self.name
 
 
 class PensionDetail(models.Model):
@@ -316,6 +325,9 @@ class PensionDetail(models.Model):
     present_pension = models.CharField(max_length=6)
     disability_pension = models.CharField(max_length=6)
     disability_percent = models.CharField(max_length=3)
+
+    def __str__(self):
+        return self.ref
 
 
 class PersonalRef(models.Model):
@@ -350,6 +362,9 @@ class PersonalDetail(PersonalRef):
     birth_district = models.ForeignKey(District, on_delete=models.DO_NOTHING)
     expiry_date = models.DateField(blank=True)
 
+    def __str__(self):
+        return self.ref
+
 
 class Address(models.Model):
     house_no = models.CharField(max_length=7)
@@ -367,8 +382,9 @@ class Address(models.Model):
 class PermanentAddress(Address):
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE, default=None)
     telephone = models.CharField(max_length=12, blank=True, null=True)
-    is_address_same = models.CharField(max_length=1, choices=YesNo)
+    is_address_same = models.BooleanField(default=False)
 
+    
 
 class PresentAddress(Address):
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE, default=None)

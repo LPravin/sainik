@@ -45,7 +45,8 @@
                 },
                 success: function (data) {
                     $("#id_trade").html(data);
-
+                    // $('#id_rank').html(<option value="">Select rank category</option>);
+                    // $('#id_trade').html(<option value="">Select trade</option>);
                 }
             });
         }
@@ -115,55 +116,66 @@
             }
         });
     });
+    function alphaOnly(event) {
+  let key = event.keyCode;
+  return ((key >= 65 && key <= 90) || key === 8);
+    }
 
+    function numOnly(event) {
+    let key = event.keyCode;
+  return ((key >= 48 && key <= 57) || (key >= 96 && key <= 105) || key === 8);
+    }
+$(document).ready(function(){
+    $('#div_id_corps').attr("hidden", true);
+});
 function validateform() {
-   if (ert.value === ""){
-      alert("Please select ESM registration type")
-      ert.focus();
-      return false;
-   }
-   if (esm_no.value === ""){
-      alert("Please fill ESM Number");
-      service.focus();
-      return false;
-   }
-   if (service.value === "") {
-      alert("Please select service");
-      service.focus();
-      return false;
-   }
-   if (ro.value === "") {
-      alert("Please select record office");
-      ro.focus();
-      return false;
-   }
-   if (group.value === "") {
-      alert("Please select group");
-      group.focus();
-      return false;
-   }
-   if (trade.value === "") {
-      alert("Please select trade");
-      trade.focus();
-      return false;
-   }
-   if (rcat.value === "") {
-      alert("Please select rank category");
-      rcat.focus();
-      return false;
-   }
-   if (rank.value === "") {
-      alert("Please select rank");
-      rank.focus();
-      return false;
-   }
-   if (sno.value === "") {
-      alert("Please fill service number");
-      sno.focus();
-      return false;
-   }
-   email.value = sno.value + "@sainik.com"
-   password1.value = mobile.value
-   password2.vaue = mobile.value
+   // if (ert.value === ""){
+   //    alert("Please select ESM registration type")
+   //    ert.focus();
+   //    return false;
+   // }
+   // if (esm_no.value === ""){
+   //    alert("Please fill ESM Number");
+   //    service.focus();
+   //    return false;
+   // }
+   // if (service.value === "") {
+   //    alert("Please select service");
+   //    service.focus();
+   //    return false;
+   // }
+   // if (ro.value === "") {
+   //    alert("Please select record office");
+   //    ro.focus();
+   //    return false;
+   // }
+   // if (group.value === "") {
+   //    alert("Please select group");
+   //    group.focus();
+   //    return false;
+   // }
+   // if (trade.value === "") {
+   //    alert("Please select trade");
+   //    trade.focus();
+   //    return false;
+   // }
+   // if (rcat.value === "") {
+   //    alert("Please select rank category");
+   //    rcat.focus();
+   //    return false;
+   // }
+   // if (rank.value === "") {
+   //    alert("Please select rank");
+   //    rank.focus();
+   //    return false;
+   // }
+   // if (sno.value === "") {
+   //    alert("Please fill service number");
+   //    sno.focus();
+   //    return false;
+   // }
+   // email.value = sno.value + "@sainik.com"
+   // password1.value = mobile.value
+   // password2.vaue = mobile.value
    return true;
 }

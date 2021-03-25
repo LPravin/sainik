@@ -4,7 +4,7 @@
 
 {% block top %}
      {% if user.is_authenticated %}
-    <li><a href=""> Welcome {{ request.user.email }}</a></li>
+    <li><a href=""> Welcome {{ name }}</a></li>
     <li><a href=""> My Profile</a></li>
     <li><a href="{% url 'logout'  %}">Logout</a></li>
     {% else %}
@@ -14,12 +14,14 @@
 {% endblock %}
 {% block content %}
     {% if request.user.role == 2 %}
+
+       <h4>Zila Board Name: {{ zboard }}</h4>
         <div class="containers">
             <div class="box">
                 <div class="icon"> <i class="fas fa-users"></i></div>
                 <div class = "content">
                     <h4>TOTAL USERS</h4><br>
-                    <p style="color:#5c5c5c;">150 users</p>
+                    <p style="color:#5c5c5c;">{{ total_users }}</p>
                 </div>
             </div>
 {#           <div class="box">#}

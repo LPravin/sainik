@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from . import forms
 from .models import *
+from .models import MyUser
 from exservicemen.forms import ApplyForm1, CustomUserCreationForm, PersonalForm, EmploymentForm, SpouseForm, \
     DependentForm, PensionForm, ServiceForm, ContactForm1, ContactForm2, ESMBasic, ServiceDetail
 from django.contrib.auth import authenticate, login, logout
@@ -18,6 +19,20 @@ def wo_check(user):
 
 
 def homeview(request):
+    if request.user.is_authenticated:
+        user = request.user
+        if user.role == 2:
+            profile = WelfareOfficer.objects.get(ref=user)
+            zboard = profile.zila_board
+            name = profile.name
+            total_users = ServiceDetail.objects.filter(zila_board=zboard.id).count()
+            return render(request, "exservicemen/usertemplates/home.html", {'zboard': zboard, 'name': name,
+                                                                            'total_users':total_users})
+        if user.role == 1:
+            profile = ServiceDetail.objects.get(ref=user)
+            name = profile.name
+            return render(request, "exservicemen/usertemplates/home.html", {'name': name})
+
     return render(request, "exservicemen/usertemplates/home.html")
 
 
@@ -33,7 +48,7 @@ def userlogin(request):
             if user.role == 1:
                 if user.is_active:
                     login(request, user)
-                    return HttpResponseRedirect(reverse('home'))
+                    return redirect('home')
         return HttpResponse("INVALID CREDENTIALS")
 
     else:
@@ -51,7 +66,7 @@ def officerlogin(request):
             if user.role == 2:
                 if user.is_active:
                     login(request, user)
-                    return HttpResponseRedirect(reverse('home'))
+                    return redirect('home')
         return HttpResponse("INVALID CREDENTIALS")
 
     else:
@@ -183,14 +198,16 @@ def personalformview(request):
 
 @login_required()
 def employmentformview(request):
+    email = request.session['email']
     if request.method == "POST":
         employment_form = EmploymentForm(data=request.POST)
 
         if employment_form.is_valid():
             form = employment_form.save(commit=False)
-            form.ref = request.user
+            user = MyUser.objects.get(email=email)
+            form.ref = user
             form.save()
-        return redirect('spouse details')
+        return redirect('home')
     else:
         form = EmploymentForm
         return render(request, 'exservicemen/usertemplates/employment_form.html', {'form': form, 'title': 'EMPLOYMENT DETAILS'})
@@ -198,12 +215,14 @@ def employmentformview(request):
 
 @login_required()
 def spouseformview(request):
+    email = request.session['email']
     if request.method == "POST":
         spouse_form = SpouseForm(data=request.POST)
 
         if spouse_form.is_valid():
             form = spouse_form.save(commit=False)
-            form.ref = request.user
+            user = MyUser.objects.get(email=email)
+            form.ref = user
             form.save()
         return redirect('dependent details')
     else:
@@ -213,7 +232,7 @@ def spouseformview(request):
 
 @login_required()
 def dependentformview(request):
-
+    email = request.session['email']
     dependentformset = formset_factory(DependentForm, max_num=5, min_num=0)
     if request.method == "POST":
         formset = dependentformset(data=request.POST or None)
@@ -221,9 +240,10 @@ def dependentformview(request):
             for form in formset:
                 if form.is_valid():
                     dep = form.save(commit=False)
-                    dep.ref = request.user
+                    user = MyUser.objects.get(email=email)
+                    dep.ref = user
                     form.save()
-            return redirect('home')
+            return redirect('employment details')
 
     else:
         formset = dependentformset()
@@ -240,7 +260,7 @@ def contactformview(request):
             form = contactform1.save(commit=False)
             form.ref = user
             form.save()
-            if contactform1.cleaned_data['is_address_same'] == 'N':
+            if contactform1.cleaned_data['is_address_same'] == 0:
                 contactform2 = ContactForm2(data=request.POST)
                 if contactform2.is_valid():
                     form = contactform2.save(commit=False)

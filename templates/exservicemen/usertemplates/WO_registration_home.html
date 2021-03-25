@@ -9,10 +9,10 @@
           <div><button id="defaultOpen" class="Next" onclick="details(Event,'service')" >Service</button></div>
           <div><button class="Next" onclick="details(Event,'pension')">Pension</button></div>
           <div><button class="Next" onclick="details(Event,'personal')">Personal</button></div>
-          <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
           <div><button class="Next" onclick="details(Event,'contact')">Contact</button></div>
           <div><button class="Next" onclick="details(Event,'family')">Family</button></div>
-          <div><button class="Next" onclick="details(Event,'depentant')">Depentant</button></div>
+          <div><button class="Next" onclick="details(Event,'depentant')">Dependent</button></div>
+             <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
         </div><br>
      <div class="content">
       <div class="form-outer">
@@ -23,12 +23,20 @@
                   data-districts-url="{% url 'ajax_load_districts' %}"
                   method="post" action="">
  {% csrf_token %}
-
+    <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+            <h4>LOGIN DETAILS</h4>
+            </div>
      <div class="user-details">
  <div class="input-box">
       <span class="details">Email</span>
      {{ loginform.email }}
     </div>
+    <div class="input-box" id="div_id_mobile">
+            <span class="details">Mobile</span>
+            {{ serviceform.mobile }}
+                    </div>
      <div class="input-box">
       <span class="details">Password</span>
       {{ loginform.password1 }}
@@ -48,10 +56,6 @@
               <span class="details">Name</span>
                 {{ serviceform.name }}
                 </div>
-           <div class="input-box" id="div_id_mobile">
-            <span class="details">Mobile</span>
-            {{ serviceform.mobile }}
-                    </div>
           <div class="input-box" id="div_id_name">
             <span class="details" >ESM No</span>
             {{ esmbasic.esm_no }}
@@ -103,7 +107,7 @@
             {{ serviceform.enrollment_date }}
           </div>
            <div class="input-box" id="div_id_rank">
-            <span class="details">Whether World War 2 fighter?</span>
+            <span class="details">Whether World War II Veteran?</span>
             {{ serviceform.world_war_2 }}
           </div>
            <div class="input-box" id="div_id_rank">
@@ -115,6 +119,7 @@
             {{ serviceform.decorations }}
           </div>
       </div>
+            {{ ser }}
             <div class="btn-box">
 			<button type="submit" value="Submit" class="Next">Next</Button>
             </div>
