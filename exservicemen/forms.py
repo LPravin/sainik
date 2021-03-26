@@ -172,11 +172,23 @@ class ServiceForm(ModelForm):
         widgets = {
             'reg_date': forms.DateInput(attrs={'type': 'date'}),
             'enrollment_date': forms.DateInput(attrs={'type':'date'}),
-            'name': forms.DateInput(attrs={"style": "text-transform: uppercase;",
-                                           'onkeydown': "return alphaOnly(event)"})
+            'name': forms.TextInput(attrs={"style": "text-transform: uppercase;",
+                                           'onkeydown': "return alphaOnly(event)"}),
+            'mobile': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
 
         }
 
+    def clean_name(self):
+        name = self.cleaned_data['name'].upper()
+        return name
+
+    def clean_mobile(self):
+        mobile = self.cleaned_data['mobile']
+        if len(mobile) != 10:
+            raise ValidationError("Mobile number must be 10 digits")
+        if not mobile.isdigit():
+            raise ValidationError("Invalid Mobile Number")
+        return mobile
 
 class PersonalForm(ModelForm):
 
@@ -186,12 +198,23 @@ class PersonalForm(ModelForm):
 
         widgets = {
             'dob': forms.DateInput(attrs={'type': 'date'}),
-            'name': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)"}),
-            'father': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)"}),
-            'mother': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)"}),
+            'father': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)",
+                                             "style": "text-transform: uppercase;"}),
+            'mother': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)",
+                                             "style": "text-transform: uppercase;"}),
             'aadhaar_no': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
             'expiry_date': forms.DateInput(attrs={'type': 'date'}),
             }
+
+    def clean_father(self):
+        father = self.cleaned_data['father'].upper()
+        return father
+
+    def clean_mother(self):
+        mother = self.cleaned_data['mother'].upper()
+        return mother
+
+
 
 
 class PensionForm(ModelForm):
