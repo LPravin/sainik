@@ -1,0 +1,51 @@
+{% extends 'exservicemen/usertemplates/basic.html' %}
+{% load static %}
+    {% block title %} ADD NEW ESM {% endblock %}
+{% block content %}
+     <div class="container">
+     <div class="title">
+         <h4>ADD NEW ESM DETAILS</h4><br></div>
+         <br>
+     <div class="content">
+      <div class="form-outer">
+ <form name="esm_basic_form" id="esmbasicform" method="post" action="">
+ {% csrf_token %}
+     <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+            <h4>BASIC DETAILS</h4>
+            </div>
+     <div class="user-details">
+ <div class="input-box">
+      <span class="details">Email</span>
+     {{ loginform.email }}
+     {{ loginform.email.errors }}
+    </div>
+         <div class="input-box">
+      <span class="details">ESM No:</span>
+     {{ esmbasic.esm_no }}
+     {{ esmbasic.esm_no.errors }}
+    </div>
+     <div class="input-box">
+      <span class="details">Password</span>
+      {{ loginform.password1 }}
+      {{ loginform.password2.errors }}
+    </div>
+     <div class="input-box">
+      <span class="details">Confirm Password</span>
+      {{ loginform.password2 }}
+      {{ loginform.password2.errors }}
+    </div>
+         <div class="input-box">
+      <span class="details">Registration Type</span>
+     {{ esmbasic.reg_category }}
+    </div>
+    </div>
+     <div class="btn-box">
+			<button type="submit" value="Submit" class="Next">Next</Button>
+            </div>
+ </form>
+      </div>
+     </div>
+     </div>
+{% endblock %}

@@ -6,122 +6,112 @@
      <div class="title">
          <h4>ADD NEW ESM DETAILS</h4><br></div>
          <div class="tabs">
-          <div><button id="defaultOpen" class="Next" onclick="details(Event,'service')" >Service</button></div>
-          <div><button class="Next" onclick="details(Event,'pension')">Pension</button></div>
-          <div><button class="Next" onclick="details(Event,'personal')">Personal</button></div>
-          <div><button class="Next" onclick="details(Event,'contact')">Contact</button></div>
-          <div><button class="Next" onclick="details(Event,'family')">Family</button></div>
-          <div><button class="Next" onclick="details(Event,'depentant')">Dependent</button></div>
-             <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
+          <div><button id="defaultOpen" class="Next">Service</button></div>
+          <div><button class="Next" >Pension</button></div>
+          <div><button class="Next" >Personal</button></div>
+          <div><button class="Next" >Contact</button></div>
+          <div><button class="Next" >Family</button></div>
+          <div><button class="Next" >Dependent</button></div>
+          <div><button class="Next" >Employment</button></div>
         </div><br>
      <div class="content">
       <div class="form-outer">
- <form enctype="multipart/form-data" id="addesmform" name="addesmform" onsubmit="return validateform()"
+ <form enctype="multipart/form-data" id="addesmform" name="addesmform"  onsubmit="return validateform()"
                   data-records-url="{% url 'ajax_load_records' %}"
                   data-trades-url="{% url 'ajax_load_trades' %}"
                   data-ranks-url="{% url 'ajax_load_ranks' %}"
                   data-districts-url="{% url 'ajax_load_districts' %}"
                   method="post" action="">
  {% csrf_token %}
-    <div class="detailname" style="overflow: hidden;
-          border: 1px solid #ccc;
-          background-color: #f1f1f1;">
-            <h4>LOGIN DETAILS</h4>
-            </div>
-     <div class="user-details">
- <div class="input-box">
-      <span class="details">Email</span>
-     {{ loginform.email }}
-    </div>
-    <div class="input-box" id="div_id_mobile">
-            <span class="details">Mobile</span>
-            {{ serviceform.mobile }}
-                    </div>
-     <div class="input-box">
-      <span class="details">Password</span>
-      {{ loginform.password1 }}
-    </div>
-     <div class="input-box">
-      <span class="details">Confirm Password</span>
-      {{ loginform.password2 }}
-    </div>
-    </div>
         <div class="detailname" style="overflow: hidden;
           border: 1px solid #ccc;
           background-color: #f1f1f1;">
-            <h4>SERVICE DETAILS</h4>
+            <h4>ESM DETAILS</h4>
             </div>
                <div class="user-details">
               <div class="input-box" id="div_id_mobile">
-              <span class="details">Name</span>
+              <span class="details">ESM Name</span>
                 {{ serviceform.name }}
+                  {{ serviceform.name.errors }}
                 </div>
-          <div class="input-box" id="div_id_name">
-            <span class="details" >ESM No</span>
-            {{ esmbasic.esm_no }}
-            </div>
-          <div class="input-box" id="div_reg_type">
-            <span class="details" >Registration Type</span>
-            {{ esmbasic.reg_type }}
-            </div>
-                   {{ esmbasic.esm_no.errors }}
+                   <div class="input-box" id="div_id_mobile">
+            <span class="details">Mobile</span>
+            {{ serviceform.mobile }}
+                       {{ serviceform.mobile.errors }}
+                    </div>
           <div class="input-box" id="div_id_rank">
             <span class="details">Date of Registration</span>
             {{ serviceform.reg_date }}
-
+              {{ serviceform.reg_date.errors }}
           </div>
-
+<div class="input-box" id="div_id_service">
+            <span class="details">ESM Type</span>
+            {{ serviceform.reg_type }}
+    {{ serviceform.reg_type.errors }}
+          </div>
 <div class="input-box" id="div_id_service">
             <span class="details">Service</span>
             {{ serviceform.service }}
+    {{ serviceform.service.errors }}
           </div>
 <div class="input-box" id="div_id_corps">
             <span class="details">Corps</span>
             {{ serviceform.corps }}
+    {{ serviceform.corps.errors }}
           </div>
 <div class="input-box" id="div_id_record_office">
             <span class="details" >Record Office</span>
             {{ serviceform.record_office }}
+    {{ serviceform.record_office.errors }}
           </div>
 <div class="input-box" id="div_id_service_no">
             <span class="details" >Service No</span>
             {{ serviceform.service_no }}
+    {{ serviceform.service_no.errors }}
           </div>
 <div class="input-box" id="div_id_group">
             <span class="details">Group</span>
             {{ serviceform.group }}
+    {{ serviceform.group.errors }}
           </div>
 <div class="input-box" id="div_id_trade">
             <span class="details">Trade</span>
             {{ serviceform.trade }}
+    {{ serviceform.trade.errors }}
           </div>
 <div class="input-box" id="div_id_rank_category">
             <span class="details">Rank Category</span>
             {{ serviceform.rank_category }}
+    {{ serviceform.rank_category.errors }}
           </div>
           <div class="input-box" id="div_id_rank_category">
             <span class="details">Rank</span>
             {{ serviceform.rank }}
+              {{ serviceform.rank.errors }}
           </div>
           <div class="input-box" id="div_id_rank">
             <span class="details">Enrollment Date</span>
             {{ serviceform.enrollment_date }}
+              {{ serviceform.enrollment_date.errors }}
           </div>
            <div class="input-box" id="div_id_rank">
             <span class="details">Whether World War II Veteran?</span>
             {{ serviceform.world_war_2 }}
+               {{ serviceform.world_war_2.errors }}
           </div>
            <div class="input-box" id="div_id_rank">
             <span class="details">Operations Attended</span>
             {{ serviceform.operations }}
+               {{ serviceform.operations.errors }}
           </div>
            <div class="input-box" id="div_id_rank">
             <span class="details">Decorations</span>
             {{ serviceform.decorations }}
+               {{ serviceform.decorations.errors }}
           </div>
       </div>
             <div class="btn-box">
-			<button type="submit" value="Submit" class="Next">Next</Button>
+			<button type="submit" name="Next" value="submit" class="Next">Next</Button>
             </div>
      </form>
       </div>

@@ -1,14 +1,3 @@
-function details(evt, tabName) {
-
-  var i;
-  var x = document.getElementsByClassName("tab");
-  for (i = 0; i < x.length; i++) {
-    x[i].style.display = "none";
-  }
-  document.getElementById(tabName).style.display = "block";
-}
-
-     document.getElementById("defaultOpen").click();
 
 function alphaOnly(event) {
   let key = event.keyCode;
@@ -19,3 +8,7 @@ function alphaOnly(event) {
     let key = event.keyCode;
   return ((key >= 48 && key <= 57) || (key >= 96 && key <= 105) || key === 8);
     }
+
+     $(document).ready(function(){
+       $('#div_id_ppo_no').hide();
+     });

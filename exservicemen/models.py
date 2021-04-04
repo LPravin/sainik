@@ -26,7 +26,6 @@ class MyUserManager(BaseUserManager):
 
 
 class MyUser(AbstractBaseUser):
-
     ROLE_CHOICES = (
         (1, 'EXSERVICEMEN'),
         (2, 'WELFARE_OFFICER'),
@@ -72,22 +71,34 @@ YesNo = [
 ]
 
 
-class RegTypeReference(models.Model):
-    reg_type = models.CharField(max_length=10)
+class BasicRegType(models.Model):
+    basic_reg_type = models.CharField(max_length=30)
 
     def __str__(self):
-        return self.reg_type
+        return self.basic_reg_type
+
+
+class ESMType(models.Model):
+    esm_type = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.esm_type
+
+
+class Prefix(models.Model):
+    prefix = models.CharField(max_length=10, null=True)
+    suffix = models.CharField(max_length=5, null=True)
 
 
 class Service(models.Model):
-    service_name = models.CharField(max_length=9)
+    service_name = models.CharField(max_length=9, unique=True)
 
     def __str__(self):
         return self.service_name
 
 
 class TradeGroup(models.Model):
-    trade_group = models.CharField(max_length=1)
+    trade_group = models.CharField(max_length=1, unique=True)
 
     def __str__(self):
         return self.trade_group
@@ -96,14 +107,14 @@ class TradeGroup(models.Model):
 class Trade(models.Model):
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
     trade_group = models.ForeignKey(TradeGroup, on_delete=models.CASCADE)
-    trade_name = models.CharField(max_length=45)
+    trade_name = models.CharField(max_length=45, unique=True)
 
     def __str__(self):
         return self.trade_name
 
 
 class RankCategory(models.Model):
-    rank_category = models.CharField(max_length=10)
+    rank_category = models.CharField(max_length=10, unique=True)
 
     def __str__(self):
         return self.rank_category
@@ -112,36 +123,23 @@ class RankCategory(models.Model):
 class Rank(models.Model):
     rank_category = models.ForeignKey(RankCategory, on_delete=models.DO_NOTHING)
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING)
-    rank = models.CharField(max_length=35)
+    rank = models.CharField(max_length=35, unique=True)
 
     def __str__(self):
         return self.rank
 
 
-class Corp(models.Model):
-    corps_name = models.CharField(max_length=55)
-
-    def __str__(self):
-        return self.corps_name
-
-
 class RecordOffice(models.Model):
-    record_office_name = models.CharField(max_length=60)
+    record_office = models.CharField(max_length=60, unique=True, verbose_name='Record Office')
+    corp = models.CharField(max_length=60, unique=True)
     service = models.ForeignKey(Service, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
-        return self.record_office_name
-
-
-class Gender(models.Model):
-    gender_name = models.CharField(max_length=6)
-
-    def __str__(self):
-        return self.gender_name
+        return self.record_office
 
 
 class DischargeReason(models.Model):
-    reason = models.CharField(max_length=40)
+    reason = models.CharField(max_length=40, unique=True)
 
     def __str__(self):
         return self.reason
@@ -163,17 +161,10 @@ class Character(models.Model):
 
 
 class Religion(models.Model):
-    religion_name = models.CharField(max_length=10)
+    religion_name = models.CharField(max_length=10, unique=True)
 
     def __str__(self):
         return self.religion_name
-
-
-class Caste(models.Model):
-    caste_name = models.CharField(max_length=50)
-
-    def __str__(self):
-        return self.caste_name
 
 
 class CasteCategory(models.Model):
@@ -192,6 +183,7 @@ class Department(models.Model):
 
 class RajyaSainikBoard(models.Model):
     rsb_name = models.CharField(max_length=50)
+    code = models.CharField(max_length=3)
 
     def __str__(self):
         return self.rsb_name
@@ -208,6 +200,7 @@ class State(models.Model):
 class ZilaSainikBoard(models.Model):
     zb_name = models.CharField(max_length=50)
     state = models.ForeignKey(State, on_delete=models.DO_NOTHING)
+    code = models.CharField(max_length=2)
 
     def __str__(self):
         return self.zb_name
@@ -229,47 +222,51 @@ class CivilQualification(models.Model):
         return self.qualification
 
 
-class ApplyDetail(models.Model):
-    regtypes = [
-        ('', '---------'),
-        ('E', 'ESM'),
-        ('W', 'Widow of already registered ESM'),
-        ('TE', 'Transferred ESM/Widow'),
-        ('UW', 'Widow of Unregistered/Died in service')
-    ]
+# class ApplyDetail(models.Model):
+#     regtypes = [
+#         ('', '---------'),
+#         ('E', 'ESM'),
+#         ('W', 'Widow of already registered ESM'),
+#         ('TE', 'Transferred ESM/Widow'),
+#         ('UW', 'Widow of Unregistered/Died in service')
+#     ]
+#     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
+#     name = models.CharField(max_length=100, null=True, blank=True)
+#     mobile = models.CharField(max_length=10, null=True, blank=True)
+#     basic_reg_type = models.CharField(max_length=2, choices=regtypes)
+#     esm_no = models.CharField(max_length=10, null=True, blank=True)
+#     expiry_date = models.DateField(default=None, null=True, blank=True)
+#     esm_reg_type = models.ForeignKey(RegTypeReference, on_delete=models.CASCADE, default=None, null=True, blank=True)
+#     state = models.ForeignKey(State, on_delete=models.CASCADE, default=None, null=True, blank=True)
+#     zsb = models.ForeignKey(ZilaSainikBoard, on_delete=models.SET_NULL, default=None, null=True, blank=True)
+#     district = models.ForeignKey(District, on_delete=models.CASCADE, default=None, null=True, blank=True)
+#     discharge_book = models.FileField(upload_to='images/discharge book', null=True, blank=True)
+#     ppo_book = models.ImageField(upload_to='images/ppo book', null=True, blank=True, verbose_name="PPO BOOK")
+#     residence_certificate = models.ImageField(upload_to='images/residence certificate', null=True, blank=True)
+#     death_certificate = models.ImageField(upload_to='images/death_certificate', null=True, blank=True)
+#
+
+class BasicDocument(models.Model):
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100, null=True, blank=True)
-    mobile = models.CharField(max_length=10, null=True, blank=True)
-    basic_reg_type = models.CharField(max_length=2, choices=regtypes)
-    esm_no = models.CharField(max_length=10, null=True, blank=True)
-    expiry_date = models.DateField(default=None, null=True, blank=True)
-    esm_reg_type = models.ForeignKey(RegTypeReference, on_delete=models.CASCADE, default=None, null=True, blank=True)
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, default=None, null=True, blank=True)
-    corps = models.ForeignKey(Corp, on_delete=models.CASCADE, default=None, null=True, blank=True)
-    record_office = models.ForeignKey(RecordOffice, on_delete=models.CASCADE, default=None, null=True, blank=True)
-    group = models.ForeignKey(TradeGroup, on_delete=models.CASCADE, default=None, null=True, blank=True)
-    trade = models.ForeignKey(Trade, on_delete=models.CASCADE, default=None, null=True, blank=True)
-    rank_category = models.ForeignKey(RankCategory, on_delete=models.CASCADE, default=None, null=True, blank=True)
-    rank = models.ForeignKey(Rank, on_delete=models.CASCADE, default=None, null=True, blank=True)
-    service_no = models.CharField(max_length=9, null=True, blank=True)
-    state = models.ForeignKey(State, on_delete=models.CASCADE, default=None, null=True, blank=True)
-    zsb = models.ForeignKey(ZilaSainikBoard, on_delete=models.SET_NULL, default=None, null=True, blank=True)
-    district = models.ForeignKey(District, on_delete=models.CASCADE, default=None, null=True, blank=True)
-    discharge_book = models.FileField(upload_to='images/discharge book', null=True, blank=True)
-    ppo_book = models.ImageField(upload_to='images/ppo book', null=True, blank=True,verbose_name="PPO BOOK")
-    residence_certificate = models.ImageField(upload_to='images/residence certificate', null=True, blank=True)
-    death_certificate = models.ImageField(upload_to='images/death_certificate', null=True, blank=True)
+    discharge_book = models.FileField(upload_to='documents')
 
 
 class ExServiceMen(models.Model):
-    esm_no = models.CharField(primary_key=True, max_length=10)
-    reg_type = models.ForeignKey(RegTypeReference, on_delete=models.DO_NOTHING, default=None)
+    statuses = (
+        (1, 'ACTIVE'),
+        (2, 'PENDING'),  # for exservicemen
+        (3, 'EXPIRED'),
+        (4, 'INCOMPLETE'),  # for welfare officer
+    )
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
+    esm_no = models.CharField(primary_key=True, max_length=10)
+    reg_category = models.ForeignKey(BasicRegType, on_delete=models.DO_NOTHING, default=None)
+    zila_board = models.ForeignKey(ZilaSainikBoard, on_delete=models.DO_NOTHING, default=None)
+    status = models.PositiveSmallIntegerField(choices=statuses)
 
 
 class WidowDetail(models.Model):
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
-    esm_no = models.CharField(primary_key=True, max_length=10)
     name = models.CharField(max_length=100)
     family_pension = models.CharField(max_length=6)
     widow_next_of_kin = models.CharField(max_length=100)
@@ -280,15 +277,19 @@ class WidowDetail(models.Model):
 
 
 class ServiceDetail(models.Model):
+
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE, default=None)
     name = models.CharField(max_length=100)
-    mobile = models.CharField(max_length=10)
+    mobile = models.CharField(max_length=10, blank=True)
+    reg_type = models.ForeignKey(ESMType, on_delete=models.DO_NOTHING, default=None)
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING, default=None)
-    corps = models.ForeignKey(Corp, on_delete=models.DO_NOTHING, default=None, blank=True, null=True)
-    record_office = models.ForeignKey(RecordOffice, on_delete=models.CASCADE, default=None)
+    corps = models.ForeignKey(RecordOffice, on_delete=models.DO_NOTHING, default=None, blank=True, null=True,
+                              related_name='army_corp')
+    record_office = models.ForeignKey(RecordOffice, on_delete=models.CASCADE, default=None,
+                                      related_name='record_office_ref')
     group = models.ForeignKey(TradeGroup, on_delete=models.CASCADE, default=None)
     trade = models.ForeignKey(Trade, on_delete=models.DO_NOTHING, default=None)
-    service_no = models.CharField(max_length=9)
+    service_no = models.CharField(max_length=9, unique=True)
     rank_category = models.ForeignKey(RankCategory, on_delete=models.DO_NOTHING, default=None)
     rank = models.ForeignKey(Rank, on_delete=models.DO_NOTHING, default=None)
     reg_date = models.DateField()
@@ -296,35 +297,26 @@ class ServiceDetail(models.Model):
     world_war_2 = models.CharField(max_length=1, choices=YesNo, default=None)
     operations = models.CharField(max_length=100, blank=True, null=True)
     decorations = models.CharField(max_length=100, blank=True, null=True)
-    zila_board = models.ForeignKey(ZilaSainikBoard, on_delete=models.DO_NOTHING, default=None)
 
     def __str__(self):
         return self.name
 
 
 class PensionDetail(models.Model):
-    DischargeReasons = [
-        ('', '---------'),
-        ('O', 'On Completion of Engagement'),
-        ('R', 'Retired'),
-        ('M', 'Medical'),
-        ('I', 'Injury'),
-        ('D', 'Dismissed'),
-        ('V', 'VRS'),
-        ('E', 'Expired')
-    ]
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
     unit_last_served = models.CharField(max_length=50)
     discharge_date = models.DateField()
-    discharge_reason = models.CharField(max_length=1, choices=DischargeReasons, default=None)
+    discharge_reason = models.ForeignKey(DischargeReason, on_delete=models.CASCADE, default=None)
     medical_category = models.ForeignKey(MedicalCategory, on_delete=models.CASCADE, default=None)
     character = models.ForeignKey(Character, on_delete=models.DO_NOTHING, default=None)
     discharge_book_no = models.CharField(max_length=8)
     ppo_no = models.CharField(max_length=8, verbose_name="PPO No")
+    pensioner_status = models.CharField(max_length=1, choices=YesNo, default=None)
     pension_sanctioned = models.CharField(max_length=6)
     present_pension = models.CharField(max_length=6)
-    disability_pension = models.CharField(max_length=6)
-    disability_percent = models.CharField(max_length=3)
+    whether_pwd = models.CharField(max_length=1, choices=YesNo, default=None)
+    disability_pension = models.CharField(max_length=6, blank=True)
+    disability_percent = models.CharField(max_length=3, blank=True)
 
     def __str__(self):
         return self.ref
@@ -360,7 +352,7 @@ class PersonalDetail(PersonalRef):
     birth_place = models.CharField(max_length=50)
     birth_state = models.ForeignKey(State, on_delete=models.DO_NOTHING)
     birth_district = models.ForeignKey(District, on_delete=models.DO_NOTHING)
-    expiry_date = models.DateField(blank=True)
+    expiry_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return self.ref
@@ -384,7 +376,6 @@ class PermanentAddress(Address):
     telephone = models.CharField(max_length=12, blank=True, null=True)
     is_address_same = models.BooleanField(default=False)
 
-    
 
 class PresentAddress(Address):
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE, default=None)
@@ -401,14 +392,15 @@ class EmploymentDetail(models.Model):
     civil_qualification = models.ForeignKey(CivilQualification, on_delete=models.DO_NOTHING)
     test_passed = models.CharField(max_length=40, null=True, blank=True)
     employment_status = models.CharField(max_length=1, choices=EStates)
-    willing_for_job = models.CharField(max_length=1, choices=YesNo, verbose_name="Whether willing for Employment Registration?")
-    security_job = models.CharField(max_length=1, choices=YesNo, verbose_name="Whether willing for security job?")
-    firesafety_sec_qualification = models.CharField(max_length=50, verbose_name="Courses completed in relation with firefighting or security")
-    employer = models.CharField(max_length=50)
-    monthly_income = models.CharField(max_length=7)
-    department = models.ForeignKey(Department, on_delete=models.DO_NOTHING)
-    civil_retirement_date = models.DateField()
-    civil_ppo_no = models.CharField(max_length=8, verbose_name="Civil PPO Number")
+    willing_for_job = models.CharField(max_length=1, choices=YesNo, blank=True, null=True,
+                                       verbose_name="Whether willing for Employment Registration?")
+    security_job = models.CharField(max_length=1, choices=YesNo, verbose_name="Whether willing for security job?",
+                                    blank=True, null=True)
+    employer = models.CharField(max_length=50, null=True, blank=True)
+    monthly_income = models.CharField(max_length=7, blank=True, null=True)
+    department = models.ForeignKey(Department, on_delete=models.DO_NOTHING, null=True, blank=True)
+    civil_retirement_date = models.DateField(null=True, blank=True)
+    civil_ppo_no = models.CharField(max_length=8, verbose_name="Civil PPO Number", blank=True, null=True)
 
 
 class SpouseDetail(PersonalRef):
@@ -430,14 +422,15 @@ class SpouseDetail(PersonalRef):
         ('U', 'UnEmployed')
     ]
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    spouse_name = models.CharField(max_length=100, null=True, blank=True)
     marital_status = models.CharField(max_length=1, choices=MaritalStates, default=None)
     marriage_date = models.DateField()
-    spouse_relation = models.CharField(max_length=1, choices=SpouseRelation, default=None)
-    spouse_qualification = models.ForeignKey(CivilQualification, on_delete=models.DO_NOTHING)
-    spouse_employment_status = models.CharField(max_length=1, choices=EmploymentStatus, default=None)
-    spouse_profession = models.CharField(max_length=50)
-    spouse_retirement_date = models.DateField()
+    spouse_relation = models.CharField(max_length=1, choices=SpouseRelation, default=None, null=True, blank=True)
+    spouse_qualification = models.ForeignKey(CivilQualification, on_delete=models.DO_NOTHING, null=True, blank=True)
+    spouse_employment_status = models.CharField(max_length=1, choices=EmploymentStatus, default=None, blank=True,
+                                                null=True)
+    spouse_profession = models.CharField(max_length=50, blank=True, null=True)
+    spouse_retirement_date = models.DateField(blank=True, null=True)
     next_of_kin = models.CharField(max_length=50)
     nok_relation = models.CharField(max_length=15, verbose_name="Next Of Kin Relation")
 
@@ -465,13 +458,15 @@ class DependentDetail(models.Model):
         ('U', 'UnEmployed')
     ]
     ref = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    dep_no = models.SmallIntegerField()
     dep_name = models.CharField(max_length=50, verbose_name="Name")
     dep_relation = models.CharField(max_length=1, choices=Dependents, default=None, verbose_name='Dependent Relation')
     dep_dob = models.DateField(verbose_name='Date of Birth')
-    aadhaar_no = models.CharField(max_length=12, verbose_name='Aadhaar Number')
+    aadhaar_no = models.CharField(max_length=12, blank=True, verbose_name='Aadhaar Number')
     dep_qualification = models.CharField(max_length=40, verbose_name='Dependent Qualification')
     academic_year = models.CharField(max_length=4)
-    emp_status = models.CharField(max_length=1, choices=EmploymentStatus, verbose_name='Employment Status')
+    emp_status = models.CharField(max_length=1, choices=EmploymentStatus, verbose_name='Employment Status', null=True,
+                                  blank=True)
     marital_status = models.CharField(max_length=1, choices=MaritalState, default=None)
 
     def __str__(self):
@@ -526,3 +521,8 @@ class KSBHead(OfficerDetail):
 
     def __str__(self):
         return self.name
+
+
+class TransferDetail(models.Model):
+    ref = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    from_zsb = models.ForeignKey(ZilaSainikBoard, on_delete=models.CASCADE)

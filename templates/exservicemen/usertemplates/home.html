@@ -8,7 +8,7 @@
     <li><a href=""> My Profile</a></li>
     <li><a href="{% url 'logout'  %}">Logout</a></li>
     {% else %}
-      <li><a href="{% url 'officer login' %}">Board Login</a></li>
+      <li ><a href="{% url 'officer login' %}">Board Login</a></li>
     <li><a href="{% url 'user login' %}">User Login </a></li>
     {% endif %}
 {% endblock %}
@@ -24,13 +24,13 @@
                     <p style="color:#5c5c5c;">{{ total_users }}</p>
                 </div>
             </div>
-{#           <div class="box">#}
-{#            <div class="icon"><i class="fas fa-user-plus"></i></div>#}
-{#            <div class = "content">#}
-{#                <h4>USER DETAILS</h4>#}
-{#                <a class="link"href="#">ADD</a>#}
-{#            </div>#}
-{#        </div>#}
+           <div class="box">
+            <div class="icon"><i class="fas fa-user-plus"></i></div>
+            <div class = "content">
+                <h4>USER DETAILS</h4>
+                <a class="link"href="#">ADD</a>
+            </div>
+        </div>
 
        <div class="box">
         <div class="icon"><i class="fas fa-user-check"></i></div>

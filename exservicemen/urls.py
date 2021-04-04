@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.homeview, name='home'),
-    path('apply/', views.applyview, name="apply"),
+    # path('apply/', views.applyview, name="apply"),
     # path('registration/', views.serviceformview, name="service details"),
     path('registration/pension-info', views.pensionformview, name="pension details"),
     path('registration/personal-info', views.personalformview, name="personal details"),
@@ -20,4 +20,7 @@ urlpatterns = [
     # path('ajax/load-mcs/', views.load_mcs, name='ajax_load_mcs'),
     path('logout/', views.userlogout, name='logout'),
     path('addesm/', views.addesm, name='add ESM'),
+    path('addesm/basic-info', views.addbasicinfo, name='basic details'),
+    path('addesm/service-info', views.serviceformview, name='service details'),
+
 ]

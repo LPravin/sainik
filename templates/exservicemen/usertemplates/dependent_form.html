@@ -15,7 +15,7 @@
           <div><button class="Next" onclick="details(Event,'personal')">Personal</button></div>
           <div><button class="Next" onclick="details(Event,'contact')">Contact</button></div>
           <div><button class="Next" onclick="details(Event,'family')">Family</button></div>
-          <div><button class="Next" onclick="details(Event,'depentant')">Dependent</button></div>
+          <div><button class="Next" onclick="details(Event,'dependent')">Dependent</button></div>
           <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
 
         </div><br><br><br>
@@ -25,7 +25,6 @@
 
       <form action="#" method="post" autocomplete="off">
           {% csrf_token %}
-
 
   <div class="tab" id="pension">
         <div class="detailname" style="overflow: hidden;
@@ -37,7 +36,7 @@
           <br><br>
       {{ formset.management_form }}
         <div class="user-details">
-
+        <input type="number" name="form-0-dep_no" value=1 id="id_form-0-dep_no" class="form-0">
         <div class="input-box">
       <span class="details">Name</span>
 
@@ -120,7 +119,7 @@
         </div>
           <hr>
           <div class="user-details" hidden>
-
+            <input type="number" name="form-1-dep_no" value=2 id="id_form-1-dep_no" class="form-1">
         <div class="input-box">
       <span class="details">Name</span>
 
@@ -202,7 +201,7 @@
 
         </div>
           <div class="user-details" hidden>
-
+        <input type="number" name="form-2-dep_no" value=3 id="id_form-2-dep_no" class="form-2">
         <div class="input-box">
       <span class="details">Name</span>
 
@@ -284,7 +283,7 @@
 
         </div>
           <div class="user-details" hidden>
-
+        <input type="number" name="form-3-dep_no" value=4 id="id_form-3-dep_no" class="form-3">
         <div class="input-box">
       <span class="details">Name</span>
 
@@ -366,7 +365,7 @@
 
         </div>
           <div class="user-details" hidden>
-
+            <input type="number" name="form-4-dep_no" value=5 id="id_form-4-dep_no" class="form-4">
         <div class="input-box">
       <span class="details">Name</span>
 
@@ -442,7 +441,6 @@
 </select>
 
     </div>
-
 
         </div>
         <button type="button" class="Next" id="addform">ADD</button>

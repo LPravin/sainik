@@ -127,6 +127,8 @@
     }
 $(document).ready(function(){
     $('#div_id_corps').attr("hidden", true);
+    $("#id_reg_date").attr("max", 0)
+    // $('#id_enrollment_date').attr("min", {{ date }})
 });
 function validateform() {
    // if (ert.value === ""){

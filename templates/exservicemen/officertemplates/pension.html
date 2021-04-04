@@ -13,20 +13,19 @@
          <div class="tabs">
           <div><button class="Next" onclick="details(Event,'service')" >Service</button></div>
           <div><button id="defaultOpen" class="Next" onclick="details(Event,'pension')">Pension</button></div>
-          <div><button class="Next" onclick="details(Event,'personal')">Personal</button></div>
-          <div><button class="Next" onclick="details(Event,'contact')">Contact</button></div>
-          <div><button class="Next" onclick="details(Event,'family')">Family</button></div>
-          <div><button class="Next" onclick="details(Event,'depentant')">Dependent</button></div>
-         <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
+          <div><button class="Next" >Personal</button></div>
+          <div><button class="Next" >Contact</button></div>
+          <div><button class="Next" >Family</button></div>
+          <div><button class="Next" >Dependent</button></div>
+          <div><button class="Next" >Employment</button></div>
 
         </div><br><br><br>
     <div class="content">
 
       <div class="form-outer">
 
-      <form action="#"  name="pensionform"  id="pensionform" method="post">
+      <form action="#"  name="form"  id="form" method="post">
           {% csrf_token %}
-
 
   <div class="tab" id="pension">
         <div class="detailname" style="overflow: hidden;
@@ -47,6 +46,7 @@
             <span class="details">Reason for Discharge</span>
             {{ form.discharge_reason }}
           </div>
+
           <div class="input-box">
             <span class="details">Medical category while Discharge</span>
               <select name="medical_category" required id="id_medical_category">
@@ -68,7 +68,7 @@
             <span class="details">Whether pensioner?</span>
             {{ form.pensioner_status }}
           </div>
-          <div class="input-box" id="div_id_ppo_no">
+          <div class="input-box">
             <span class="details">PPO No</span>
             {{ form.ppo_no }}
           </div>
@@ -94,7 +94,7 @@
           </div>
         </div>
         <div class="btn-box">
-			<button type="button" class="Next" onclick="details(Event,'service')">BACK</Button>
+			<button type="submit" class="Next" value="">BACK</Button>
 			<button type="submit" class="Next" value="submit">NEXT</Button>
 		</div>
     </div>
