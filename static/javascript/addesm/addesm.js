@@ -126,7 +126,7 @@
   return ((key >= 48 && key <= 57) || (key >= 96 && key <= 105) || key === 8);
     }
 $(document).ready(function(){
-    $('#div_id_corps').attr("hidden", true);
+    $('#div_id_corps').prop("disabled", true);
     $("#id_reg_date").attr("max", 0)
     // $('#id_enrollment_date').attr("min", {{ date }})
 });

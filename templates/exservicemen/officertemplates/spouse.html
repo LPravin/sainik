@@ -13,10 +13,10 @@
           <div><button id="defaultOpen" class="Next" onclick="details(Event,'service')" >Service</button></div>
           <div><button class="Next" onclick="details(Event,'pension')">Pension</button></div>
           <div><button class="Next" onclick="details(Event,'personal')">Personal</button></div>
+             <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
           <div><button class="Next" onclick="details(Event,'contact')">Contact</button></div>
           <div><button class="Next" onclick="details(Event,'family')">Family</button></div>
           <div><button class="Next" onclick="details(Event,'depentant')">Dependent</button></div>
-             <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
         </div><br><br><br>
     <div class="content">
 
@@ -24,8 +24,6 @@
 
       <form action="#" method="post">
           {% csrf_token %}
-          {{ wizard.management_form }}
-
 
   <div class="tab" id="pension">
         <div class="detailname" style="overflow: hidden;
@@ -38,75 +36,75 @@
         <div class="user-details">
              <div class="input-box">
       <span class="details">Name of the Next of Kin</span>
-      {{ wizard.form.next_of_kin }}
+      {{ form.next_of_kin }}
     </div>
     <div class="input-box">
       <span class="details">Relation to the ESM</span>
-      {{ wizard.form.nok_relation }}
+      {{ form.nok_relation }}
     </div>
             <div class="input-box">
       <span class="details">Marital Status</span>
-      {{ wizard.form.marital_status }}
+      {{ form.marital_status }}
     </div>
              <div class="input-box" id="div_id_spouse_name">
       <span class="details">Spouse Name</span>
-      {{ wizard.form.name }}
+      {{ form.spouse_name }}
     </div>
     <div class="input-box" id="div_id_marriage_date">
       <span class="details">Date of Marriage</span>
-      {{ wizard.form.marriage_date }}
+      {{ form.marriage_date }}
     </div>
     <div class="input-box" id="div_id_spouse_relation">
       <span class="details">Spouse Relation</span>
-        {{ wizard.form.spouse_relation }}
+        {{ form.spouse_relation }}
     </div>
     <div class="input-box" id="div_id_dob">
       <span class="details">Spouse Date of Birth</span>
-      {{ wizard.form.dob }}
+      {{ form.dob }}
     </div>
     <div class="input-box" id="div_id_spouse_qualification">
       <span class="details">Spouse Qualification</span>
-      {{ wizard.form.spouse_qualification }}
+      {{ form.spouse_qualification }}
     </div>
     <div class="input-box" id="div_id_spouse_employment_status">
       <span class="details">Spouse Employment Status</span>
-      {{ wizard.form.spouse_employment_status }}
+      {{ form.spouse_employment_status }}
     </div>
     <div class="input-box" id="div_id_spouse_profession">
       <span class="details">Spouse Employed Profession</span>
-      {{ wizard.form.spouse_profession }}
+      {{ form.spouse_profession }}
     </div>
     <div class="input-box" id="div_id_spouse_retirement_date">
       <span class="details">Date of Retirement of spouse</span>
-      {{ wizard.form.spouse_retirement_date }}
+      {{ form.spouse_retirement_date }}
     </div>
     <div class="input-box" id="div_id_spouse_aadhaar">
       <span class="details">Spouse Aadhaar No</span>
-      {{ wizard.form.aadhaar_no }}
+      {{ form.aadhaar_no }}
     </div>
     <div class="input-box" id="div_id_spouse_voter_id">
       <span class="details">Spouse Voter ID No</span>
-      {{ wizard.form.voter_id_no }}
+      {{ form.voter_id_no }}
     </div>
     <div class="input-box" id="div_id_spouse_pan_id">
       <span class="details">Spouse PAN Card No</span>
-      {{ wizard.form.pan_no }}
+      {{ form.pan_no }}
     </div>
     <div class="input-box" id="div_id_spouse_csd_id">
       <span class="details">Spouse CSD Card No</span>
-      {{ wizard.form.csd_no }}
+      {{ form.csd_no }}
     </div>
     <div class="input-box" id="div_id_spouse_echs_id">
       <span class="details">Spouse ECHS Card No</span>
-      {{ wizard.form.echs_no }}
+      {{ form.echs_no }}
     </div>
      <div class="input-box" id="div_id_ident1">
          <span class="details">Identification Mark1</span>
-            {{ wizard.form.ident_mark_1 }}
+            {{ form.ident_mark_1 }}
      </div>
     <div class="input-box" id="div_id_ident2">
      <span class="details">Identification Mark 2</span>
-      {{ wizard.form.ident_mark_2 }}
+      {{ form.ident_mark_2 }}
     </div>
         </div>
         <div class="btn-box">

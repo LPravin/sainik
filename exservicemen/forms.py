@@ -268,7 +268,6 @@ class DependentForm(ModelForm):
             'dep_dob': forms.DateInput(attrs={'type': 'date'}),
             'dep_name': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)"}),
             'aadhaar_no': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
-            'dep_no': forms.HiddenInput()
         }
 
 
@@ -312,3 +311,7 @@ class ESMBasic(ModelForm):
         fields = ['esm_no', 'reg_category']
 
 
+class TransferForm(ModelForm):
+    class Meta:
+        model = TransferDetail
+        exclude = ['ref']

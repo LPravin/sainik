@@ -9,7 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from django.forms import formset_factory
+from django.forms import inlineformset_factory
 from django.contrib.auth.decorators import user_passes_test
 
 # FORMS = [("Service Form", ServiceForm), ("Pension Form", PensionForm), ("Personal Form", PersonalForm)]
@@ -87,58 +87,68 @@ def userlogout(request):
     return HttpResponseRedirect(reverse('home'))
 
 
-
 @login_required()
 def pensionformview(request):
     email = request.session['email']
+    service_id = request.session['service_id']
+    user = MyUser.objects.get(email=email)
     if request.method == "POST":
         pensionform = PensionForm(request.POST)
-        user = MyUser.objects.get(email=email)
-        check = 0
         try:
             check = PensionDetail.objects.get(ref=user)
-        except ServiceDetail.DoesNotExist:
+        except PensionDetail.DoesNotExist:
             if pensionform.is_valid():
                 user = MyUser.objects.get(email=email)
                 pension = pensionform.save(commit=False)
                 pension.ref = user
                 pension.save()
                 return redirect('personal details')
-        if check:
+        else:
             pensionform.instance = check
             if pensionform.is_valid():
                 pensionform.save()
                 return redirect('personal details')
+        mcs = MedicalCategory.objects.filter(service_id=service_id).all()
     else:
-        pensionform = PensionForm
-    service_id = request.session['service_id']
-    mcs = MedicalCategory.objects.filter(service_id=service_id).all()
-    return render(request, 'exservicemen/officertemplates/pension.html', {'form': pensionform, 'mcs': mcs})
+        mcs = MedicalCategory.objects.filter(service_id=service_id).all()
+        try:
+            check = PensionDetail.objects.get(ref=user)
+        except PensionDetail.DoesNotExist:
+            pensionform = PensionForm
+
+        else:
+            pensionform = PensionForm(instance=check)
+    return render(request, 'exservicemen/officertemplates/pension.html',  {'form': pensionform, 'mcs': mcs})
 
 
 @login_required()
 def personalformview(request):
     email = request.session['email']
+    user = MyUser.objects.get(email=email)
     if request.method == "POST":
         personalform = PersonalForm(request.POST)
-        user = MyUser.objects.get(email=email)
-        check = 0
         try:
             check = PersonalDetail.objects.get(ref=user)
-        except PensionDetail.DoesNotExist:
+        except PersonalDetail.DoesNotExist:
             if personalform.is_valid():
                 user = MyUser.objects.get(email=email)
                 form = personalform.save(commit=False)
                 form.ref = user
                 form.save()
                 return redirect('contact details')
-        if check:
+        else:
             personalform.instance = check
             if personalform.is_valid():
                 personalform.save()
                 return redirect('contact details')
     else:
         personalform = PersonalForm
+        try:
+            check = PersonalDetail.objects.get(ref=user)
+        except PersonalDetail.DoesNotExist:
+            pass
+        else:
+            personalform = PersonalForm(instance=check)
     return render(request, 'exservicemen/usertemplates/personal_form.html', {'form': personalform})
 
 
@@ -146,28 +156,35 @@ def personalformview(request):
 def employmentformview(request):
     email = request.session['email']
     if request.method == "POST":
-        employment_form = EmploymentForm(data=request.POST)
-
-        if employment_form.is_valid():
-            form = employment_form.save(commit=False)
-            user = MyUser.objects.get(email=email)
-            form.ref = user
-            form.save()
-            service = ServiceDetail.objects.get(ref=user)
-            service.status = 1
-        return redirect('home')
+        employmentform = EmploymentForm(data=request.POST)
+        user = MyUser.objects.get(email=email)
+        try:
+            check = EmploymentDetail.objects.get(ref=user)
+        except EmploymentDetail.DoesNotExist:
+            if employmentform.is_valid():
+                form = employmentform.save(commit=False)
+                user = MyUser.objects.get(email=email)
+                form.ref = user
+                form.save()
+                service = ServiceDetail.objects.get(ref=user)
+                service.status = 1
+                return redirect('home')
+        else:
+            employmentform.instance = check
+            if employmentform.is_valid():
+                employmentform.save()
+                return redirect('home')
     else:
-        form = EmploymentForm
-        return render(request, 'exservicemen/usertemplates/employment_form.html', {'form': form, 'title': 'EMPLOYMENT DETAILS'})
+        employmentform = EmploymentForm
+    return render(request, 'exservicemen/usertemplates/employment_form.html', {'form': employmentform, 'title': 'EMPLOYMENT DETAILS'})
 
 
 @login_required()
 def spouseformview(request):
     email = request.session['email']
+    user = MyUser.objects.get(email=email)
     if request.method == "POST":
         spouseform = SpouseForm(request.POST)
-        user = MyUser.objects.get(email=email)
-        check = 0
         try:
             check = SpouseDetail.objects.get(ref=user)
         except SpouseDetail.DoesNotExist:
@@ -177,28 +194,34 @@ def spouseformview(request):
                 form.ref = user
                 form.save()
                 return redirect('dependent details')
-        if check:
+        else:
             spouseform.instance = check
             if spouseform.is_valid():
                 spouseform.save()
                 return redirect('dependent details')
     else:
         spouseform = SpouseForm
+        try:
+            check = SpouseDetail.objects.get(ref=user)
+        except SpouseDetail.DoesNotExist:
+            pass
+        else:
+            spouseform.instance = check
     return render(request, 'exservicemen/officertemplates/spouse.html', {'form': spouseform})
 
 
 @login_required()
 def dependentformview(request):
     email = request.session['email']
-    dependentformset = formset_factory(DependentForm, max_num=5, min_num=0)
+    dependentformset = inlineformset_factory(MyUser, DependentDetail, DependentForm, exclude=('dep_no', 'ref',),)
+    user = MyUser.objects.get(email=email)
     if request.method == "POST":
         formset = dependentformset(request.POST or None)
-        user = MyUser.objects.get(email=email)
-        check = DependentDetail.objects.filter(ref=user).count()
-        if check == 0:
+        dependents = DependentDetail.objects.filter(ref=user).count()
+        if dependents == 0:
             if formset.is_valid():
-                no = 1
                 error = 0
+                no = 1
                 for form in formset:
                     if form.is_valid():
                         dep = form.save(commit=False)
@@ -216,18 +239,34 @@ def dependentformview(request):
                 error = 0
                 for form in formset:
                     try:
-                        dependent = DependentDetail.objects.get(ref=user, dep_no=no)
+                        check = DependentDetail.objects.get(ref=user, dep_no=no)
                     except DependentDetail.DoesNotExist:
-                        if form.is_valid():
+                        if form.is_valid(self=form):
                             dep = form.save(commit=False)
                             dep.dep_no = no
                             dep.ref = user
                             dep.save()
-
-
+                        else:
+                            error = 1
+                    else:
+                        form.instance = check
+                        if form.is_valid():
+                            form.save()
+                        else:
+                            error = 1
+                if not error:
+                    return redirect('employment details')
     else:
         formset = dependentformset()
-    return render(request, 'exservicemen/usertemplates/dependent_form.html', {'formset': formset})
+        try:
+            check = DependentDetail.objects.filter(ref=user).all()
+        except DependentDetail.DoesNotExist:
+            # no = 0
+            pass
+        else:
+            formset = dependentformset(instance=user)
+            # no = check.count()
+    return render(request, 'exservicemen/officertemplates/dependent.html', {'formset': formset})
 
 
 @login_required()
@@ -237,7 +276,6 @@ def contactformview(request):
         form1 = ContactForm1(data=request.POST)
         form2 = ContactForm2
         user = MyUser.objects.get(email=email)
-        check = 0
         try:
             check = PermanentAddress.objects.get(ref=user)
         except PermanentAddress.DoesNotExist:
@@ -255,13 +293,12 @@ def contactformview(request):
                         return redirect('spouse details')
                 else:
                     return redirect('spouse details')
-        if check:
+        else:
             form1.instance = check
             if form1.is_valid():
                 form1.save()
                 if form1.cleaned_data['is_address_same'] == 0:
                     form2 = ContactForm2(request.POST)
-                    check1 = 0
                     try:
                         check1 = PresentAddress.objects.get(ref=user)
                     except PresentAddress.DoesNotExist:
@@ -270,7 +307,7 @@ def contactformview(request):
                             form.ref = user
                             form.save()
                             return redirect('spouse details')
-                    if check1:
+                    else:
                         form2.instance = check1
                         if form2.is_valid():
                             form2.save()
@@ -341,7 +378,6 @@ def addbasicinfo(request):
             # request.session['esmno'] = esmbasic.cleaned_data['esm_no']
             regcat = esmbasic.cleaned_data['reg_category'].id
             request.session['reg_type'] = regcat
-            print(request.session)
             if regcat != '2':
                 return redirect('service details')
             else:
@@ -353,14 +389,14 @@ def addbasicinfo(request):
     return render(request, "exservicemen/officertemplates/add_users_home.html",
                   {'loginform': loginform, 'esmbasic': esmbasic})
 
+
 @login_required()
 @user_passes_test(wo_check)
 def serviceformview(request):
     email = request.session['email']
+    user = MyUser.objects.get(email=email)
     if request.method == "POST":
         serviceform = ServiceForm(request.POST)
-        user = MyUser.objects.get(email=email)
-        check = 0
         try:
             check = ServiceDetail.objects.get(ref=user)
         except ServiceDetail.DoesNotExist:
@@ -370,7 +406,7 @@ def serviceformview(request):
                 request.session['service_id'] = serviceform.cleaned_data["service"].id
                 service.save()
                 return redirect('pension details')
-        if check:
+        else:
             serviceform.instance = check
             if serviceform.is_valid():
                 serviceform.save()
@@ -378,6 +414,12 @@ def serviceformview(request):
                 return redirect('pension details')
     else:
         serviceform = ServiceForm
+        check = 0
+        try:
+            check = ServiceDetail.objects.get(ref=user)
+        except ServiceDetail.DoesNotExist:
+            pass
+        serviceform.instance = check
     return render(request, "exservicemen/officertemplates/service.html",
                   {'serviceform': serviceform})
 

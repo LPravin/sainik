@@ -130,12 +130,19 @@ class Rank(models.Model):
 
 
 class RecordOffice(models.Model):
-    record_office = models.CharField(max_length=60, unique=True, verbose_name='Record Office')
-    corp = models.CharField(max_length=60, unique=True)
+    record_office_name = models.CharField(max_length=60, unique=True)
     service = models.ForeignKey(Service, on_delete=models.CASCADE, default=None)
 
     def __str__(self):
-        return self.record_office
+        return self.record_office_name
+
+
+class Corp(models.Model):
+    corps_name = models.CharField(max_length=55, unique=True)
+    record_office = models.ForeignKey(RecordOffice, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.corps_name
 
 
 class DischargeReason(models.Model):
@@ -283,10 +290,8 @@ class ServiceDetail(models.Model):
     mobile = models.CharField(max_length=10, blank=True)
     reg_type = models.ForeignKey(ESMType, on_delete=models.DO_NOTHING, default=None)
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING, default=None)
-    corps = models.ForeignKey(RecordOffice, on_delete=models.DO_NOTHING, default=None, blank=True, null=True,
-                              related_name='army_corp')
-    record_office = models.ForeignKey(RecordOffice, on_delete=models.CASCADE, default=None,
-                                      related_name='record_office_ref')
+    corps = models.ForeignKey(Corp, on_delete=models.DO_NOTHING, default=None, blank=True, null=True)
+    record_office = models.ForeignKey(RecordOffice, on_delete=models.CASCADE, default=None)
     group = models.ForeignKey(TradeGroup, on_delete=models.CASCADE, default=None)
     trade = models.ForeignKey(Trade, on_delete=models.DO_NOTHING, default=None)
     service_no = models.CharField(max_length=9, unique=True)
@@ -324,13 +329,13 @@ class PensionDetail(models.Model):
 
 class PersonalRef(models.Model):
     dob = models.DateField(verbose_name="Date Of Birth")
-    aadhaar_no = models.CharField(max_length=12)
-    voter_id_no = models.CharField(max_length=12, verbose_name="Voter ID Number")
-    pan_no = models.CharField(max_length=10, verbose_name="Permanent Account Number(PAN)")
-    csd_no = models.CharField(max_length=19, verbose_name="CSD Number")
-    echs_no = models.CharField(max_length=14, verbose_name="ECHS Number")
-    ident_mark_1 = models.CharField(max_length=70, verbose_name="Identification Mark 1")
-    ident_mark_2 = models.CharField(max_length=70, verbose_name="Identification Mark 2")
+    aadhaar_no = models.CharField(max_length=12, blank=True, null=True)
+    voter_id_no = models.CharField(max_length=12, blank=True, null=True, verbose_name="Voter ID Number")
+    pan_no = models.CharField(max_length=10, blank=True, null=True, verbose_name="Permanent Account Number(PAN)")
+    csd_no = models.CharField(max_length=19, blank=True, null=True, verbose_name="CSD Number")
+    echs_no = models.CharField(max_length=14, blank=True, null=True, verbose_name="ECHS Number")
+    ident_mark_1 = models.CharField(max_length=70, blank=True, null=True, verbose_name="Identification Mark 1")
+    ident_mark_2 = models.CharField(max_length=70, blank=True, null=True, verbose_name="Identification Mark 2")
 
     class Meta:
         abstract = True
@@ -423,8 +428,10 @@ class SpouseDetail(PersonalRef):
     ]
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
     spouse_name = models.CharField(max_length=100, null=True, blank=True)
+    dob = models.DateField(blank=True, null=True)
+
     marital_status = models.CharField(max_length=1, choices=MaritalStates, default=None)
-    marriage_date = models.DateField()
+    marriage_date = models.DateField(null=True, blank=True)
     spouse_relation = models.CharField(max_length=1, choices=SpouseRelation, default=None, null=True, blank=True)
     spouse_qualification = models.ForeignKey(CivilQualification, on_delete=models.DO_NOTHING, null=True, blank=True)
     spouse_employment_status = models.CharField(max_length=1, choices=EmploymentStatus, default=None, blank=True,

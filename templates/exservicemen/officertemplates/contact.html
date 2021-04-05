@@ -13,16 +13,16 @@
           <div><button id="defaultOpen" class="Next" onclick="details(Event,'service')" >Service</button></div>
           <div><button class="Next" onclick="details(Event,'pension')">Pension</button></div>
           <div><button class="Next" onclick="details(Event,'personal')">Personal</button></div>
+          <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
           <div><button class="Next" onclick="details(Event,'contact')">Contact</button></div>
           <div><button class="Next" onclick="details(Event,'family')">Family</button></div>
           <div><button class="Next" onclick="details(Event,'depentant')">Dependent</button></div>
-            <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
         </div><br>
     <div class="content">
 
       <div class="form-outer">
 
-      <form action="#" method="post" name="contactform" id="contactform" data-districts-url="{% url 'ajax_load_districts' %}">
+      <form action="#" method="post" name="contactform" id="contactform" autocomplete="on" data-districts-url="{% url 'ajax_load_districts' %}">
           {% csrf_token %}
 
 

@@ -11,20 +11,20 @@
          <h4>ESM DETAILS</h4><br>
      <h4>{{ request.session.email }}</h4><br></div>
          <div class="tabs">
-          <div><button class="Next" onclick="details(Event,'service')" >Service</button></div>
-          <div><button id="defaultOpen" class="Next" onclick="details(Event,'pension')">Pension</button></div>
+          <div><button class="Next" >Service</button></div>
+          <div><button  class="Next" >Pension</button></div>
           <div><button class="Next" >Personal</button></div>
+         <div><button class="Next" >Employment</button></div>
           <div><button class="Next" >Contact</button></div>
           <div><button class="Next" >Family</button></div>
           <div><button class="Next" >Dependent</button></div>
-          <div><button class="Next" >Employment</button></div>
 
         </div><br><br><br>
     <div class="content">
 
       <div class="form-outer">
 
-      <form action="#"  name="form"  id="form" method="post">
+      <form action="#"  name="form"  id="form" method="post" autocomplete="on">
           {% csrf_token %}
 
   <div class="tab" id="pension">

@@ -9,14 +9,14 @@
           <div><button id="defaultOpen" class="Next">Service</button></div>
           <div><button class="Next" >Pension</button></div>
           <div><button class="Next" >Personal</button></div>
+             <div><button class="Next" >Employment</button></div>
           <div><button class="Next" >Contact</button></div>
           <div><button class="Next" >Family</button></div>
           <div><button class="Next" >Dependent</button></div>
-          <div><button class="Next" >Employment</button></div>
         </div><br>
      <div class="content">
       <div class="form-outer">
- <form enctype="multipart/form-data" id="addesmform" name="addesmform"  onsubmit="return validateform()"
+ <form enctype="multipart/form-data" id="addesmform" name="addesmform" autocomplete="on" onsubmit="return validateform()"
                   data-records-url="{% url 'ajax_load_records' %}"
                   data-trades-url="{% url 'ajax_load_trades' %}"
                   data-ranks-url="{% url 'ajax_load_ranks' %}"
