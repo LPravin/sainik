@@ -3,24 +3,10 @@ nav{
     background: #fff;
 
 }
-nav h2{
-    font-weight: 800;
-    font-size: 24px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    text-align: center;
-    top:3%;
-    float:left;
-    position: absolute;
-    margin-bottom: 10px;
-    color:#677eff;
-    margin-left: 3%;
-    width:40%;
-    height:100px;
-}
+
 nav img{
-    width:42px;
-    height:42px;
+    width:30%;
+    height:10%;
     position: absolute;
     top:15px;
     left:2%;
@@ -33,18 +19,22 @@ nav ul{
 }
 
 nav ul li{
+
     display: inline-block;
-    line-height: 80px;
+    line-height: 60px;
     margin: 0 15px;
+    text-decoration: none;
 
 }
 
 nav ul li a{
+
     position: relative;
     color:#677eff;
     font-size: 18px;
     padding: 5px 0;
     text-transform: uppercase;
+    text-decoration: none;
 
 }
 nav ul .icontxt{
@@ -67,6 +57,7 @@ nav ul li a:before{
 nav ul li a:hover:before{
     transform: scaleX(1);
     transform-origin: left;
+
 }
 
 label #btn,
@@ -82,45 +73,41 @@ label #cancel{
 #check{
     display: none;
 }
-@media (max-width: 1118px){
+@media (max-width: 1240px){
     nav img{
         left:2%;
     }
-    nav h2{
-        left:0%;
-        width:80%;
-    }
-}
-@media (max-width: 944px){
-    nav h2{
-        left:2%;
-        top: 20px;
-        width: 60%;
-    }
-    nav img{
-        display: none;
-    }
-    nav ul li a{
 
-        font-size: 17px;
-        color:white;
-
-    }
-    nav ul .icon{
-        display: none;
-    }
-    nav ul .icontxt{
-        display: block;
-    }
 }
-@media (max-width: 860px){
-    nav img{
-        display: none;
-    }
-    nav h2{
-        left:8%;
-       text-align: center;
-    }
+/*@media (max-width: 480px){*/
+/*    nav h2{*/
+/*        left:2%;*/
+/*        top: 20px;*/
+/*        width: 60%;*/
+/*    }*/
+/*    nav img{*/
+/*        display: none;*/
+/*    }*/
+/*    nav ul li a{*/
+
+/*        font-size: 17px;*/
+/*        color:white;*/
+
+/*    }*/
+/*    nav ul .icon{*/
+/*        display: none;*/
+/*    }*/
+/*    nav ul .icontxt{*/
+/*        display: block;*/
+/*    }*/
+/*}*/
+@media (max-width: 960px){
+
+   nav img{
+       width:30%;
+       height:10%;
+       left:10%;
+   }
 
     label #btn{
         display: block;
@@ -128,8 +115,8 @@ label #cancel{
     }
     ul{
         position: fixed;
-        width: 40%;
-        height: 100vh;
+        width: 100%;
+        height: 100%;
         background: #677eff;
         top: 80px;
         left: -100%;
@@ -144,6 +131,7 @@ label #cancel{
     }
     nav ul li a{
         font-size: 20px;
+        color:#fff;
     }
     nav ul li a:before{
         position: absolute;
@@ -173,3 +161,64 @@ label #cancel{
         display: block;
     }
 }
+@media (max-width: 480px){
+     nav img{
+       width:150px;
+       height:50px;
+       left:10%;
+   }
+
+    label #btn{
+        display: block;
+
+    }
+    ul{
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: #677eff;
+        top: 80px;
+        left: -100%;
+        text-align: center;
+        transition: all 0.5s;
+        z-index: 3;
+    }
+    nav ul li{
+        display: block;
+        margin: 50px 0;
+        line-height: 30px;
+    }
+    nav ul li a{
+        font-size: 20px;
+        color:#fff;
+    }
+    nav ul li a:before{
+        position: absolute;
+        content:"";
+        left: 0;
+        bottom: 0;
+        height: 3px;
+        width: 100%;
+        background: white;
+        transform: scaleX(0);
+        transform-origin: right;
+        transition: transform 0.4s linear;
+    }
+
+    nav ul li a:hover:before{
+        transform: scaleX(1);
+        transform-origin: left;
+    }
+
+    #check:checked ~ ul{
+        left: 0;
+    }
+    #check:checked ~ label #btn{
+        display: none;
+    }
+    #check:checked ~ label #cancel{
+        display: block;
+    }
+}
+
+

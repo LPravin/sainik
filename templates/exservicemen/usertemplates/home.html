@@ -15,8 +15,12 @@
 {% block content %}
     {% if request.user.role == 2 %}
 
-       <h4>Zila Board Name: {{ zboard }}</h4>
+    <div class="board"><h5 class="boardnm">Zila Board Name</h5>
+    <h5 class="boardname">{{ zboard }}</h5>
+    </div>
+
         <div class="containers">
+
             <div class="box">
                 <div class="icon"> <i class="fas fa-users"></i></div>
                 <div class = "content">
@@ -24,13 +28,7 @@
                     <p style="color:#5c5c5c;">{{ total_users }}</p>
                 </div>
             </div>
-           <div class="box">
-            <div class="icon"><i class="fas fa-user-plus"></i></div>
-            <div class = "content">
-                <h4>USER DETAILS</h4>
-                <a class="link"href="#">ADD</a>
-            </div>
-        </div>
+
 
        <div class="box">
         <div class="icon"><i class="fas fa-user-check"></i></div>

@@ -97,23 +97,23 @@ section .container .user .formbx form input{
     outline: none;
     box-shadow: none;
     margin: 8px 0;
-    font-size: 14px; 
+    font-size: 14px;
     letter-spacing: 1px;
     font-weight: 300;
 }
 
 section .container .user .formbx form input[type="submit"]{
-max-width: 100px;
-background: #677eff;
-color: #fff;
-padding:10px;
-border-radius: 6px;
-cursor: pointer;
-font-size: 14px;
-font-weight: 500;
-letter-spacing: 1px;
-transition: 0.5s;
-margin-bottom: 20px;
+    max-width: 100px;
+    background: #677eff;
+    color: #fff;
+    padding:10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    transition: 0.5s;
+    margin-bottom: 20px;
 }
 
 section .container .user .formbx form .signup a{
@@ -127,14 +127,14 @@ section .container .user .formbx form .admin a{
     font-weight: 600;
     text-decoration: none;
     color: #677eff;
- 
+
 }
 
 section .container .loginbx{
-    pointer-events: none;   
+    pointer-events: none;
 }
 section .container.active .loginbx{
-    pointer-events: initial;   
+    pointer-events: initial;
 }
 
 section .container .loginbx .formbx{
@@ -147,10 +147,44 @@ section .container.active .loginbx .formbx{
 }
 section .container .loginbx .imgbx{
     left: -100%;
-    
+
 }
 section .container.active .loginbx .imgbx{
     left: 0%;
-    
+
 }
 
+
+@media (max-width:650px) {
+
+
+     section .container .user .formbx{
+         width:100%;
+         height:100%;
+       }
+
+    section .container .user .formbx .logo{
+        width:100%;
+        height:40%;
+    }
+    section .container .user .imgbx {
+            display:none;
+        }
+
+}
+@media (max-width: 450px) {
+
+ section .container .user .formbx{
+         width:100%;
+         height:100%;
+       }
+        section .container .user .formbx .logo{
+        width:100%;
+        height:40%;
+    }
+
+      section .container .user .imgbx{
+            display:none;
+        }
+
+}

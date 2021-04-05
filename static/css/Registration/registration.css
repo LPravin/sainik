@@ -123,6 +123,7 @@ float:left;
 .search{
     display:none;
 }
+
 .container .title::before{
   position: absolute;
   left: 0;
@@ -154,6 +155,12 @@ form .user-details .input-box{
   margin-bottom: 15px;
   width: calc(100% / 2 - 20px);
 }
+
+form .user-details .input-box .input{
+  display:flex;
+  flex-direction:row;
+}
+
 form .user-details input.invalid {
   background-color: #ffdddd;
 }
