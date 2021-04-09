@@ -15,26 +15,30 @@
           background-color: #f1f1f1;">
             <h4>BASIC DETAILS</h4>
             </div>
-     <div class="user-details">
+ <div class="user-details">
  <div class="input-box">
       <span class="details">Email</span>
      {{ loginform.email }}
-     {{ loginform.email.errors }}
+     <p class ="errorlist">{{ loginform.email.errors.as_text }}</p>
     </div>
          <div class="input-box">
       <span class="details">ESM No:</span>
-     {{ esmbasic.esm_no }}
-     {{ esmbasic.esm_no.errors }}
+      <div class="input"  style="display:flex; flex-direction: row;">
+        <input type="text" style="width:30%; margin-right: 3px;" required>
+          <input type="text" style="width:20%; margin-right: 3px;" required>
+       {{ esmbasic.esm_no }}
+          <p class ="errorlist">{{ esmbasic.esm_no.errors.as_text }}</p>
+          </div>
     </div>
      <div class="input-box">
       <span class="details">Password</span>
       {{ loginform.password1 }}
-      {{ loginform.password2.errors }}
+         <p class ="errorlist">{{ loginform.password2.errors.as_text }}</p>
     </div>
      <div class="input-box">
       <span class="details">Confirm Password</span>
       {{ loginform.password2 }}
-      {{ loginform.password2.errors }}
+         <p class ="errorlist">{{ loginform.password2.errors.as_text }}</p>
     </div>
          <div class="input-box">
       <span class="details">Registration Type</span>

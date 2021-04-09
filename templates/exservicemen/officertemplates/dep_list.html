@@ -1,0 +1,27 @@
+{% if dependents %}
+{% for form in dependents %}
+                <tr>
+                  <td style="text-align: left; padding:20px 8px;"> {{ form.dep_name }}</td>
+                  <td style="text-align: left; padding:20px 8px;">{{ form.get_dep_relation_display }}</td>
+                  <td style="text-align: left; padding:20px 8px;"> {{ form.dep_dob }}</td>
+                  <td style="text-align: left; padding:20px 8px;">{{ form.aadhaar_no }}</td>
+                  <td style="text-align: left; padding:20px 8px;">{{ form.dep_qualification }}</td>
+                  <td style="text-align: left; padding:20px 8px;"> {{ form.academic_year }}</td>
+                  <td style="text-align: left; padding:20px 8px;">{{ form.get_emp_status_display }}</td>
+                  <td style="text-align: left; padding:20px 8px;">{{ form.get_marital_status_display }}</td>
+                  <td style="text-align: left; padding:20px 8px;">
+                      <div style="display:flex; flex-direction: row;">
+                          <input type="button" value="Edit" name="Edit" class="edit" style="margin-right: 2px;">
+                          <input type="button" value="Delete" name="Delete" class="delete">
+                      </div>
+                  </td>
+                </tr>
+
+{% endfor %}
+{% else %}
+<tbody>
+<tr>
+    <td>NO DEPENDENTS</td>
+</tr>
+</tbody>
+{% endif %}

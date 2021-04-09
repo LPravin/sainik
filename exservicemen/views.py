@@ -1,12 +1,14 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 # from django.views.generic import TemplateView
 # from django.views.generic.edit import FormView
+from django.template.loader import render_to_string
+
 from .forms import *
 from .models import *
 # from exservicemen.forms import ApplyForm1, CustomUserCreationForm, PersonalForm, EmploymentForm, SpouseForm, \
 #     DependentForm, PensionForm, ServiceForm, ContactForm1, ContactForm2, ESMBasic, ServiceDetail
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.forms import inlineformset_factory
@@ -210,63 +212,13 @@ def spouseformview(request):
     return render(request, 'exservicemen/officertemplates/spouse.html', {'form': spouseform})
 
 
-@login_required()
+# @login_required()
 def dependentformview(request):
-    email = request.session['email']
-    dependentformset = inlineformset_factory(MyUser, DependentDetail, DependentForm, exclude=('dep_no', 'ref',),)
+    email = 'prakash@gmail.com'
     user = MyUser.objects.get(email=email)
-    if request.method == "POST":
-        formset = dependentformset(request.POST or None)
-        dependents = DependentDetail.objects.filter(ref=user).count()
-        if dependents == 0:
-            if formset.is_valid():
-                error = 0
-                no = 1
-                for form in formset:
-                    if form.is_valid():
-                        dep = form.save(commit=False)
-                        dep.ref = user
-                        dep.dep_no = no
-                        dep.save()
-                    else:
-                        error = 1
-                    no += 1
-                if not error:
-                    return redirect('employment details')
-        else:
-            if formset.is_valid():
-                no = 1
-                error = 0
-                for form in formset:
-                    try:
-                        check = DependentDetail.objects.get(ref=user, dep_no=no)
-                    except DependentDetail.DoesNotExist:
-                        if form.is_valid(self=form):
-                            dep = form.save(commit=False)
-                            dep.dep_no = no
-                            dep.ref = user
-                            dep.save()
-                        else:
-                            error = 1
-                    else:
-                        form.instance = check
-                        if form.is_valid():
-                            form.save()
-                        else:
-                            error = 1
-                if not error:
-                    return redirect('employment details')
-    else:
-        formset = dependentformset()
-        try:
-            check = DependentDetail.objects.filter(ref=user).all()
-        except DependentDetail.DoesNotExist:
-            # no = 0
-            pass
-        else:
-            formset = dependentformset(instance=user)
-            # no = check.count()
-    return render(request, 'exservicemen/officertemplates/dependent.html', {'formset': formset})
+    forms = DependentDetail.objects.filter(ref=user)
+    context = {'forms': forms}
+    return render(request, 'exservicemen/officertemplates/dep.html', context)
 
 
 @login_required()
@@ -393,7 +345,8 @@ def addbasicinfo(request):
 @login_required()
 @user_passes_test(wo_check)
 def serviceformview(request):
-    email = request.session['email']
+    # email = request.session['email']
+    email = 'prakash@gmail.com'
     user = MyUser.objects.get(email=email)
     if request.method == "POST":
         serviceform = ServiceForm(request.POST)
@@ -448,3 +401,46 @@ def load_districts(request):
     stateid = request.GET.get('stateid')
     districts = District.objects.filter(state_id=stateid).all()
     return render(request, 'exservicemen/usertemplates/dependent_dropdown.html', {'record_offices': districts})
+
+def load_dependent(request):
+    email = 'prakash@gmail.com'
+    user = MyUser.objects.get(email=email)
+    dependents = DependentDetail.objects.filter(ref=user)
+    return render(request, 'exservicemen/officertemplates/dep_list.html', {'dependents': dependents})
+
+
+def update_dependent(request, pk):
+    dependent = get_object_or_404(DependentDetail, pk=pk)
+    if request.method == "POST":
+        form = DependentForm(request.POST, instance=dependent)
+    else:
+        form = DependentForm(instance=dependent)
+    return render(request, 'exservicemen/officertemplates/add_dep_temp.html', {'form': form})
+
+
+def add_dependent(request):
+    email = 'prakash@gmail.com'
+    user = MyUser.objects.get(email=email)
+    data = dict()
+    if request.method == 'POST':
+        form = DependentForm(request.POST)
+        if form.is_valid():
+            dependent = form.save(commit=False)
+            dependent.ref = user
+            dependent.save()
+            data['form_is_valid'] = True
+            dependents = DependentDetail.objects.filter(ref=user)
+            data['html_dep_list'] = render_to_string('exservicemen/officertemplates/dep_list.html', {
+                'dependents': dependents
+            })
+        else:
+            data['form_is_valid'] = False
+            print(form.errors)
+    else:
+        form = DependentForm()
+
+    context = {'form': form}
+    return
+    # data['html_form'] = render_to_string('exservicemen/officertemplates/add_dep_temp.html', context, request=request)
+    # return JsonResponse(data)
+

@@ -465,7 +465,6 @@ class DependentDetail(models.Model):
         ('U', 'UnEmployed')
     ]
     ref = models.ForeignKey(MyUser, on_delete=models.CASCADE)
-    dep_no = models.SmallIntegerField()
     dep_name = models.CharField(max_length=50, verbose_name="Name")
     dep_relation = models.CharField(max_length=1, choices=Dependents, default=None, verbose_name='Dependent Relation')
     dep_dob = models.DateField(verbose_name='Date of Birth')

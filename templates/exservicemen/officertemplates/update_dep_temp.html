@@ -1,0 +1,45 @@
+<form method="post" action="{% url 'book_update' form.instance.pk %}">
+{% csrf_token %}
+    <h3 style="text-align: center;margin-bottom: 20px;">UPDATE DEPENDENT DETAILS</h3>
+        <div class="input-box">
+      <span class="details">Name</span>
+
+            {{ form.dep_name }}
+    </div>
+    <div class="input-box">
+      <span class="details">Relation</span>
+
+        {{ form.dep_relation }}
+    </div>
+    <div class="input-box">
+      <span class="details">Date of Birth</span>
+
+        {{ form.dep_dob }}
+    </div>
+    <div class="input-box">
+      <span class="details">Aadhaar Card No</span>
+
+        {{ form.aadhaar_no }}
+    </div>
+    <div class="input-box">
+      <span class="details">Qualification</span>
+
+        {{ form.dep_qualification }}
+    </div>
+    <div class="input-box">
+      <span class="details">Academic Year</span>
+        {{ form.academic_year }}
+    </div>
+    <div class="input-box">
+      <span class="details">Employment Status</span>
+        {{ form.emp_status }}
+    </div>
+    <div class="input-box">
+      <span class="details">Marital Status</span>
+        {{ form.marital_status }}
+    </div>
+    <div>
+           <button type="button" class="Next" id="cancel">CANCEL</button>
+           <button type="button" class="Next" id="save">UPDATE</button>
+        </div>
+    </form>

@@ -262,13 +262,14 @@ class DependentForm(ModelForm):
 
     class Meta:
         model = DependentDetail
-        exclude = ['ref']
+        exclude = ['ref', 'dep_no']
 
         widgets = {
             'dep_dob': forms.DateInput(attrs={'type': 'date'}),
             'dep_name': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)"}),
             'aadhaar_no': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
         }
+
 
 
 class ContactForm1(ModelForm):

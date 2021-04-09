@@ -1,20 +1,22 @@
-@login_required()
-def dependentformview(request):
-    email = request.session['email']
-    dependentformset = formset_factory(DependentForm, max_num=5, min_num=0)
-    if request.method == "POST":
-        formset = dependentformset(data=request.POST or None)
-        if formset.is_valid():
-            no = 1
-            for form in formset:
-                if form.is_valid():
-                    dep = form.save(commit=False)
-                    user = MyUser.objects.get(email=email)
-                    dep.ref = user
-                    dep.dep_no = no
-                    form.save()
-                no += 1
-            return redirect('home')
-    else:
-        formset = dependentformset()
-    return render(request, 'exservicemen/officertemplates/dependent.html', {'formset': formset})
+{#@login_required()#}
+{#def dependentformview(request):#}
+{#    email = request.session['email']#}
+{#    dependentformset = formset_factory(DependentForm, max_num=5, min_num=0)#}
+{#    if request.method == "POST":#}
+{#        formset = dependentformset(data=request.POST or None)#}
+{#        if formset.is_valid():#}
+{#            no = 1#}
+{#            for form in formset:#}
+{#                if form.is_valid():#}
+{#                    dep = form.save(commit=False)#}
+{#                    user = MyUser.objects.get(email=email)#}
+{#                    dep.ref = user#}
+{#                    dep.dep_no = no#}
+{#                    form.save()#}
+{#                no += 1#}
+{#            return redirect('home')#}
+{#    else:#}
+{#        formset = dependentformset()#}
+{#    return render(request, 'exservicemen/officertemplates/dependent.html', {'formset': formset})#}
+
+

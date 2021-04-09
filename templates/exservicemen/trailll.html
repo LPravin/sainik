@@ -1,0 +1,39 @@
+{% extends 'exservicemen/usertemplates/basic.html' %}
+
+
+{% load static %}
+
+{% block content %}
+
+{{ formset.management_form }}
+
+
+    {% if no > {{ request.session.no }} %}
+        <div id="id_1">
+        <h1>hello 1</h1>
+        </div>
+        {% elif no > 1 %}
+            <div id="id_2">
+        <h1>hello 2</h1>
+        </div>
+    {% endif %}
+
+<button value="submit" type="submit" name="add" id="add_div"></button>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+    $("#add_div").click(function (){
+         $.ajax({
+            url: '/',
+            data: {
+                'service_id': serviceid,
+                 'rankcatid' :  rankcatid
+            },
+            success: function (data) {
+                $("#id_rank").html(data);
+
+            }
+        });
+    });
+</script>
+{% endblock %}

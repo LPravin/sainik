@@ -1,0 +1,47 @@
+<form name="add_dep_form" method="post" action="{% url 'ajax_add_dependent'  %}" class="dep-add-form">
+{% csrf_token %}
+    <h3 style="text-align: center;margin-bottom: 20px;">ADD DEPENDENT DETAILS</h3>
+    <div class="user-details">
+        <div class="input-box">
+      <span class="details">Name</span>
+
+            {{ form.dep_name }}
+            {{ form.dep_name.errors }}
+    </div>
+    <div class="input-box">
+      <span class="details">Relation</span>
+
+        {{ form.dep_relation }}
+        {{ form.dep_relation.errors }}
+    </div>
+    <div class="input-box">
+      <span class="details">Date of Birth</span>
+        {{ form.dep_dob }}
+    </div>
+    <div class="input-box">
+      <span class="details">Aadhaar Card No</span>
+        {{ form.aadhaar_no }}
+    </div>
+    <div class="input-box">
+      <span class="details">Qualification</span>
+
+        {{ form.dep_qualification }}
+    </div>
+    <div class="input-box">
+      <span class="details">Academic Year</span>
+        {{ form.academic_year }}
+    </div>
+    <div class="input-box">
+      <span class="details">Employment Status</span>
+        {{ form.emp_status }}
+    </div>
+    <div class="input-box">
+      <span class="details">Marital Status</span>
+        {{ form.marital_status }}
+    </div>
+    <div>
+           <button type="button" class="Next" id="cancel">CANCEL</button>
+           <button type="submit" class="Next" >ADD DEPENDENT</button>
+        </div>
+        </div>
+    </form>

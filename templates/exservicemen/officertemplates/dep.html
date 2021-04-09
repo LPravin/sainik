@@ -1,0 +1,155 @@
+{% extends 'exservicemen/usertemplates/basic.html' %}
+
+
+{% load static %}
+
+{% block content %}
+
+
+ <div class="container1">
+     <div class="title">
+         <h4>ESM DETAILS</h4><br></div>
+         <div class="tabs">
+          <div><button class="Next">Service</button></div>
+          <div><button class="Next" onclick="details(Event,'pension')">Pension</button></div>
+          <div><button class="Next" onclick="details(Event,'personal')">Personal</button></div>
+          <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
+          <div><button class="Next" onclick="details(Event,'contact')">Contact</button></div>
+          <div><button class="Next" onclick="details(Event,'family')">Family</button></div>
+         <div><button class="Next" onclick="details(Event,'dependent')">Dependent</button></div>
+
+        </div><br><br><br>
+    <div class="content">
+
+      <div class="form-outer">
+
+<form action="#" method="post" autocomplete="off">
+          {% csrf_token %}
+  <div class="tab" id="pension">
+        <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+            <h4>DEPENDENT DETAILS</h4>
+
+            </div><br>
+          <br><br>
+       <div class="user-details" id="form">
+           </div>
+       </div>
+<table class="table table-hover">
+              <thead >
+                <tr >
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">NAME</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">RELATION</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">DOB</th>
+                  <th scope="col" style="text-align: left; padding:10px;background: #808080; color:#fff;">AADHAAR NO</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">QUALIFICATION</th>
+                  <th scope="col" style="text-align: left; padding:10px;background: #808080; color:#fff;">ACADEMIC YEAR</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">EMPLOYED</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">MARRIED</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">ACTION</th>
+                </tr>
+              </thead>
+            <tbody id="dep_list">
+
+            </tbody>
+</table>
+<div class="btn-box" style="margin-top:2%;">
+			<button type="button" id="add_dep" class="add-dep">ADD DEPENDENT</button>
+		</div>
+<br><br>
+     <div class="btn-box" style="margin-top:10%;">
+			<button type="button" class="Next" onclick="details(Event,'service')" >BACK</button>
+			<button type="submit" class="Next" onclick="details(Event,'personal')">NEXT</button>
+		</div>
+      </form>
+      </div>
+    </div>
+ </div>
+<div class="add-popup">
+
+    <div class="content">
+
+      <div class="form-outer" id="add_dependent">
+
+
+    </div>
+    </div>
+ </div>
+<div class ="popup">
+
+   <div class = "content">
+    <div class = "form-outer">
+
+       <form name="form1">
+
+
+  <div class="tab" style="display:block;" id="depentant">
+ <div class="close-btn">&times;</div>
+<br><br>
+
+  <h3 style="text-align: center;margin-bottom: 20px;">UPDATE DEPENDENT DETAILS</h3>
+  <div class="user-details">
+
+    <div class="input-box">
+      <span class="details">Name</span>
+      <input type="text" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Relation</span>
+      <input type="text" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Date of Birth</span>
+      <input type="date" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Aadhaar Card No</span>
+      <input type="number" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Gender</span>
+      <input type="text" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Qualification</span>
+      <input type="text" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Academic Year</span>
+      <input type="number" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Employement Status</span>
+      <input type="text" required>
+    </div>
+    <div class="input-box">
+      <span class="details">Marital Status</span>
+      <input type="text" required>
+    </div>
+  </div>
+  <div class="btn-box">
+			<button type="button" id="Back6" class="Next">UPDATE</Button>
+
+		</div>
+</div>
+
+      </form>
+</div>
+</div>
+</div>
+{% endblock %}
+{% block script %}
+    <script src="{% static "javascript/registration/dependent.js" %}"></script>
+    <script>
+    document.querySelector(".edit").addEventListener("click",function(){
+    document.querySelector(".popup").classList.add("active");
+
+    });
+    document.querySelector(".popup .close-btn").addEventListener("click",function(){
+    document.querySelector(".popup").classList.remove("active");
+
+    });
+
+    </script>
+{% endblock %}

@@ -6,26 +6,54 @@ function alphaOnly(event) {
     let key = event.keyCode;
   return ((key >= 48 && key <= 57) || (key >= 96 && key <= 105) || key === 8);
     }
-    var a = document.getElementById("id_form-TOTAL_FORMS");
-    $("#addform").click(function (){
-      $(".user-details:hidden:first").attr("hidden", false);
-      if(a.value < 5) {
-        a.value = parseInt(a.value) + 1;
-      }
-    });
-    $("#removeform").click(function (){
-      $(".user-details:visible:last").attr("hidden", true);
-      var b = a.value - 1;
-      $(".form-"+b).val("");
-      if(a.value > 0) {
-        a.value = parseInt(a.value) - 1;
-      }
-    });
+$(document).ready(function(){
+load_deps();
+ });
 
-    // $(document).ready(function(){
-    //   form0_input = document.getElementsByClassName(".form-0");
-    //   form1_input = document.getElementsByClassName(".form-1");
-    //   form2_input = document.getElementsByClassName(".form-2");
-    //   form3_input = document.getElementsByClassName(".form-3");
-    //   form4_input = document.getElementsByClassName(".form-4");
-    // });
+
+    function load_deps(){
+   const url = 'ajax/load_dependent';
+        $.ajax({
+            url: url,
+            success: function (data) {
+                $('#dep_list').html(data);
+
+            }
+        });
+    }
+   $("#add_dep").click(function(){
+        $.ajax({
+            url: 'ajax/add_dependent',
+            type: 'get',
+            dataType: 'json',
+            // beforeSend: function () {
+            // $(".add-popup").addClass('active');
+            // },
+            success: function (data) {
+                $('#add_dependent').html(data.html_form);
+                $(".add-popup").addClass('active');
+            }
+        });
+    // document.querySelector(".add-popup").classList.add("active");
+    });
+    document.querySelector(".add-popup .close-btn").addEventListener("click",function(){
+    document.querySelector(".add-popup").classList.remove("active");
+    });
+$("#add_dependent").on("submit", ".dep-add-form", function () {
+    var form = $(this);
+    $.ajax({
+      url: form.attr("action"),
+      data: form.serialize(),
+      type: form.attr("method"),
+      dataType: 'json',
+      success: function (data) {
+        if (data.form_is_valid) {
+          alert("Book created!");  // <-- This is just a placeholder for now for testing
+        }
+        else {
+          $("#add_dependent").html(data.html_form);
+        }
+      }
+    });
+    return false;
+  });
