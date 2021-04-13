@@ -85,9 +85,18 @@ class ESMType(models.Model):
         return self.esm_type
 
 
-class Prefix(models.Model):
+class ServiceNoPrefix(models.Model):
     prefix = models.CharField(max_length=10, null=True)
+
+    def __str__(self):
+        return self.prefix
+
+
+class ServiceNoSuffix(models.Model):
     suffix = models.CharField(max_length=5, null=True)
+
+    def __str__(self):
+        return self.suffix
 
 
 class Service(models.Model):
@@ -294,7 +303,9 @@ class ServiceDetail(models.Model):
     record_office = models.ForeignKey(RecordOffice, on_delete=models.CASCADE, default=None)
     group = models.ForeignKey(TradeGroup, on_delete=models.CASCADE, default=None)
     trade = models.ForeignKey(Trade, on_delete=models.DO_NOTHING, default=None)
+    prefix = models.ForeignKey(ServiceNoPrefix, on_delete=models.CASCADE, default=None, blank=True, null=True)
     service_no = models.CharField(max_length=9, unique=True)
+    suffix = models.ForeignKey(ServiceNoSuffix, on_delete=models.CASCADE, default=None, blank=True, null=True)
     rank_category = models.ForeignKey(RankCategory, on_delete=models.DO_NOTHING, default=None)
     rank = models.ForeignKey(Rank, on_delete=models.DO_NOTHING, default=None)
     reg_date = models.DateField()

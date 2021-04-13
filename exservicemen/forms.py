@@ -171,8 +171,13 @@ class ServiceForm(ModelForm):
             'reg_date': forms.DateInput(attrs={'type': 'date', 'max': str(datetime.date.today())}),
             'enrollment_date': forms.DateInput(attrs={'type': 'date', 'max': str(datetime.date.today())}),
             'name': forms.TextInput(attrs={"style": "text-transform: uppercase;",
-                                           'onkeydown': "return alphaOnly(event)"}),
-            'mobile': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
+                                           'onkeydown': "return alphaOnly(event)",
+                                           'onpaste': "return false"}),
+            'mobile': forms.TextInput(attrs={'onkeydown': "return numOnly(event)",
+                                             'onpaste': "return false"}),
+            "prefix": forms.Select(attrs={'style': "width:40%; margin-right: 3px;"}),
+            "suffix": forms.Select(attrs={'style': "width:30%; margin-right: 3px;"}),
+            'record_office': forms.Select(attrs={"disabled": "true"})
             # attrs = {'mindate': '2021-03-27'}
         }
 
@@ -267,9 +272,8 @@ class DependentForm(ModelForm):
         widgets = {
             'dep_dob': forms.DateInput(attrs={'type': 'date'}),
             'dep_name': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)"}),
-            'aadhaar_no': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
+            'aadhaar_no': forms.TextInput(attrs={'onkeydown': "return numOnly(event)", 'minlength': '12'}),
         }
-
 
 
 class ContactForm1(ModelForm):
@@ -307,12 +311,20 @@ class ContactForm2(ModelForm):
 
 
 class ESMBasic(ModelForm):
+    esm_no = forms.CharField(max_length=4, widget=forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}))
+
     class Meta:
         model = ExServiceMen
         fields = ['esm_no', 'reg_category']
+
+        # widgets = {
+        #      'esm_no': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
+        # }
 
 
 class TransferForm(ModelForm):
     class Meta:
         model = TransferDetail
         exclude = ['ref']
+
+

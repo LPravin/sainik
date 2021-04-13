@@ -1,29 +1,30 @@
-<form method="post" action="{% url 'book_update' form.instance.pk %}">
+<form name="add_dep_form" method="post" action="{% url 'ajax_update_dependent' form.instance.pk %}" class="dep-add-form" id="dep_update_form">
 {% csrf_token %}
-    <h3 style="text-align: center;margin-bottom: 20px;">UPDATE DEPENDENT DETAILS</h3>
+    <h3 style="text-align: center;margin-bottom: 20px;">ADD DEPENDENT DETAILS</h3>
+    <div class="user-details">
         <div class="input-box">
       <span class="details">Name</span>
 
             {{ form.dep_name }}
+{#            {{ form.dep_name.errors }}#}
     </div>
     <div class="input-box">
       <span class="details">Relation</span>
 
         {{ form.dep_relation }}
+{#        {{ form.dep_relation.errors }}#}
     </div>
     <div class="input-box">
       <span class="details">Date of Birth</span>
-
         {{ form.dep_dob }}
     </div>
     <div class="input-box">
       <span class="details">Aadhaar Card No</span>
-
         {{ form.aadhaar_no }}
+        {{ form.aadhaar_no.errors }}
     </div>
     <div class="input-box">
       <span class="details">Qualification</span>
-
         {{ form.dep_qualification }}
     </div>
     <div class="input-box">
@@ -40,6 +41,7 @@
     </div>
     <div>
            <button type="button" class="Next" id="cancel">CANCEL</button>
-           <button type="button" class="Next" id="save">UPDATE</button>
+           <button type="submit" class="Next" >UPDATE DEPENDENT</button>
+        </div>
         </div>
     </form>

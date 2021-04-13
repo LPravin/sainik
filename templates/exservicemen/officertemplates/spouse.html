@@ -13,7 +13,7 @@
           <div><button id="defaultOpen" class="Next" onclick="details(Event,'service')" >Service</button></div>
           <div><button class="Next" onclick="details(Event,'pension')">Pension</button></div>
           <div><button class="Next" onclick="details(Event,'personal')">Personal</button></div>
-             <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
+          <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
           <div><button class="Next" onclick="details(Event,'contact')">Contact</button></div>
           <div><button class="Next" onclick="details(Event,'family')">Family</button></div>
           <div><button class="Next" onclick="details(Event,'depentant')">Dependent</button></div>
@@ -108,8 +108,8 @@
     </div>
         </div>
         <div class="btn-box">
-			<button type="button" class="Next" onclick="details(Event,'service')">BACK</Button>
-			<button type="submit" class="Next" onclick="details(Event,'personal')">NEXT</Button>
+			<button type="button" class="Next" onclick="location.href='{% url "contact details" %}'">BACK</Button>
+			<button type="submit" class="Next">NEXT</Button>
 		</div>
     </div>
       </form>

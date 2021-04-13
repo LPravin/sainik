@@ -1,3 +1,21 @@
+function onload() {
+    data = localStorage.getItem("marital_status")
+    if(data === "yes"){
+        $('#id_spouse_name').attr("hidden", false)
+        document.getElementById('YesOrNo').value="Yes"
+    }
+    $('#id_marital_staus').change( function (e) {
+    if (this.value === 'S') {
+      document.getElementById('Details').style.display='';
+      localStorage.setItem("details","yes")
+    } else {
+      document.getElementById('Details').style.display='none';
+      localStorage.setItem("details","no")
+   }
+  });
+ }
+
+
 function hidespouse(){
     $('#div_id_spouse_name').attr("hidden", true);
     $('#div_id_marriage_date').attr("hidden", true);
@@ -46,9 +64,9 @@ $('#id_marital_status').change(function (){
         } else if ($(this).val() === 'W'){
             // showwidowed();
         }
-
     });
  $(document).ready(function(){
+     myStorage = window.sessionStorage;
      const form_fields = document.getElementsByTagName('input');
      const form_select = document.getElementsByTagName('select');
         for (let f in form_fields) {
@@ -65,7 +83,9 @@ $('#id_marital_status').change(function (){
         $('#id_nok_relation').removeClass("form-control");
         $('#id_marital_status').removeClass('form-control');
         $('[name="csrfmiddlewaretoken"]').removeClass("form-control");
-   hidespouse();
+   if($("#id_marital_status").val() !== 'M'){
+    hidespouse();
+}
  });
 
 

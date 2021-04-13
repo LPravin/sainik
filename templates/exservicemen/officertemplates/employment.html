@@ -1,0 +1,101 @@
+{% extends 'exservicemen/usertemplates/basic.html' %}
+
+
+{% load static %}
+
+{% block content %}
+
+
+ <div class="container">
+     <div class="title">
+         <h4>ESM DETAILS</h4><br></div>
+         <div class="tabs">
+          <div><button id="defaultOpen" class="Next" onclick="details(Event,'service')" >Service</button></div>
+          <div><button class="Next" onclick="details(Event,'pension')">Pension</button></div>
+          <div><button class="Next" onclick="details(Event,'personal')">Personal</button></div>
+          <div><button class="Next" onclick="details(Event,'contact')">Contact</button></div>
+          <div><button class="Next" onclick="details(Event,'family')">Family</button></div>
+          <div><button class="Next" onclick="details(Event,'depentant')">Dependent</button></div>
+          <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
+        </div><br><br><br>
+    <div class="content">
+
+      <div class="form-outer">
+
+      <form action="#" method="post">
+          {% csrf_token %}
+
+
+  <div class="tab" id="pension">
+        <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+            <h4>EMPLOYMENT DETAILS</h4>
+
+            </div><br>
+          <br><br>
+        <div class="user-details">
+            <div class="input-box">
+      <span class="details">Civil Qualification</span>
+      {{ form.civil_qualification }}
+          </div>
+{#          <div class="input-box">#}
+{#      <span class="details">Degree</span>#}
+{#      {{ form }}#}
+{#          </div>#}
+        <div class="input-box">
+      <span class="details">Equivalent trade qualification</span>
+      <input type="text" required>
+          </div>
+          <div class="input-box">
+          <span class="details">Employment Status</span>
+          {{ form.employment_status }}
+        </div>
+          <div class="input-box" id="div_id_willing_for_job">
+          <span class="details">Whether willing for Employment registration?</span>
+              {{ form.willing_for_job }}
+          </div>
+          <div class="input-box" id="div_id_security_job">
+          <span class="details">Whether willing to Watch & Ward / Security Job?</span>
+          {{ form.security_job }}
+        </div>
+          <div class="input-box" id="div_id_firesafety_sec_qualification">
+          <span class="details">Courses completed in relation with firesafety and security</span>
+          {{ form.firesafety_sec_qualification }}
+        </div>
+        <div class="input-box" id="div_id_employer">
+          <span class="details">Employer</span>
+          {{ form.employer }}
+        </div>
+        <div class="input-box" id="div_id_monthly_income">
+          <span class="details">Monthly Income</span>
+          {{ form.monthly_income }}
+        </div>
+        <div class="input-box" id="div_id_department">
+          <span class="details">Department</span>
+          {{ form.department }}
+        </div>
+        <div class="input-box" id="div_id_civil_retirement_date">
+          <span class="details">Date of Retirement from Civil Service</span>
+          {{ form.civil_retirement_date }}
+        </div>
+        <div class="input-box" id="div_id_civil_ppo_no">
+          <span class="details">Civil PPO No</span>
+          {{ form.civil_ppo_no }}
+        </div>
+
+        </div>
+        <div class="btn-box">
+			<button type="button" class="Next" onclick="location.href='{% url "personal details" %}'">BACK</Button>
+			<button type="submit" value="submit" class="Next">NEXT</Button>
+		</div>
+    </div>
+      </form>
+      </div>
+    </div>
+ </div>
+{% endblock %}
+
+{% block script %}
+    <script src="{% static "javascript/registration/employment.js" %}"></script>
+{% endblock %}

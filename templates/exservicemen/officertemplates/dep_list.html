@@ -11,17 +11,15 @@
                   <td style="text-align: left; padding:20px 8px;">{{ form.get_marital_status_display }}</td>
                   <td style="text-align: left; padding:20px 8px;">
                       <div style="display:flex; flex-direction: row;">
-                          <input type="button" value="Edit" name="Edit" class="edit" style="margin-right: 2px;">
-                          <input type="button" value="Delete" name="Delete" class="delete">
+                          <input type="button" data-url="{% url 'ajax_update_dependent' form.id %}" value="Edit" class="edit_dep" name="Edit" style="margin-right: 2px;">
+                          <input type="button" data-url="{% url 'ajax_delete_dependent' form.id %}" value="Delete" class="delete" name="Delete">
                       </div>
                   </td>
                 </tr>
 
 {% endfor %}
 {% else %}
-<tbody>
-<tr>
-    <td>NO DEPENDENTS</td>
-</tr>
-</tbody>
+   <td colspan="9" style="text-align: center;font-size: large;padding:30px;">
+   NO DEPENDENTS
+   </td>
 {% endif %}

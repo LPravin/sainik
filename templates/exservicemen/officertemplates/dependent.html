@@ -6,7 +6,7 @@
 {% block content %}
 
 
- <div class="container">
+ <div class="container1">
      <div class="title">
          <h4>ESM DETAILS</h4><br></div>
          <div class="tabs">
@@ -23,9 +23,6 @@
 
       <div class="form-outer">
 
-      <form action="#" method="post" autocomplete="off">
-          {% csrf_token %}
-
   <div class="tab" id="pension">
         <div class="detailname" style="overflow: hidden;
           border: 1px solid #ccc;
@@ -34,61 +31,66 @@
 
             </div><br>
           <br><br>
-      {% for form in formset %}
-        <div class="user-details">
-        <div class="input-box">
-      <span class="details">Name</span>
+       <div class="user-details" id="form">
+           </div>
+       </div>
+<table class="table table-hover">
+              <thead >
+                <tr >
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">NAME</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">RELATION</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">DOB</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">AADHAAR NO</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">QUALIFICATION</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">ACADEMIC YEAR</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">EMPLOYED</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">MARRIED</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">ACTION</th>
+                </tr>
+              </thead>
+            <tbody id="dep_list">
 
-            {{ form.dep_name }}
-    </div>
-    <div class="input-box">
-      <span class="details">Relation</span>
-
-        {{ form.dep_relation }}
-    </div>
-    <div class="input-box">
-      <span class="details">Date of Birth</span>
-
-        {{ form.dep_dob }}
-    </div>
-    <div class="input-box">
-      <span class="details">Aadhaar Card No</span>
-
-        {{ form.aadhaar_no }}
-    </div>
-    <div class="input-box">
-      <span class="details">Qualification</span>
-
-        {{ form.dep_qualification }}
-    </div>
-    <div class="input-box">
-      <span class="details">Academic Year</span>
-        {{ form.academic_year }}
-    </div>
-    <div class="input-box">
-      <span class="details">Employment Status</span>
-        {{ form.emp_status }}
-    </div>
-    <div class="input-box">
-      <span class="details">Marital Status</span>
-        {{ form.marital_status }}
-    </div>
-        </div>
-          <div class="individual-form">
-        </div>
-      {% endfor %}
-    <button type="button" class="Next" >REMOVE</button>
-    <button onclick="{% url 'add dependent' %}">SAVE AND ADD ONE MORE DEPENDENT</button>
-      <div class="btn-box">
-			<button type="button" class="Next">BACK</Button>
-			<button type="submit" class="Next" value="submit">NEXT</Button>
+            </tbody>
+</table>
+<div class="btn-box" style="margin-top:4%;">
+			<button type="button" id="add_dep" class="add-dep">ADD DEPENDENT</button>
 		</div>
-    </div>
-      </form>
+<br><br>
+     <div class="btn-box" style="margin-top:10%;">
+			<button type="button" class="Next" onclick="location.href='{% url "spouse details" %}'" >BACK</button>
+			<button type="submit" class="Next" value="submit">NEXT</button>
+		</div>
       </div>
     </div>
  </div>
+<div class="add-popup">
+
+    <div class="content">
+
+      <div class="form-outer" id="add_dependent">
+
+
+    </div>
+    </div>
+ </div>
+<div class ="popup">
+
+   <div class = "content">
+    <div class = "form-outer" id="update_dependent">
+
+
+</div>
+</div>
+</div>
 {% endblock %}
 {% block script %}
     <script src="{% static "javascript/registration/dependent.js" %}"></script>
+    <script>
+
+    document.querySelector(".popup .close-btn").addEventListener("click",function(){
+    document.querySelector(".popup").classList.remove("active");
+
+    });
+
+    </script>
 {% endblock %}

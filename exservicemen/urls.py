@@ -19,11 +19,12 @@ urlpatterns = [
     path('ajax/load-disrticts/', views.load_districts, name='ajax_load_districts'),
     path('registration/ajax/load_dependent/', views.load_dependent, name='ajax_load_dependent'),
     path('registration/ajax/add_dependent/', views.add_dependent, name='ajax_add_dependent'),
-    path('registration/ajax/<int:pk>/update', views.update_dependent, name='ajax_update_dependent'),
+    path('registration/ajax/update_dependent/<int:pk>', views.update_dependent, name='ajax_update_dependent'),
+    path('registration/ajax/delete_dependent/<int:pk>', views.delete_dependent, name='ajax_delete_dependent'),
     # path('ajax/load-mcs/', views.load_mcs, name='ajax_load_mcs'),
     path('logout/', views.userlogout, name='logout'),
-    path('addesm/', views.addesm, name='add ESM'),
-    path('addesm/basic-info', views.addbasicinfo, name='basic details'),
+    path('addesm/pending/<str:pk>', views.addesm, name='add ESM'),
+    path('addesm/', views.addbasicinfo, name='basic details'),
     path('addesm/service-info', views.serviceformview, name='service details'),
 
 ]

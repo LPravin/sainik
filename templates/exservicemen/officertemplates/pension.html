@@ -68,33 +68,33 @@
             <span class="details">Whether pensioner?</span>
             {{ form.pensioner_status }}
           </div>
-          <div class="input-box">
+          <div class="input-box" id="div_id_ppo_no">
             <span class="details">PPO No</span>
             {{ form.ppo_no }}
           </div>
-          <div class="input-box">
+          <div class="input-box" id="div_id_pension_sanctioned">
             <span class="details">Pension Sanctioned</span>
             {{ form.pension_sanctioned }}
           </div>
-          <div class="input-box">
+          <div class="input-box" id="div_id_present_pension">
             <span class="details">Present Pension</span>
             {{ form.present_pension }}
           </div>
-        <div class="input-box">
+        <div class="input-box" id="div_id_whether_pwd">
             <span class="details">Whether Person with Disability?</span>
             {{ form.whether_pwd }}
           </div>
-          <div class="input-box">
+          <div class="input-box" id="div_id_disability_pension">
             <span class="details">Disability Pension</span>
             {{ form.disability_pension }}
           </div>
-          <div class="input-box">
+          <div class="input-box" id="div_id_disability_percent">
             <span class="details">Percentage of Disability</span>
             {{ form.disability_percent }}
           </div>
         </div>
         <div class="btn-box">
-			<button type="submit" class="Next" value="">BACK</Button>
+			<button type="button" class="Next" onclick="location.href='{% url "service details" %}'" value="">BACK</Button>
 			<button type="submit" class="Next" value="submit">NEXT</Button>
 		</div>
     </div>
