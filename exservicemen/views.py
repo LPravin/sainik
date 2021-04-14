@@ -136,12 +136,13 @@ def personalformview(request):
             pass
         else:
             personalform = PersonalForm(instance=check)
-    return render(request, 'exservicemen/usertemplates/personal_form.html', {'form': personalform})
+    return render(request, 'exservicemen/officertemplates/personal.html', {'form': personalform})
 
 
 @login_required()
 def employmentformview(request):
     email = request.session['email']
+    user = MyUser.objects.get(email=email)
     if request.method == "POST":
         employmentform = EmploymentForm(data=request.POST)
         user = MyUser.objects.get(email=email)
@@ -150,7 +151,6 @@ def employmentformview(request):
         except EmploymentDetail.DoesNotExist:
             if employmentform.is_valid():
                 form = employmentform.save(commit=False)
-                user = MyUser.objects.get(email=email)
                 form.ref = user
                 form.save()
                 service = ServiceDetail.objects.get(ref=user)
@@ -163,12 +163,18 @@ def employmentformview(request):
                 return redirect('contact details')
     else:
         employmentform = EmploymentForm
-    return render(request, 'exservicemen/usertemplates/employment_form.html', {'form': employmentform, 'title': 'EMPLOYMENT DETAILS'})
+        try:
+            check = EmploymentDetail.objects.get(ref=user)
+        except EmploymentDetail.DoesNotExist:
+            pass
+        else:
+            employmentform = EmploymentForm(instance=check)
+    return render(request, 'exservicemen/officertemplates/employment.html', {'form': employmentform, 'title': 'EMPLOYMENT DETAILS'})
 
 
 @login_required()
 def spouseformview(request):
-    email = 'prakash@gmail.com'
+    email = request.session['email']
     user = MyUser.objects.get(email=email)
     if request.method == "POST":
         spouseform = SpouseForm(request.POST)
@@ -199,7 +205,7 @@ def spouseformview(request):
 
 # @login_required()
 def dependentformview(request):
-    email = 'prakash@gmail.com'
+    email = request.session['email']
     user = MyUser.objects.get(email=email)
     forms = DependentDetail.objects.filter(ref=user)
     context = {'forms': forms}
@@ -209,10 +215,11 @@ def dependentformview(request):
 @login_required()
 def contactformview(request):
     email = request.session['email']
+    user = MyUser.objects.get(email=email)
     if request.method == "POST":
         form1 = ContactForm1(data=request.POST)
         form2 = ContactForm2
-        user = MyUser.objects.get(email=email)
+
         try:
             check = PermanentAddress.objects.get(ref=user)
         except PermanentAddress.DoesNotExist:
@@ -252,8 +259,19 @@ def contactformview(request):
                 else:
                     return redirect('spouse details')
     else:
-        form1 = ContactForm1
-        form2 = ContactForm2
+        try:
+            check = PermanentAddress.objects.get(ref=user)
+        except PermanentAddress.DoesNotExist:
+            form1 = ContactForm1
+            form2 = ContactForm2
+        else:
+            form1 = ContactForm1(instance=check)
+            check2 = PermanentAddress.objects.get(ref=user).is_address_same
+            if not check2:
+                check3 = PresentAddress.objects.get(ref=user)
+                form2 = ContactForm2(instance=check3)
+            else:
+                form2 = ContactForm2
     return render(request, 'exservicemen/officertemplates/contact.html', {'form1': form1, 'form2': form2})
 
 
@@ -307,9 +325,9 @@ def addbasicinfo(request):
             basic.status = 4
             basic.save()
             request.session['email'] = loginform.cleaned_data['email']
-            regcat = esmbasic.cleaned_data['reg_category'].id
+            regcat = esmbasic.cleaned_data['reg_category']
             request.session['reg_type'] = regcat
-            if regcat != '2':
+            if regcat != 2:
                 return redirect('service details')
             else:
                 return redirect('home')
@@ -357,31 +375,38 @@ def serviceformview(request):
 def load_record_office(request):
     service_id = request.GET.get('service_id')
     record_offices = RecordOffice.objects.filter(service_id=service_id).all()
-    return render(request, 'exservicemen/usertemplates/dependent_dropdown.html', {'record_offices': record_offices})
+    return render(request, 'exservicemen/usertemplates/record_office_dropdown.html', {'items': record_offices})
+
+
+def load_army_records(request):
+    corps_id = request.GET.get('corps_id')
+    record = Corp.objects.get(id=corps_id).record_office_id
+    record_office = RecordOffice.objects.filter(pk=record).all()
+    return render(request, 'exservicemen/usertemplates/record_office_dropdown.html', {'items': record_office})
 
 
 def load_trades(request):
     service_id = request.GET.get('service_id')
     group_id = request.GET.get('groupid')
     trades = Trade.objects.filter(service=service_id, trade_group=group_id).all()
-    return render(request, 'exservicemen/usertemplates/dependent_dropdown.html', {'record_offices': trades})
+    return render(request, 'exservicemen/usertemplates/dependent_dropdown.html', {'items': trades})
 
 
 def load_ranks(request):
     service_id = request.GET.get('service_id')
     rankcatid = request.GET.get('rankcatid')
     ranks = Rank.objects.filter(service=service_id, rank_category=rankcatid).all()
-    return render(request, 'exservicemen/usertemplates/dependent_dropdown.html', {'record_offices': ranks})
+    return render(request, 'exservicemen/usertemplates/dependent_dropdown.html', {'items': ranks})
 
 
 def load_districts(request):
     stateid = request.GET.get('stateid')
     districts = District.objects.filter(state_id=stateid).all()
-    return render(request, 'exservicemen/usertemplates/dependent_dropdown.html', {'record_offices': districts})
+    return render(request, 'exservicemen/usertemplates/dependent_dropdown.html', {'items': districts})
 
 
 def load_dependent(request):
-    email = 'prakash@gmail.com'
+    email = request.session['email']
     user = MyUser.objects.get(email=email)
     dependents = DependentDetail.objects.filter(ref=user)
     return render(request, 'exservicemen/officertemplates/dep_list.html', {'dependents': dependents})
@@ -427,7 +452,7 @@ def add_dependent(request):
 
 
 def delete_dependent(request, pk):
-    email = 'prakash@gmail.com'
+    email = request.session['email']
     user = MyUser.objects.get(email=email)
     data = dict()
     dependent = get_object_or_404(DependentDetail, pk=pk)
@@ -436,14 +461,18 @@ def delete_dependent(request, pk):
     data['html_dependents'] = render_to_string('exservicemen/officertemplates/dep_list.html',
                                                {'dependents': dependents})
     return JsonResponse(data)
-        # data['form_is_valid'] = True  # This is just to play along with the existing code
-    # else:
-    #     context = {'dependent': dependent}
-    #     data['html_form'] = render_to_string('books/includes/partial_book_delete.html',
-    #         context,
-    #         request=request,
-    #     )
-    # return JsonResponse(data)
 
 
-# def widow_form_view(request):
+def widowformview(request):
+    email = request.session['email']
+    user = MyUser.objects.get(email=email)
+    if request.method == "POST":
+        widowform = WidowForm(request.POST)
+        if widowform.is_valid():
+            form = widowform.save(commit=False)
+            user = MyUser.objects.get(email=email)
+            form.ref = user
+            form.save()
+    else:
+        widowform = WidowForm
+    return render(request, 'exservicemen/officertemplates/widow.html', {'form': widowform})

@@ -21,6 +21,7 @@
                   data-trades-url="{% url 'ajax_load_trades' %}"
                   data-ranks-url="{% url 'ajax_load_ranks' %}"
                   data-districts-url="{% url 'ajax_load_districts' %}"
+                  data-army-records-url="{% url 'ajax_army_records' %}"
                   method="post" action="">
  {% csrf_token %}
         <div class="detailname" style="overflow: hidden;
@@ -40,7 +41,7 @@
                        <p class ="errorlist"> {{ serviceform.mobile.errors.as_text }}</p>
                     </div>
           <div class="input-box" id="div_id_rank">
-            <span class="details">Date of Registration</span>
+            <span class="details">Date of ESM Registration</span>
             {{ serviceform.reg_date }}
               <p class ="errorlist">{{ serviceform.reg_date.errors.as_text }}</p>
           </div>

@@ -177,7 +177,8 @@ class ServiceForm(ModelForm):
                                              'onpaste': "return false"}),
             "prefix": forms.Select(attrs={'style': "width:40%; margin-right: 3px;"}),
             "suffix": forms.Select(attrs={'style': "width:30%; margin-right: 3px;"}),
-            'record_office': forms.Select(attrs={"disabled": "true"})
+            'service_no': forms.TextInput(attrs={'onkeydown': "return numOnly(event)",
+                                                 'onpaste': "return false"})
             # attrs = {'mindate': '2021-03-27'}
         }
 
@@ -207,6 +208,8 @@ class PersonalForm(ModelForm):
             'mother': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)",
                                              "style": "text-transform: uppercase;"}),
             'aadhaar_no': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
+            'birth_place': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)",
+                                                  "style": "text-transform: uppercase;"}),
             'expiry_date': forms.DateInput(attrs={'type': 'date'}),
             }
 
@@ -218,6 +221,10 @@ class PersonalForm(ModelForm):
         mother = self.cleaned_data['mother'].upper()
         return mother
 
+    def clean_birth_place(self):
+        bp = self.cleaned_data['birth_place'].upper()
+        return bp
+
 
 class PensionForm(ModelForm):
 
@@ -228,7 +235,12 @@ class PensionForm(ModelForm):
         widgets = {
             'discharge_date': forms.DateInput(attrs={'type': 'date'}),
             'disability_percent': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
+            'unit_last_served': forms.TextInput(attrs={"style": "text-transform: uppercase;"})
             }
+
+    def clean_unit_last_served(self):
+        uls = self.cleaned_data['unit_last_served'].upper()
+        return uls
 
 
 class EmploymentForm(ModelForm):
@@ -271,9 +283,22 @@ class DependentForm(ModelForm):
 
         widgets = {
             'dep_dob': forms.DateInput(attrs={'type': 'date'}),
-            'dep_name': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)"}),
+            'dep_name': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)",
+                                               "style": "text-transform: uppercase;"}),
             'aadhaar_no': forms.TextInput(attrs={'onkeydown': "return numOnly(event)", 'minlength': '12'}),
+            'dep_qualification': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)",
+                                                        "style": "text-transform: uppercase;"}),
+            'academic_year': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
         }
+
+    def clean_dep_name(self):
+        dep = self.cleaned_data['dep_name'].upper()
+        return dep
+
+    def clean_dep_qualification(self):
+        qfn = self.cleaned_data['dep_qualification'].upper()
+        return qfn
+
 
 
 class ContactForm1(ModelForm):
@@ -285,12 +310,13 @@ class ContactForm1(ModelForm):
         widgets = {
             'is_address_same': forms.CheckboxInput(),
             'house_no': forms.TextInput(attrs={'class':'cf1'}),
-            'house_name': forms.TextInput(attrs={'class': 'cf1'}),
+            'house_name': forms.TextInput(attrs={'class': 'cf1', 'onkeydown': "return alphaOnly(event)"}),
             'street_name': forms.TextInput(attrs={'class': 'cf1'}),
-            'city': forms.TextInput(attrs={'class': 'cf1'}),
+            'city': forms.TextInput(attrs={'class': 'cf1', 'onkeydown': "return alphaOnly(event)"}),
             'district': forms.Select(attrs={'class': 'cf1'}),
             'state': forms.Select(attrs={'class': 'cf1'}),
-            'pincode': forms.TextInput(attrs={'class': 'cf1'})
+            'pincode': forms.TextInput(attrs={'class': 'cf1', 'minlength': '6', 'onkeydown': "return numOnly(event)"}),
+            'telephone': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"})
         }
 
 
@@ -306,7 +332,7 @@ class ContactForm2(ModelForm):
             'city': forms.TextInput(attrs={'id': "city"}),
             'district': forms.Select(attrs={'id': "district"}),
             'state': forms.Select(attrs={'id': "state"}),
-            'pincode': forms.TextInput(attrs={'id': "pincode"}),
+            'pincode': forms.TextInput(attrs={'id': "pincode", 'minlength': '6', 'onkeydown': "return numOnly(event)"}),
         }
 
 
@@ -328,3 +354,13 @@ class TransferForm(ModelForm):
         exclude = ['ref']
 
 
+class WidowForm(ModelForm):
+    expiry_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+
+    class Meta:
+        model = WidowDetail
+        exclude = ['ref']
+        widgets = {
+            'spouse_esm_no': forms.TextInput(attrs={'maxlenght': '4'}),
+            'widow_expiry_date': forms.DateInput(attrs={'type': 'date'})
+        }

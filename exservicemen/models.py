@@ -71,13 +71,6 @@ YesNo = [
 ]
 
 
-class BasicRegType(models.Model):
-    basic_reg_type = models.CharField(max_length=30)
-
-    def __str__(self):
-        return self.basic_reg_type
-
-
 class ESMType(models.Model):
     esm_type = models.CharField(max_length=20)
 
@@ -238,30 +231,6 @@ class CivilQualification(models.Model):
         return self.qualification
 
 
-# class ApplyDetail(models.Model):
-#     regtypes = [
-#         ('', '---------'),
-#         ('E', 'ESM'),
-#         ('W', 'Widow of already registered ESM'),
-#         ('TE', 'Transferred ESM/Widow'),
-#         ('UW', 'Widow of Unregistered/Died in service')
-#     ]
-#     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
-#     name = models.CharField(max_length=100, null=True, blank=True)
-#     mobile = models.CharField(max_length=10, null=True, blank=True)
-#     basic_reg_type = models.CharField(max_length=2, choices=regtypes)
-#     esm_no = models.CharField(max_length=10, null=True, blank=True)
-#     expiry_date = models.DateField(default=None, null=True, blank=True)
-#     esm_reg_type = models.ForeignKey(RegTypeReference, on_delete=models.CASCADE, default=None, null=True, blank=True)
-#     state = models.ForeignKey(State, on_delete=models.CASCADE, default=None, null=True, blank=True)
-#     zsb = models.ForeignKey(ZilaSainikBoard, on_delete=models.SET_NULL, default=None, null=True, blank=True)
-#     district = models.ForeignKey(District, on_delete=models.CASCADE, default=None, null=True, blank=True)
-#     discharge_book = models.FileField(upload_to='images/discharge book', null=True, blank=True)
-#     ppo_book = models.ImageField(upload_to='images/ppo book', null=True, blank=True, verbose_name="PPO BOOK")
-#     residence_certificate = models.ImageField(upload_to='images/residence certificate', null=True, blank=True)
-#     death_certificate = models.ImageField(upload_to='images/death_certificate', null=True, blank=True)
-#
-
 class BasicDocument(models.Model):
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
     discharge_book = models.FileField(upload_to='documents')
@@ -274,22 +243,31 @@ class ExServiceMen(models.Model):
         (3, 'EXPIRED'),
         (4, 'INCOMPLETE'),  # for welfare officer
     )
+    reg_categories = (
+        (1, 'ESM'),
+        (2, 'WIDOW'),
+        (3, 'WIDOW IN SERVICE / UNREGISTERED')
+    )
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
     esm_no = models.CharField(primary_key=True, max_length=10)
-    reg_category = models.ForeignKey(BasicRegType, on_delete=models.DO_NOTHING, default=None)
+    reg_category = models.SmallIntegerField(choices=reg_categories)
     zila_board = models.ForeignKey(ZilaSainikBoard, on_delete=models.DO_NOTHING, default=None)
     status = models.PositiveSmallIntegerField(choices=statuses)
+
+    def __str__(self):
+        return self.esm_no
 
 
 class WidowDetail(models.Model):
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
-    family_pension = models.CharField(max_length=6)
+    family_pension = models.CharField(max_length=6, blank=True)
     widow_next_of_kin = models.CharField(max_length=100)
     widow_next_of_kin_relation = models.CharField(max_length=30)
-    widow_expiry_date = models.DateField()
-    whether_spouse_has_esm = models.CharField(max_length=1, choices=YesNo)
+    widow_expiry_date = models.DateField(blank=True, null=True)
     spouse_esm_no = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE, blank=True)
+
+    def __str__(self):
+        return self.ref.email
 
 
 class ServiceDetail(models.Model):
@@ -326,16 +304,16 @@ class PensionDetail(models.Model):
     medical_category = models.ForeignKey(MedicalCategory, on_delete=models.CASCADE, default=None)
     character = models.ForeignKey(Character, on_delete=models.DO_NOTHING, default=None)
     discharge_book_no = models.CharField(max_length=8)
-    ppo_no = models.CharField(max_length=8, verbose_name="PPO No")
+    ppo_no = models.CharField(max_length=8, blank=True, verbose_name="PPO No")
     pensioner_status = models.CharField(max_length=1, choices=YesNo, default=None)
-    pension_sanctioned = models.CharField(max_length=6)
-    present_pension = models.CharField(max_length=6)
+    pension_sanctioned = models.CharField(max_length=6, blank=True)
+    present_pension = models.CharField(max_length=6, blank=True)
     whether_pwd = models.CharField(max_length=1, choices=YesNo, default=None)
     disability_pension = models.CharField(max_length=6, blank=True)
     disability_percent = models.CharField(max_length=3, blank=True)
 
     def __str__(self):
-        return self.ref
+        return self.ref.email
 
 
 class PersonalRef(models.Model):
@@ -371,7 +349,7 @@ class PersonalDetail(PersonalRef):
     expiry_date = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self.ref
+        return self.ref.email
 
 
 class Address(models.Model):
@@ -392,9 +370,15 @@ class PermanentAddress(Address):
     telephone = models.CharField(max_length=12, blank=True, null=True)
     is_address_same = models.BooleanField(default=False)
 
+    def __str__(self):
+        return self.ref.email
+
 
 class PresentAddress(Address):
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE, default=None)
+
+    def __str__(self):
+        return self.ref.email
 
 
 class EmploymentDetail(models.Model):
@@ -417,6 +401,9 @@ class EmploymentDetail(models.Model):
     department = models.ForeignKey(Department, on_delete=models.DO_NOTHING, null=True, blank=True)
     civil_retirement_date = models.DateField(null=True, blank=True)
     civil_ppo_no = models.CharField(max_length=8, verbose_name="Civil PPO Number", blank=True, null=True)
+
+    def __str__(self):
+        return self.ref.email
 
 
 class SpouseDetail(PersonalRef):
@@ -451,6 +438,9 @@ class SpouseDetail(PersonalRef):
     spouse_retirement_date = models.DateField(blank=True, null=True)
     next_of_kin = models.CharField(max_length=50)
     nok_relation = models.CharField(max_length=15, verbose_name="Next Of Kin Relation")
+
+    def __str__(self):
+        return self.ref.email
 
 
 class DependentDetail(models.Model):

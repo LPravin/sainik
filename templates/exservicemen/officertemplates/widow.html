@@ -1,0 +1,60 @@
+{% extends 'exservicemen/usertemplates/basic.html' %}
+
+
+{% load static %}
+
+{% block content %}
+
+
+ <div class="container">
+     <div class="title">
+         <h4>WIDOW REGISTRATION FORM</h4><br></div>
+         <br>
+    <div class="content">
+
+      <div class="form-outer">
+
+      <form action="#" method="post" name="widowform" id="widowform" autocomplete="on">
+          {% csrf_token %}
+
+
+  <div class="tab" id="pension">
+        <div class="user-details">
+             <div class="input-box" id="div_id_spouse_csd_id">
+      <span class="details">REFERENCE ESM NO</span>
+      {{ form.spouse_esm_no }}
+    </div>
+            <div class="input-box" id="div_id_spouse_csd_id">
+      <span class="details">EXPIRY DATE OF ESM</span>
+      {{ form.expiry_date }}
+    </div>
+             <div class="input-box" id="div_id_spouse_csd_id">
+      <span class="details">WIDOW NEXT OF KIN</span>
+      {{ form.widow_next_of_kin }}
+    </div>
+             <div class="input-box" id="div_id_spouse_csd_id">
+      <span class="details">WIDOW NEXT OF KIN RELATION</span>
+      {{ form.widow_next_of_kin_relation }}
+    </div>
+            <div class="input-box" id="div_id_spouse_csd_id">
+      <span class="details">FAMILY PENSION</span>
+      {{ form.family_pension }}
+    </div>
+        <div class="input-box" id="div_id_spouse_csd_id">
+      <span class="details">WIDOW EXPIRY DATE</span>
+      {{ form.widow_expiry_date }}
+    </div>
+            </div>
+          </div>
+        <div class="btn-box">
+			<button type="button" class="Next" onclick="">BACK</Button>
+			<button type="submit" class="Next" value="submit">SUBMIT</Button>
+		</div>
+      </form>
+      </div>
+    </div>
+ </div>
+{% endblock %}
+{% block script %}
+    <script src="{% static "javascript/registration/widow.js" %}"></script>
+{% endblock %}

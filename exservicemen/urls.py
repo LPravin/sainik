@@ -16,6 +16,7 @@ urlpatterns = [
     path('ajax/load-record-office/', views.load_record_office, name='ajax_load_records'),
     path('ajax/load-trades/', views.load_trades, name='ajax_load_trades'),
     path('ajax/load-ranks/', views.load_ranks, name='ajax_load_ranks'),
+    path('ajax/load-army-recorda/', views.load_army_records, name='ajax_army_records'),
     path('ajax/load-disrticts/', views.load_districts, name='ajax_load_districts'),
     path('registration/ajax/load_dependent/', views.load_dependent, name='ajax_load_dependent'),
     path('registration/ajax/add_dependent/', views.add_dependent, name='ajax_add_dependent'),
@@ -26,5 +27,5 @@ urlpatterns = [
     path('addesm/pending/<str:pk>', views.addesm, name='add ESM'),
     path('addesm/', views.addbasicinfo, name='basic details'),
     path('addesm/service-info', views.serviceformview, name='service details'),
-
+    path('addesm/widow-info', views.widowformview, name='widow details'),
 ]

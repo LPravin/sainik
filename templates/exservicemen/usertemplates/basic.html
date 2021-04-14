@@ -35,7 +35,17 @@
 
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script type="text/javascript">
+        function alphaOnly(event) {
+  let key = event.keyCode;
+  return ((key >= 65 && key <= 90) || key === 8 || key === 32 || key === 9 || key === 37 || key === 39 || key === 46);
+    }
 
+    function numOnly(event) {
+    let key = event.keyCode;
+  return ((key >= 48 && key <= 57) || (key >= 96 && key <= 105) || key === 8 || key === 9 || key === 37 || key === 39 || key === 46);
+    }
+    </script>
 </head>
 <body>
 <div style="width:100%;padding: 8px;height:110px;">
@@ -67,4 +77,5 @@
      {% endblock %}
 <script src='https://kit.fontawesome.com/a076d05399.js'></script>
 </body>
+
 </html>
