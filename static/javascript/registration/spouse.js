@@ -1,19 +1,3 @@
-function onload() {
-    data = localStorage.getItem("marital_status")
-    if(data === "yes"){
-        $('#id_spouse_name').attr("hidden", false)
-        document.getElementById('YesOrNo').value="Yes"
-    }
-    $('#id_marital_staus').change( function (e) {
-    if (this.value === 'S') {
-      document.getElementById('Details').style.display='';
-      localStorage.setItem("details","yes")
-    } else {
-      document.getElementById('Details').style.display='none';
-      localStorage.setItem("details","no")
-   }
-  });
- }
 
 
 function hidespouse(){
@@ -66,23 +50,22 @@ $('#id_marital_status').change(function (){
         }
     });
  $(document).ready(function(){
-     myStorage = window.sessionStorage;
-     const form_fields = document.getElementsByTagName('input');
-     const form_select = document.getElementsByTagName('select');
-        for (let f in form_fields) {
-            if(form_fields.hasOwnProperty(f)){
-                form_fields[f].className = "form-control"
-            }
-        }
-        for (let s in form_select) {
-            if(form_select.hasOwnProperty(s)){
-                form_select[s].className = "form-control"
-            }
-        }
-        $("#id_next_of_kin").removeClass("form-control");
-        $('#id_nok_relation').removeClass("form-control");
-        $('#id_marital_status').removeClass('form-control');
-        $('[name="csrfmiddlewaretoken"]').removeClass("form-control");
+     // const form_fields = document.getElementsByTagName('input');
+     // const form_select = document.getElementsByTagName('select');
+     //    for (let f in form_fields) {
+     //        if(form_fields.hasOwnProperty(f)){
+     //            form_fields[f].className = "form-control"
+     //        }
+     //    }
+     //    for (let s in form_select) {
+     //        if(form_select.hasOwnProperty(s)){
+     //            form_select[s].className = "form-control"
+     //        }
+     //    }
+     //    $("#id_next_of_kin").removeClass("form-control");
+     //    $('#id_nok_relation').removeClass("form-control");
+     //    $('#id_marital_status').removeClass('form-control');
+     //    $('[name="csrfmiddlewaretoken"]').removeClass("form-control");
    if($("#id_marital_status").val() !== 'M'){
     hidespouse();
 }

@@ -358,3 +358,82 @@ th, td {
   text-align: left;
   padding: 8px;
 }
+.multi-steps > .li.is-active::before, .multi-steps > .li.is-active ~ .li::before {
+	 content: counter(stepNum);
+	 font-family: inherit;
+	 font-weight: 700;
+}
+ .multi-steps > .li.is-active:after, .multi-steps > .li.is-active ~ .li::after {
+	 background-color: #ededed;
+}
+ .multi-steps {
+	 display: table;
+	 table-layout: fixed;
+	 width: 100%;
+     opacity: 0.99;
+}
+ .multi-steps > .li {
+	 counter-increment: stepNum;
+	 text-align: center;
+	 display: table-cell;
+	 position: relative;
+	 color: #677eff;
+     z-index:1;
+}
+ .multi-steps > .li::before {
+	 content: '\f00c';
+	 content: '\2713';
+     content: '\10003';
+	 content: '\10004';
+	 content: '\2713';
+	 display: block;
+	 margin: 0 auto 4px;
+	 color: #fff;
+	 background-color: #677eff;
+	 width: 36px;
+	 height: 36px;
+     z-index:3;
+	 line-height: 32px;
+	 text-align: center;
+	 font-weight: bold;
+	 border-width: 2px;
+	 border-style: solid;
+	 border-color: #677eff;
+	 border-radius: 50%;
+
+}
+
+ .multi-steps > .li::after {
+  content: "";
+  height: 3px;
+  width: 100%;
+  position: absolute;
+  left: 40%;
+  top:16px;
+  z-index:-1;
+  background-color:#677eff;
+}
+ .multi-steps > .li:last-child::after {
+	 display: none;
+}
+ .multi-steps > .li.is-active::before {
+	 background-color: #fff;
+	 color: #677eff;
+	 border-color: #677eff;
+}
+ .multi-steps > .li.is-active ~ .li {
+	 color: #808080;
+}
+ .multi-steps > .li.is-active ~ .li::before {
+	 color: #808080;
+	 background-color: #ededed;
+	 border-color: #ededed;
+}
+@media (max-width:460px){
+	 .multi-steps .li{
+		 color:white;
+	 }
+	.multi-steps > .li.is-active ~ .li {
+	 color: #fff;
+}
+}

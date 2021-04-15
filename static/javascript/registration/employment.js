@@ -33,7 +33,6 @@ function hideeveything() {
     $('#id_willing_for_job').change(function () {
         if ($(this).val() === 'Y') {
             $('#div_id_security_job').attr("hidden", false);
-            $('#div_id_firesafety_sec_qualification').attr("hidden", false);
         } else if ($(this).val() === 'N') {
             hideeveything();
             $('#div_id_willing_for_job').attr("hidden", false);
@@ -41,4 +40,15 @@ function hideeveything() {
     });
     $(document).ready(function(){
         hideeveything();
+        if ($("#id_employment_status").val() === 'E'){
+            showemp();
+        } else if ($("#id_employment_status").val() === 'U') {
+            showunemp();
+            if ($("#id_willing_for_job").val() === 'Y'){
+                $('#div_id_security_job').attr("hidden", false);
+            }
+        } else if ($("#id_employment_status").val() === 'R') {
+            showretired();
+        }
+
     });

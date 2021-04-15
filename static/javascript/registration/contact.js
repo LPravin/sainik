@@ -1,14 +1,20 @@
-$('#id_is_address_same').change( function () {
-    if (this.checked) {
-        this.value = true
-        // $("#presentaddress").hide();
-        $('#hno').attr({'value': $('#id_house_no').val(), 'disabled': true})
+function copyaddress(){
+    $('#hno').attr({'value': $('#id_house_no').val(), 'disabled': true})
         $('#hname').attr({'value': $('#id_house_name').val(), 'disabled': true})
         $('#sname').attr({'value': $('#id_street_name').val(), 'disabled': true})
         $('#city').attr({'value': $('#id_city').val(), 'disabled': true})
         $('#district').val($('#id_district').val()).attr('disabled', true);
         $('#state').val($('#id_state').val()).attr('disabled', true);
         $('#pincode').attr({'value': $('#id_pincode').val(), 'disabled': true})
+}
+
+
+
+$('#id_is_address_same').change( function () {
+    if (this.checked) {
+        this.value = true
+        // $("#presentaddress").hide();
+        copyaddress();
     } else {
         this.value = false
         $("#presentaddress").show();
@@ -50,4 +56,8 @@ $("#id_state").change(function getdistricts() {
             }
         });
     });
-
+ $(document).ready(function(){
+     if($('#id_is_address_same').prop('checked')) {
+         copyaddress();
+     }
+ });

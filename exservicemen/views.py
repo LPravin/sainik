@@ -77,7 +77,7 @@ def userlogout(request):
 @login_required()
 def pensionformview(request):
     email = request.session['email']
-    # service_id = request.session['service_id']
+    service_id = request.session['service_id']
     user = MyUser.objects.get(email=email)
     if request.method == "POST":
         pensionform = PensionForm(request.POST)
@@ -95,9 +95,9 @@ def pensionformview(request):
             if pensionform.is_valid():
                 pensionform.save()
                 return redirect('personal details')
-        mcs = MedicalCategory.objects.filter(service_id=1).all()
+        mcs = MedicalCategory.objects.filter(service_id=service_id).all()
     else:
-        mcs = MedicalCategory.objects.filter(service_id=1).all()
+        mcs = MedicalCategory.objects.filter(service_id=service_id).all()
         try:
             check = PensionDetail.objects.get(ref=user)
         except PensionDetail.DoesNotExist:
@@ -193,13 +193,12 @@ def spouseformview(request):
                 spouseform.save()
                 return redirect('dependent details')
     else:
-        spouseform = SpouseForm
         try:
             check = SpouseDetail.objects.get(ref=user)
         except SpouseDetail.DoesNotExist:
-            pass
+            spouseform = SpouseForm
         else:
-            spouseform.instance = check
+            spouseform = SpouseForm(instance=check)
     return render(request, 'exservicemen/officertemplates/spouse.html', {'form': spouseform})
 
 
@@ -350,6 +349,7 @@ def serviceformview(request):
             check = ServiceDetail.objects.get(ref=user)
         except ServiceDetail.DoesNotExist:
             if serviceform.is_valid():
+                # request.session['serviceform_data'] = serviceform.cleaned_data
                 service = serviceform.save(commit=False)
                 service.ref = user
                 request.session['service_id'] = serviceform.cleaned_data["service"].id
@@ -428,7 +428,7 @@ def update_dependent(request, pk):
 
 
 def add_dependent(request):
-    email = 'prakash@gmail.com'
+    email = request.session['email']
     user = MyUser.objects.get(email=email)
     data = dict()
     if request.method == 'POST':
