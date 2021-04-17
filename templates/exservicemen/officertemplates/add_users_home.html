@@ -58,7 +58,7 @@
         {% if pendings %}
         {% for esm in pendings %}
             <h3>{{ esm.esm_no }} <input type="button" onclick="location.href='{% url "add ESM" esm.pk %}'" value="Continue" class="edit_dep" name="Edit" style="margin-right: 2px;"></h3>
-            <br>
+            <br><hr>
         {% endfor %}
 {#            <input type="button" onclick="location.href='{% url "incomplete list" esm.pk %}'" value="Continue" class="edit_dep" name="Edit" style="margin-right: 2px;">#}
     {% endif %}

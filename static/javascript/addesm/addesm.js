@@ -126,7 +126,7 @@
 
 
 $(document).ready(function(){
-    $("#id_reg_date").attr("max", 0)
+    // $("#id_reg_date").attr("max", 0)
     $("#id_name").focus();
     if ($( "#id_service option:selected").text().toUpperCase() !== 'ARMY') {
         $("#div_id_corps").attr('hidden', true);

@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-
+import datetime
 
 def wo_check(user):
     return user.role == 2
@@ -77,8 +77,8 @@ def userlogout(request):
 @login_required()
 def pensionformview(request):
     email = request.session['email']
-    service_id = request.session['service_id']
     user = MyUser.objects.get(email=email)
+    service = ServiceDetail.objects.get(ref=user).service
     if request.method == "POST":
         pensionform = PensionForm(request.POST)
         try:
@@ -95,17 +95,15 @@ def pensionformview(request):
             if pensionform.is_valid():
                 pensionform.save()
                 return redirect('personal details')
-        mcs = MedicalCategory.objects.filter(service_id=service_id).all()
     else:
-        mcs = MedicalCategory.objects.filter(service_id=service_id).all()
         try:
             check = PensionDetail.objects.get(ref=user)
         except PensionDetail.DoesNotExist:
-            pensionform = PensionForm
-
+            pensionform = PensionForm()
+            pensionform.fields['medical_category'].queryset = MedicalCategory.objects.filter(service=service)
         else:
             pensionform = PensionForm(instance=check)
-    return render(request, 'exservicemen/officertemplates/pension.html',  {'form': pensionform, 'mcs': mcs})
+    return render(request, 'exservicemen/officertemplates/pension.html',  {'form': pensionform})
 
 
 @login_required()
@@ -211,6 +209,15 @@ def dependentformview(request):
     return render(request, 'exservicemen/officertemplates/dependent.html', context)
 
 
+def submit(request):
+    email = request.session['email']
+    user = MyUser.objects.get(email=email)
+    reg_user = ExServiceMen.objects.get(ref=user)
+    reg_user.status = 1
+    reg_user.save()
+    return redirect('home')
+
+
 @login_required()
 def contactformview(request):
     email = request.session['email']
@@ -287,12 +294,19 @@ def addesm(request, pk):
     try:
         check = PensionDetail.objects.get(ref=unregistered)
     except PensionDetail.DoesNotExist:
-        request.session['service_id'] = ServiceDetail.objects.get(ref=unregistered).service_id
         return redirect("pension details")
     try:
         check = PersonalDetail.objects.get(ref=unregistered)
     except PersonalDetail.DoesNotExist:
         return redirect("personal details")
+    try:
+        check = PermanentAddress.objects.get(ref=unregistered)
+    except PermanentAddress.DoesNotExist:
+        return redirect("contact details")
+    try:
+        check = EmploymentDetail.objects.get(ref=unregistered)
+    except EmploymentDetail.DoesNotExist:
+        return redirect("employment details")
     try:
         check = SpouseDetail.objects.get(ref=unregistered)
     except SpouseDetail.DoesNotExist:
@@ -349,7 +363,6 @@ def serviceformview(request):
             check = ServiceDetail.objects.get(ref=user)
         except ServiceDetail.DoesNotExist:
             if serviceform.is_valid():
-                # request.session['serviceform_data'] = serviceform.cleaned_data
                 service = serviceform.save(commit=False)
                 service.ref = user
                 request.session['service_id'] = serviceform.cleaned_data["service"].id
@@ -365,7 +378,10 @@ def serviceformview(request):
         try:
             check = ServiceDetail.objects.get(ref=user)
         except ServiceDetail.DoesNotExist:
-            serviceform = ServiceForm
+            serviceform = ServiceForm()
+            # serviceform.fields['reg_date'].widget = forms.DateInput(attrs={'type': 'date', 'min': '2021-04-01', 'max': str(datetime.date.today())})
+            # serviceform.fields['reg_date'].widget = forms.DateInput(attrs={'type': 'date', 'required': 'true',
+            #                                                                'max': str(datetime.date.today())})
         else:
             serviceform = ServiceForm(instance=check)
     return render(request, "exservicemen/officertemplates/service.html",

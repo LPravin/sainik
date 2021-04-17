@@ -28,4 +28,5 @@ urlpatterns = [
     path('addesm/', views.addbasicinfo, name='basic details'),
     path('addesm/service-info', views.serviceformview, name='service details'),
     path('addesm/widow-info', views.widowformview, name='widow details'),
+    path('addesm/submit', views.submit, name='submit form'),
 ]

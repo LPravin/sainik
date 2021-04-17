@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.core.validators import ValidationError
 import datetime
 
+
 class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm):
@@ -173,6 +174,9 @@ class ServiceForm(ModelForm):
             'name': forms.TextInput(attrs={"style": "text-transform: uppercase;",
                                            'onkeydown': "return alphaOnly(event)",
                                            'onpaste': "return false"}),
+            'dob': forms.DateInput(attrs={'type': 'date', 'max': datetime.date(datetime.date.today().year - 15,
+                                                                               datetime.date.today().month,
+                                                                               datetime.date.today().day)}),
             'mobile': forms.TextInput(attrs={'onkeydown': "return numOnly(event)",
                                              'onpaste': "return false"}),
             "prefix": forms.Select(attrs={'style': "width:40%; margin-right: 3px;"}),
@@ -202,7 +206,6 @@ class PersonalForm(ModelForm):
         exclude = ['ref']
 
         widgets = {
-            'dob': forms.DateInput(attrs={'type': 'date'}),
             'father': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)",
                                              "style": "text-transform: uppercase;"}),
             'mother': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)",
@@ -241,6 +244,12 @@ class PensionForm(ModelForm):
     def clean_unit_last_served(self):
         uls = self.cleaned_data['unit_last_served'].upper()
         return uls
+
+    # def __init__(self, service=None, **kwargs):
+    #     service = kwargs.pop('service')
+    #     super(PensionForm, self).__init__(**kwargs)
+    #     if service:
+    #         self.fields['medical_category'].queryset = MedicalCategory.objects.filter(service=service)
 
 
 class EmploymentForm(ModelForm):
@@ -300,9 +309,7 @@ class DependentForm(ModelForm):
         return qfn
 
 
-
 class ContactForm1(ModelForm):
-
     class Meta:
         model = PermanentAddress
         exclude = ['ref']

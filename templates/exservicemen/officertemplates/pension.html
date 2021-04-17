@@ -48,12 +48,7 @@
 
           <div class="input-box">
             <span class="details">Medical category while Discharge</span>
-              <select name="medical_category" required id="id_medical_category">
-              <option value="" selected>---------</option>
-                  {% for mc in mcs %}
-                  <option value="{{ mc.pk }}">{{ mc.mc_name }}</option>
-                    {% endfor %}
-            </select>
+              {{ form.medical_category }}
           </div>
           <div class="input-box">
             <span class="details">Character while Discharge</span>

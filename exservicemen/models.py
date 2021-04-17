@@ -242,6 +242,7 @@ class ExServiceMen(models.Model):
         (2, 'PENDING'),  # for exservicemen
         (3, 'EXPIRED'),
         (4, 'INCOMPLETE'),  # for welfare officer
+        (5, 'UNDER QUERY')
     )
     reg_categories = (
         (1, 'ESM'),
@@ -250,6 +251,7 @@ class ExServiceMen(models.Model):
     )
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
     esm_no = models.CharField(primary_key=True, max_length=10)
+    mobile = models.CharField(max_length=10, blank=True)
     reg_category = models.SmallIntegerField(choices=reg_categories)
     zila_board = models.ForeignKey(ZilaSainikBoard, on_delete=models.DO_NOTHING, default=None)
     status = models.PositiveSmallIntegerField(choices=statuses)
@@ -271,10 +273,9 @@ class WidowDetail(models.Model):
 
 
 class ServiceDetail(models.Model):
-
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE, default=None)
     name = models.CharField(max_length=100)
-    mobile = models.CharField(max_length=10, blank=True)
+    dob = models.DateField(verbose_name="Date Of Birth")
     reg_type = models.ForeignKey(ESMType, on_delete=models.DO_NOTHING, default=None)
     service = models.ForeignKey(Service, on_delete=models.DO_NOTHING, default=None)
     corps = models.ForeignKey(Corp, on_delete=models.DO_NOTHING, default=None, blank=True, null=True)
@@ -317,7 +318,6 @@ class PensionDetail(models.Model):
 
 
 class PersonalRef(models.Model):
-    dob = models.DateField(verbose_name="Date Of Birth")
     aadhaar_no = models.CharField(max_length=12, blank=True, null=True)
     voter_id_no = models.CharField(max_length=12, blank=True, null=True, verbose_name="Voter ID Number")
     pan_no = models.CharField(max_length=10, blank=True, null=True, verbose_name="Permanent Account Number(PAN)")
@@ -426,8 +426,7 @@ class SpouseDetail(PersonalRef):
     ]
     ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
     spouse_name = models.CharField(max_length=100, null=True, blank=True)
-    dob = models.DateField(blank=True, null=True)
-
+    dob = models.DateField(verbose_name="Date Of Birth", null=True, blank=True)
     marital_status = models.CharField(max_length=1, choices=MaritalStates, default=None)
     marriage_date = models.DateField(null=True, blank=True)
     spouse_relation = models.CharField(max_length=1, choices=SpouseRelation, default=None, null=True, blank=True)
