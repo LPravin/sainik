@@ -23,6 +23,7 @@
                   data-ranks-url="{% url 'ajax_load_ranks' %}"
                   data-districts-url="{% url 'ajax_load_districts' %}"
                   data-army-records-url="{% url 'ajax_army_records' %}"
+                  data-prefixes-url="{% url 'ajax_load_prefixes' %}"
                   method="post" action="">
  {% csrf_token %}
         <div class="detailname" style="overflow: hidden;
@@ -40,11 +41,11 @@
             <span class="details">Date of Birth</span>
             {{ serviceform.dob }}
           </div>
-                   <div class="input-box" id="div_id_mobile">
-            <span class="details">Mobile</span>
-                       {{ serviceform.mobile }}
-                       <p class ="errorlist"> {{ serviceform.mobile.errors.as_text }}</p>
-                    </div>
+            <div class="input-box">
+      <span class="details">Mobile</span>
+     {{ serviceform.mobile }}
+          <p class ="errorlist"> {{ serviceform.mobile.errors.as_text }}</p>
+    </div>
       <div class="input-box" id="div_id_rank">
             <span class="details">Enrollment Date</span>
             {{ serviceform.enrollment_date }}
@@ -63,9 +64,7 @@
             <div class="input-box" id="div_id_corps">
                         <span class="details">Corps</span>
                         {{ serviceform.corps }}
-
                 <p class ="errorlist">{{ serviceform.corps.errors.as_text }}</p>
-
                       </div>
             <div class="input-box" id="div_id_record_office">
                         <span class="details" >Record Office</span>
@@ -131,5 +130,5 @@
      </div>
 {% endblock %}
 {% block script %}
-    <script src="{% static "javascript/addesm/addesm.js" %}"></script>
+    <script src="{% static "javascript/registration/service.js" %}"></script>
 {% endblock %}

@@ -16,10 +16,31 @@
         const esm_no = $("#id_esm_no");
         const states = $("#id_state");
         const districts = $("#id_district");
+        const edate = $("#id_enrollment_date");
+        const dob = $("#id_dob");
+
+        dob.change(function (){
+            var bdate = new Date(dob.val());
+            var dd = bdate.getDate();
+            var mm = bdate.getMonth() + 1;
+            var yyyy = bdate.getFullYear() + 15;
+            if (dd < 10) {
+            dd = '0' + dd;
+            }
+             if (mm < 10) {
+            mm = '0' + mm;
+            }
+           edate.attr('min',(yyyy + '-' + mm + '-' + dd));
+        });
+        edate.click(function (){
+           if (dob.val() === ""){
+               alert("Please select Date of Birth");
+           }
+        });
 
         service.change(function () {
-        const service = $( "#id_service option:selected").text().toUpperCase();
-        if (service !== 'ARMY') {
+        const servicee = $( "#id_service option:selected").text().toUpperCase();
+        if (servicee !== 'ARMY') {
             const url = $("#addesmform").attr("data-records-url");
             const serviceid = $(this).val();
             $.ajax({
@@ -145,7 +166,7 @@ $(document).ready(function(){
 //             $('#id_record_office option')[1].selected = true;
 //         }
 // }
-$("#id_corps").change(function (){
+corps.change(function (){
      const url = $("#addesmform").attr("data-army-records-url");
         const corps_id = $(this).val();
 
@@ -161,4 +182,21 @@ $("#id_corps").change(function (){
                 // ro.val($("#id_record_office")[0].selectedIndex = 1);
             }
         });
+});
+
+ert.change(function (){
+   if (servicee === "ARMY"){
+       const url = $("#addesmform").attr("data-prefixes-url");
+       const ert_id = $(this).val();
+
+        $.ajax({
+            url: url,
+            data: {
+                'ert_id': ert_id
+            },
+            success: function (data) {
+                $("#id_prefix").html(data);
+            }
+        });
+   }
 });

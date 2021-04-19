@@ -17,12 +17,8 @@
             <h4>BASIC DETAILS</h4>
             </div>
  <div class="user-details">
- <div class="input-box">
-      <span class="details">Email</span>
-     {{ loginform.email }}
-     <p class ="errorlist">{{ loginform.email.errors.as_text }}</p>
-    </div>
-         <div class="input-box">
+
+     <div class="input-box">
       <span class="details">ESM No:</span>
       <div class="input"  style="display:flex; flex-direction: row;">
         <input type="text" style="width:30%; margin-right: 3px;" value="{{ rsbcode }}" disabled >
@@ -30,16 +26,6 @@
        {{ esmbasic.esm_no }}
           <p class ="errorlist">{{ esmbasic.esm_no.errors.as_text }}</p>
           </div>
-    </div>
-     <div class="input-box">
-      <span class="details">Password</span>
-      {{ loginform.password1 }}
-         <p class ="errorlist">{{ loginform.password2.errors.as_text }}</p>
-    </div>
-     <div class="input-box">
-      <span class="details">Confirm Password</span>
-      {{ loginform.password2 }}
-         <p class ="errorlist">{{ loginform.password2.errors.as_text }}</p>
     </div>
          <div class="input-box">
       <span class="details">Registration Type</span>
@@ -54,7 +40,7 @@
      </div>
      </div>
     <div class="pending">
-        <h1>PENDING</h1>
+        <h1>INCOMPLETE</h1>
         {% if pendings %}
         {% for esm in pendings %}
             <h3>{{ esm.esm_no }} <input type="button" onclick="location.href='{% url "add ESM" esm.pk %}'" value="Continue" class="edit_dep" name="Edit" style="margin-right: 2px;"></h3>

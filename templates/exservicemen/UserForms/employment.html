@@ -9,15 +9,15 @@
  <div class="container">
      <div class="title">
          <h4>ESM DETAILS</h4><br></div>
-         <div class="tabs">
-          <div><button id="defaultOpen" class="Next" onclick="details(Event,'service')" >Service</button></div>
-          <div><button class="Next" onclick="details(Event,'pension')">Pension</button></div>
-          <div><button class="Next" onclick="details(Event,'personal')">Personal</button></div>
-          <div><button class="Next" onclick="details(Event,'contact')">Contact</button></div>
-          <div><button class="Next" onclick="details(Event,'family')">Family</button></div>
-          <div><button class="Next" onclick="details(Event,'depentant')">Dependent</button></div>
-          <div><button class="Next" onclick="details(Event,'Employement')">Employment</button></div>
-        </div><br><br><br>
+         <div class="list-unstyled multi-steps" >
+                <p class="li">Service</p>
+                <p class="li" >Pension</p>
+                <p class="li">Personal</p>
+                <p class="li is-active">Employment</p>
+                <p class="li">Contact</p>
+                <p class="li">Family</p>
+                <p class="li ">Dependent</p>
+           </div><br>
     <div class="content">
 
       <div class="form-outer">
@@ -39,14 +39,18 @@
       <span class="details">Civil Qualification</span>
       {{ form.civil_qualification }}
           </div>
+            <div class="input-box">
+      <span class="details">Specialization</span>
+      {{ form.specialization }}
+          </div>
 {#          <div class="input-box">#}
 {#      <span class="details">Degree</span>#}
 {#      {{ form }}#}
 {#          </div>#}
-        <div class="input-box">
-      <span class="details">Equivalent trade qualification</span>
-      <input type="text" required>
-          </div>
+{#        <div class="input-box">#}
+{#      <span class="details">Equivalent trade qualification</span>#}
+{#            <input type="text">#}
+{#          </div>#}
           <div class="input-box">
           <span class="details">Employment Status</span>
           {{ form.employment_status }}
@@ -59,13 +63,9 @@
           <span class="details">Whether willing to Watch & Ward / Security Job?</span>
           {{ form.security_job }}
         </div>
-          <div class="input-box" id="div_id_firesafety_sec_qualification">
-          <span class="details">Courses completed in relation with firesafety and security</span>
-          {{ form.firesafety_sec_qualification }}
-        </div>
         <div class="input-box" id="div_id_employer">
-          <span class="details">Employer</span>
-          {{ form.employer }}
+          <span class="details">Sector</span>
+          {{ form.sector }}
         </div>
         <div class="input-box" id="div_id_monthly_income">
           <span class="details">Monthly Income</span>
@@ -86,8 +86,8 @@
 
         </div>
         <div class="btn-box">
-			<button type="button" class="Next" onclick="details(Event,'service')">BACK</Button>
-			<button type="submit" class="Next" onclick="details(Event,'personal')">NEXT</Button>
+			<button type="button" class="Next" onclick="location.href='{% url "personal details" %}'">BACK</Button>
+			<button type="submit" value="submit" class="Next">NEXT</Button>
 		</div>
     </div>
       </form>

@@ -174,6 +174,7 @@ class ServiceForm(ModelForm):
             'name': forms.TextInput(attrs={"style": "text-transform: uppercase;",
                                            'onkeydown': "return alphaOnly(event)",
                                            'onpaste': "return false"}),
+
             'dob': forms.DateInput(attrs={'type': 'date', 'max': datetime.date(datetime.date.today().year - 15,
                                                                                datetime.date.today().month,
                                                                                datetime.date.today().day)}),
@@ -245,6 +246,12 @@ class PensionForm(ModelForm):
         uls = self.cleaned_data['unit_last_served'].upper()
         return uls
 
+    # def clean_ppo_no(self):
+    #     ps = self.cleaned_data['pensioner_status']
+    #     ppo = self.cleaned_data['']
+    #     if ps == "Y":
+    #         if
+
     # def __init__(self, service=None, **kwargs):
     #     service = kwargs.pop('service')
     #     super(PensionForm, self).__init__(**kwargs)
@@ -256,9 +263,9 @@ class EmploymentForm(ModelForm):
 
     class Meta:
         model = EmploymentDetail
-        fields = ['civil_qualification', 'test_passed',
-                  'employment_status', 'willing_for_job', 'security_job',
-                  'employer', 'monthly_income', 'department', 'civil_retirement_date', 'civil_ppo_no']
+        fields = ['civil_qualification', 'specialization','test_passed',
+                  'employment_status', 'willing_for_job', 'security_job', 'sector',
+                   'monthly_income', 'department', 'civil_retirement_date', 'civil_ppo_no']
 
         widgets = {
             'civil_retirement_date': forms.DateInput(attrs={'type': 'date'}),
@@ -349,10 +356,6 @@ class ESMBasic(ModelForm):
     class Meta:
         model = ExServiceMen
         fields = ['esm_no', 'reg_category']
-
-        # widgets = {
-        #      'esm_no': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
-        # }
 
 
 class TransferForm(ModelForm):
