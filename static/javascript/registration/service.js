@@ -72,7 +72,7 @@
                     ro.html(data);
                     $("#div_id_corps").attr('hidden',true);
                     corps[0].selectedIndex = 0;
-                    corps.value = 0;
+                    // corps.value = 0;
                 }
             });
         }

@@ -489,7 +489,7 @@ class DependentDetail(models.Model):
     dep_relation = models.CharField(max_length=1, choices=Dependents, default=None, verbose_name='Dependent Relation')
     dep_dob = models.DateField(verbose_name='Date of Birth')
     aadhaar_no = models.CharField(max_length=12, blank=True, verbose_name='Aadhaar Number')
-    dep_qualification = models.CharField(max_length=40, verbose_name='Dependent Qualification')
+    dep_qualification = models.ForeignKey(CivilQualification, on_delete=models.CASCADE,verbose_name='Dependent Qualification')
     specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, blank=True, null=True)
     academic_year = models.CharField(max_length=7)
     emp_status = models.CharField(max_length=1, choices=EmploymentStatus, verbose_name='Employment Status', null=True,

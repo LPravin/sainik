@@ -33,6 +33,7 @@
 
             </div><br>
           <br><br>
+{#      {{ form.errors }}#}
         <div class="user-details">
              <div class="input-box">
       <span class="details">Name of the Next of Kin</span>
@@ -49,6 +50,7 @@
              <div class="input-box" id="div_id_spouse_name">
       <span class="details">Spouse Name</span>
       {{ form.spouse_name }}
+                 {{ form.spouse_name.errors }}
     </div>
     <div class="input-box" id="div_id_marriage_date">
       <span class="details">Date of Marriage</span>

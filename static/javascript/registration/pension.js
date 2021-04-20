@@ -2,8 +2,11 @@
 
     function hidepensioner(){
         $('#div_id_ppo_no').attr('hidden', true);
+        $('#id_ppo_no').val("")
         $('#div_id_pension_sanctioned').attr('hidden', true);
+        $('#id_pension_sanctioned').val("")
         $('#div_id_present_pension').attr('hidden', true);
+        $('#id_present_pension').val("");
     }
     function showpensioner(){
         $('#div_id_ppo_no').attr('hidden', false);
@@ -16,7 +19,9 @@
     }
     function hidepwd(){
         $('#div_id_disability_pension').attr('hidden', true);
+        $('#id_disability_pension').val("");
         $('#div_id_disability_percent').attr('hidden', true);
+        $('#id_disability_percent').val("");
     }
 
     $('#id_pensioner_status').change(function (){

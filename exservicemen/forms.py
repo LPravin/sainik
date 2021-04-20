@@ -289,7 +289,7 @@ class SpouseForm(ModelForm):
         ms = self.cleaned_data['marital_status']
         sn = self.cleaned_data['spouse_name']
         if ms == "M":
-            if sn == "":
+            if not sn:
                 raise ValidationError('Spouse name cannot be blank')
 
 
