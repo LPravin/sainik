@@ -30,7 +30,7 @@
         <div class="detailname" style="overflow: hidden;
           border: 1px solid #ccc;
           background-color: #f1f1f1;">
-            <h4>EMPLOYMENT DETAILS</h4>
+            <h4>ESM NO: {{ request.session.esm_no }}</h4>
 
             </div><br>
           <br><br>
@@ -39,9 +39,13 @@
       <span class="details">Civil Qualification</span>
       {{ form.civil_qualification }}
           </div>
-            <div class="input-box">
+            <div class="input-box" id="div_id_specialization">
       <span class="details">Specialization</span>
       {{ form.specialization }}
+          </div>
+            <div class="input-box">
+      <span class="details">Equivalent Test Passed:</span>
+      {{ form.test_passed }}
           </div>
 {#          <div class="input-box">#}
 {#      <span class="details">Degree</span>#}

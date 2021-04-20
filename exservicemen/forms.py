@@ -247,16 +247,11 @@ class PensionForm(ModelForm):
         return uls
 
     # def clean_ppo_no(self):
-    #     ps = self.cleaned_data['pensioner_status']
-    #     ppo = self.cleaned_data['']
-    #     if ps == "Y":
-    #         if
-
-    # def __init__(self, service=None, **kwargs):
-    #     service = kwargs.pop('service')
-    #     super(PensionForm, self).__init__(**kwargs)
-    #     if service:
-    #         self.fields['medical_category'].queryset = MedicalCategory.objects.filter(service=service)
+    #     p_status = self.cleaned_data['pensioner_status']
+    #     if p_status == 'Y':
+    #         ppo_number = self.cleaned_data['ppo_no']
+    #         if not ppo_number:
+    #             raise ValidationError('PPO Number cannot be blank')
 
 
 class EmploymentForm(ModelForm):
@@ -289,6 +284,13 @@ class SpouseForm(ModelForm):
             'marriage_date': forms.DateInput(attrs={'type': 'date'}),
             'spouse_retirement_date': forms.DateInput(attrs={'type': 'date'}),
         }
+
+    def clean_spouse_name(self):
+        ms = self.cleaned_data['marital_status']
+        sn = self.cleaned_data['spouse_name']
+        if ms == "M":
+            if sn == "":
+                raise ValidationError('Spouse name cannot be blank')
 
 
 class DependentForm(ModelForm):

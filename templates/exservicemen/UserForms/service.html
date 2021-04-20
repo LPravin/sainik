@@ -29,7 +29,7 @@
         <div class="detailname" style="overflow: hidden;
           border: 1px solid #ccc;
           background-color: #f1f1f1;">
-            <h4>ESM DETAILS</h4>
+            <h4>ESM NO: {{ request.session.esm_no }}</h4>
             </div>
                <div class="user-details">
               <div class="input-box" id="div_id_mobile">
@@ -71,6 +71,16 @@
                         {{ serviceform.record_office }}
                 <p class ="errorlist">{{ serviceform.record_office.errors.as_text}}</p>
                       </div>
+                   <div class="input-box" id="div_id_rank_category">
+                        <span class="details">Rank Category</span>
+                        {{ serviceform.rank_category }}
+                <p class ="errorlist">{{ serviceform.rank_category.errors.as_text }}</p>
+                      </div>
+          <div class="input-box" id="div_id_rank_category">
+            <span class="details">Rank</span>
+            {{ serviceform.rank }}
+              <p class ="errorlist">{{ serviceform.rank.errors.as_text }}</p>
+          </div>
             <div class="input-box" id="div_id_service_no">
                         <span class="details" >Service No</span>
                 <div class="input"  style="display:flex; flex-direction: row;">
@@ -90,16 +100,6 @@
                         {{ serviceform.trade }}
                 <p class ="errorlist">{{ serviceform.trade.errors.as_text }}</p>
                       </div>
-            <div class="input-box" id="div_id_rank_category">
-                        <span class="details">Rank Category</span>
-                        {{ serviceform.rank_category }}
-                <p class ="errorlist">{{ serviceform.rank_category.errors.as_text }}</p>
-                      </div>
-          <div class="input-box" id="div_id_rank_category">
-            <span class="details">Rank</span>
-            {{ serviceform.rank }}
-              <p class ="errorlist">{{ serviceform.rank.errors.as_text }}</p>
-          </div>
                          <div class="input-box" id="div_id_rank">
             <span class="details">Date of ESM Registration</span>
             {{ serviceform.reg_date }}

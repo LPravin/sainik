@@ -18,6 +18,7 @@
         const districts = $("#id_district");
         const edate = $("#id_enrollment_date");
         const dob = $("#id_dob");
+        const esm_reg_date =$("#id_reg_date")
 
         dob.change(function (){
             var bdate = new Date(dob.val());
@@ -38,11 +39,30 @@
            }
         });
 
+        edate.change(function (){
+            var bdate = new Date(edate.val());
+            var dd = bdate.getDate();
+            var mm = bdate.getMonth() + 1;
+            var yyyy = bdate.getFullYear() ;
+            if (dd < 10) {
+            dd = '0' + dd;
+            }
+             if (mm < 10) {
+            mm = '0' + mm;
+            }
+           esm_reg_date.attr('min',(yyyy + '-' + mm + '-' + dd));
+        });
+
+        esm_reg_date.click(function (){
+           if (edate.val() === ""){
+               alert("Please select Enrollment Date");
+           }
+        });
+
         service.change(function () {
-        const servicee = $( "#id_service option:selected").text().toUpperCase();
-        if (servicee !== 'ARMY') {
+        const serviceid = $(this).val();
+        if (serviceid !== '1') {
             const url = $("#addesmform").attr("data-records-url");
-            const serviceid = $(this).val();
             $.ajax({
                 url: url,
                 data: {
@@ -59,6 +79,7 @@
         else{
             ro[0].selectedIndex = 0;
             $("#div_id_corps").attr('hidden',false);
+
         }
 
         // if($("#id_group").val() !=="") {
@@ -128,6 +149,17 @@
 
             }
         });
+        const ur = $("#addesmform").attr("data-prefixes-url");
+        $.ajax({
+            url: ur,
+            data: {
+                'service_id': serviceid,
+                 'rankcat_id' :  rankcatid
+            },
+            success: function (data) {
+                $("#id_prefix").html(data);
+            }
+        });
 
     });
     states.change(function () {
@@ -186,17 +218,6 @@ corps.change(function (){
 
 ert.change(function (){
    if (servicee === "ARMY"){
-       const url = $("#addesmform").attr("data-prefixes-url");
-       const ert_id = $(this).val();
 
-        $.ajax({
-            url: url,
-            data: {
-                'ert_id': ert_id
-            },
-            success: function (data) {
-                $("#id_prefix").html(data);
-            }
-        });
    }
 });

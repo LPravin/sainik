@@ -1,3 +1,16 @@
+        const cq= $("#id_civil_qualification")
+        const specialization = $("#id_specialization")
+        const estatus = $("#id_employment_status");
+        const willingforjob = $("#id_willing_for_job")
+        const sjob = $("#id_security_job")
+        const employer = $("#id_employer");
+        const income = $("#id_monthly_income");
+        const dept = $("#id_department");
+        const retdate = $('#id_civil_retirement_date')
+        const ppono = $('#id_civil_ppo_no')
+        const firesafetySecQualification = $('#id_firesafety_sec_qualification')
+
+
 function hideeveything() {
         $('#div_id_willing_for_job').attr("hidden", true);
         $('#div_id_security_job').attr("hidden", true);
@@ -7,6 +20,7 @@ function hideeveything() {
         $('#div_id_civil_retirement_date').attr("hidden", true);
         $('#div_id_civil_ppo_no').attr("hidden", true);
         $('#div_id_firesafety_sec_qualification').attr("hidden", true);
+        $("#div_id_specialization").attr('hidden', true);
     }
     function showemp(){
          $('#div_id_employer').attr("hidden", false);
@@ -20,7 +34,7 @@ function hideeveything() {
         $('#div_id_civil_retirement_date').attr("hidden", false);
         $('#div_id_civil_ppo_no').attr("hidden", false);
     }
-    $('#id_employment_status').change(function () {
+    estatus.change(function () {
         hideeveything();
         if ($(this).val() === 'E') {
             showemp();
@@ -30,7 +44,7 @@ function hideeveything() {
             showretired();
         }
     });
-    $('#id_willing_for_job').change(function () {
+    willingforjob.change(function () {
         if ($(this).val() === 'Y') {
             $('#div_id_security_job').attr("hidden", false);
         } else if ($(this).val() === 'N') {
@@ -38,16 +52,29 @@ function hideeveything() {
             $('#div_id_willing_for_job').attr("hidden", false);
         }
     });
+    cq.change(function () {
+        if (cq.val() === '4' || cq.val() === '5' ||
+            cq.val() === '6' || cq.val() === '7'){
+            $("#div_id_specialization").attr('hidden', false);
+        }
+        else{
+            $("#div_id_specialization").attr('hidden', true);
+        }
+    });
     $(document).ready(function(){
         hideeveything();
-        if ($("#id_employment_status").val() === 'E'){
+        if (cq.val() === '4' || cq.val() === '5' ||
+            cq.val() === '6' || cq.val() === '7'){
+            $("#div_id_specialization").attr('hidden', false);
+        }
+        if (estatus.val() === 'E'){
             showemp();
-        } else if ($("#id_employment_status").val() === 'U') {
+        } else if (estatus.val() === 'U') {
             showunemp();
-            if ($("#id_willing_for_job").val() === 'Y'){
-                $('#div_id_security_job').attr("hidden", false);
+            if (willingforjob.val() === 'Y'){
+                $("#div_id_security_job").attr("hidden", false);
             }
-        } else if ($("#id_employment_status").val() === 'R') {
+        } else if (estatus.val() === 'R') {
             showretired();
         }
 

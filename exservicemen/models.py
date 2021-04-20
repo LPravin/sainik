@@ -8,7 +8,6 @@ class MyUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
             raise ValueError('Users must have an email address')
-
         user = self.model(
             email=self.normalize_email(email),
             **extra_fields
@@ -72,28 +71,15 @@ YesNo = [
 
 
 class ESMType(models.Model):
+    primary_key = models.SmallIntegerField(primary_key=True)
     esm_type = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
         return self.esm_type
 
 
-class ServiceNoPrefix(models.Model):
-    prefix = models.CharField(max_length=10, null=True)
-    esm_type = models.ForeignKey(ESMType, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.prefix
-
-
-class ServiceNoSuffix(models.Model):
-    suffix = models.CharField(max_length=5, null=True)
-
-    def __str__(self):
-        return self.suffix
-
-
 class Service(models.Model):
+    primary_key = models.SmallIntegerField(primary_key=True)
     service_name = models.CharField(max_length=9, unique=True)
 
     def __str__(self):
@@ -117,6 +103,7 @@ class Trade(models.Model):
 
 
 class RankCategory(models.Model):
+    primary_key = models.SmallIntegerField(primary_key=True)
     rank_category = models.CharField(max_length=10, unique=True)
 
     def __str__(self):
@@ -130,6 +117,22 @@ class Rank(models.Model):
 
     def __str__(self):
         return self.rank
+
+
+class ServiceNoPrefix(models.Model):
+    prefix = models.CharField(max_length=10, null=True)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE)
+    rank_category = models.ForeignKey(RankCategory, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.prefix
+
+
+class ServiceNoSuffix(models.Model):
+    suffix = models.CharField(max_length=5, null=True)
+
+    def __str__(self):
+        return self.suffix
 
 
 class RecordOffice(models.Model):
@@ -226,6 +229,7 @@ class District(models.Model):
 
 
 class CivilQualification(models.Model):
+    primary_key = models.SmallIntegerField(primary_key=True)
     qualification = models.CharField(max_length=20, unique=True)
 
     def __str__(self):
@@ -312,7 +316,7 @@ class PensionDetail(models.Model):
     medical_category = models.ForeignKey(MedicalCategory, on_delete=models.CASCADE, default=None)
     character = models.ForeignKey(Character, on_delete=models.DO_NOTHING, default=None)
     discharge_book_no = models.CharField(max_length=8)
-    ppo_no = models.CharField(max_length=8, blank=True, verbose_name="PPO No")
+    ppo_no = models.CharField(max_length=16, blank=True, verbose_name="PPO No")
     pensioner_status = models.CharField(max_length=1, choices=YesNo, default=None)
     pension_sanctioned = models.CharField(max_length=6, blank=True)
     present_pension = models.CharField(max_length=6, blank=True)
@@ -403,7 +407,7 @@ class EmploymentDetail(models.Model):
     ]
     ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE)
     civil_qualification = models.ForeignKey(CivilQualification, on_delete=models.CASCADE)
-    specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE)
+    specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, null=True, blank=True)
     test_passed = models.CharField(max_length=40, null=True, blank=True)
     employment_status = models.CharField(max_length=1, choices=EStates)
     willing_for_job = models.CharField(max_length=1, choices=YesNo, blank=True, null=True,
@@ -445,6 +449,7 @@ class SpouseDetail(PersonalRef):
     marriage_date = models.DateField(null=True, blank=True)
     spouse_relation = models.CharField(max_length=1, choices=SpouseRelation, default=None, null=True, blank=True)
     spouse_qualification = models.ForeignKey(CivilQualification, on_delete=models.DO_NOTHING, null=True, blank=True)
+    specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, blank=True, null=True)
     spouse_employment_status = models.CharField(max_length=1, choices=EmploymentStatus, default=None, blank=True,
                                                 null=True)
     spouse_profession = models.CharField(max_length=50, blank=True, null=True)
@@ -485,7 +490,8 @@ class DependentDetail(models.Model):
     dep_dob = models.DateField(verbose_name='Date of Birth')
     aadhaar_no = models.CharField(max_length=12, blank=True, verbose_name='Aadhaar Number')
     dep_qualification = models.CharField(max_length=40, verbose_name='Dependent Qualification')
-    academic_year = models.CharField(max_length=4)
+    specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, blank=True, null=True)
+    academic_year = models.CharField(max_length=7)
     emp_status = models.CharField(max_length=1, choices=EmploymentStatus, verbose_name='Employment Status', null=True,
                                   blank=True)
     marital_status = models.CharField(max_length=1, choices=MaritalState, default=None)

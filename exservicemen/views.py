@@ -80,6 +80,7 @@ def pensionformview(request):
     user = ExServiceMen.objects.get(esm_no=esm_no)
     service = ServiceDetail.objects.get(ref=user).service
     enrol_date = ServiceDetail.objects.get(ref=user).enrollment_date
+    reg_date = ServiceDetail.objects.get(ref=user).reg_date
     if request.method == "POST":
         pensionform = PensionForm(request.POST)
         try:
@@ -102,7 +103,7 @@ def pensionformview(request):
             pensionform = PensionForm()
             pensionform.fields['medical_category'].queryset = MedicalCategory.objects.filter(service=service)
             pensionform.fields['discharge_date'].widget = forms.DateInput(
-                attrs={'type': 'date', 'min': str(enrol_date), 'max': str(datetime.date.today())})
+                attrs={'type': 'date', 'min': str(enrol_date), 'max': str(reg_date)})
         else:
             pensionform = PensionForm(instance=check)
     return render(request, 'exservicemen/UserForms/pension.html',  {'form': pensionform})
@@ -128,11 +129,10 @@ def personalformview(request):
                 personalform.save()
                 return redirect('employment details')
     else:
-        personalform = PersonalForm
         try:
             check = PersonalDetail.objects.get(ref=user)
         except PersonalDetail.DoesNotExist:
-            pass
+            personalform = PersonalForm()
         else:
             personalform = PersonalForm(instance=check)
     return render(request, 'exservicemen/UserForms/personal.html', {'form': personalform})
@@ -354,24 +354,21 @@ def serviceformview(request):
             if serviceform.is_valid():
                 service = serviceform.save(commit=False)
                 service.ref = user
-                request.session['service_id'] = serviceform.cleaned_data["service"].id
                 service.save()
                 return redirect('pension details')
         else:
             serviceform.instance = check
             if serviceform.is_valid():
                 serviceform.save()
-                request.session['service_id'] = serviceform.cleaned_data["service"].id
                 return redirect('pension details')
     else:
         try:
-            check = ServiceDetail.objects.get(ref=1)
+            check = ServiceDetail.objects.get(ref=user)
         except ServiceDetail.DoesNotExist:
             serviceform = ServiceForm()
         else:
             serviceform = ServiceForm(instance=check)
-    return render(request, "exservicemen/UserForms/service.html",
-                  {'serviceform': serviceform})
+    return render(request, "exservicemen/UserForms/service.html",{'serviceform': serviceform})
 
 
 def load_record_office(request):
@@ -402,8 +399,9 @@ def load_ranks(request):
 
 
 def load_prefixes(request):
-    ert_id = request.GET.get('ert_id')
-    prefixes = ServiceNoPrefix.objects.filter(esm_type=ert_id).all()
+    service_id = request.GET.get('service_id')
+    rankcat_id = request.GET.get('rankcat_id')
+    prefixes = ServiceNoPrefix.objects.filter(service_id=service_id, rank_category_id=rankcat_id).all()
     return render(request, 'exservicemen/UserForms/dependent_dropdown.html', {'items': prefixes})
 
 

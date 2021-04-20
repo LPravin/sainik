@@ -18,11 +18,15 @@
           {% csrf_token %}
 
 
-  <div class="tab" id="pension">
         <div class="user-details">
-             <div class="input-box" id="div_id_spouse_csd_id">
-      <span class="details">REFERENCE ESM NO</span>
-      {{ form.spouse_esm_no }}
+             <div class="input-box">
+      <span class="details">Spouse ESM No:</span>
+      <div class="input"  style="display:flex; flex-direction: row;">
+        <input type="text" style="width:30%; margin-right: 3px;" value="{{ rsbcode }}" disabled >
+          <input type="text" style="width:20%; margin-right: 3px;" value="{{ zsbcode }}" disabled>
+       {{ esmbasic.esm_no }}
+          <p class ="errorlist">{{ esmbasic.esm_no.errors.as_text }}</p>
+          </div>
     </div>
             <div class="input-box" id="div_id_spouse_csd_id">
       <span class="details">EXPIRY DATE OF ESM</span>
@@ -45,7 +49,6 @@
       {{ form.widow_expiry_date }}
     </div>
             </div>
-          </div>
         <div class="btn-box">
 			<button type="button" class="Next" onclick="">BACK</Button>
 			<button type="submit" class="Next" value="submit">SUBMIT</Button>
