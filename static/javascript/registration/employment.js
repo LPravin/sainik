@@ -29,7 +29,6 @@ function hideeveything() {
         $("#div_id_specialization").attr('hidden', true);
         $("#id_specialization")[0].selectedIndex = 0;
         $("#div_id_sector").attr('hidden', true);
-        $("#id_sector")[0].selectedIndex = 0;
     }
     function showemp(){
         $("#div_id_sector").attr('hidden', false);
@@ -68,6 +67,7 @@ function hideeveything() {
         }
         else{
             $("#div_id_specialization").attr('hidden', true);
+            $("#id_sector")[0].selectedIndex = 0;
         }
     });
     $(document).ready(function(){

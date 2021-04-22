@@ -408,9 +408,7 @@ th, td {
 	 border-style: solid;
 	 border-color: #677eff;
 	 border-radius: 50%;
-
 }
-
  .multi-steps > .li::after {
   content: "";
   height: 3px;

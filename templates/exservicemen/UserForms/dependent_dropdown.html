@@ -2,3 +2,6 @@
 {% for item in items %}
 <option value="{{ item.pk }}">{{ item }}</option>
 {% endfor %}
+{##}
+{#dep_qualification = models.ForeignKey(CivilQualification, on_delete=models.CASCADE,verbose_name='Dependent Qualification',blank=True, null=True)#}
+{#    specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, blank=True, null=True)#}

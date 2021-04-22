@@ -7,7 +7,6 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
-import datetime
 
 
 def wo_check(user):
@@ -20,6 +19,7 @@ def homeview(request):
         if user.role == 2:
             profile = WelfareOfficer.objects.get(ref=user)
             zboard = profile.zila_board
+            request.session['zboard'] = zboard.id
             name = profile.name
             total_users = ExServiceMen.objects.filter(zila_board=zboard.id, status=1).count()
             return render(request, "exservicemen/usertemplates/home.html", {'zboard': zboard, 'name': name,
@@ -28,7 +28,6 @@ def homeview(request):
             profile = ServiceDetail.objects.get(ref=user)
             name = profile.name
             return render(request, "exservicemen/usertemplates/home.html", {'name': name})
-
     return render(request, "exservicemen/usertemplates/home.html")
 
 
@@ -72,6 +71,10 @@ def officerlogin(request):
 def userlogout(request):
     logout(request)
     return HttpResponseRedirect(reverse('home'))
+
+@login_required()
+def crud(request):
+    return render(request, 'exservicemen/UserForms/crud.html')
 
 
 @login_required()
@@ -199,7 +202,7 @@ def spouseformview(request):
     return render(request, 'exservicemen/UserForms/spouse.html', {'form': spouseform})
 
 
-# @login_required()
+@login_required()
 def dependentformview(request):
     esm_no = request.session['esm_no']
     user = ExServiceMen.objects.get(esm_no=esm_no)
@@ -449,7 +452,9 @@ def add_dependent(request):
                 'dependents': dependents
             })
         else:
+            print(form.errors)
             data['form_is_valid'] = False
+
     else:
         form = DependentForm()
     context = {'form': form}
@@ -467,6 +472,16 @@ def delete_dependent(request, pk):
     data['html_dependents'] = render_to_string('exservicemen/UserForms/dep_list.html',
                                                {'dependents': dependents})
     return JsonResponse(data)
+
+
+def load_esm_list(request):
+    zboard = request.session['zboard']
+    esm_list = ExServiceMen.objects.filter(zila_board_id=zboard)
+    return render(request, 'exservicemen/UserForms/esm_list.html', {'esm_list': esm_list})
+
+def update_esm(request, pk):
+    user = ExServiceMen.objects.get(esm_no=pk)
+
 
 
 def widowformview(request):

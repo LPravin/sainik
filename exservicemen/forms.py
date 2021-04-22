@@ -304,18 +304,13 @@ class DependentForm(ModelForm):
             'dep_name': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)",
                                                "style": "text-transform: uppercase;"}),
             'aadhaar_no': forms.TextInput(attrs={'onkeydown': "return numOnly(event)", 'minlength': '12'}),
-            'dep_qualification': forms.TextInput(attrs={'onkeydown': "return alphaOnly(event)",
-                                                        "style": "text-transform: uppercase;"}),
+
             'academic_year': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
         }
 
     def clean_dep_name(self):
         dep = self.cleaned_data['dep_name'].upper()
         return dep
-
-    def clean_dep_qualification(self):
-        qfn = self.cleaned_data['dep_qualification'].upper()
-        return qfn
 
 
 class ContactForm1(ModelForm):

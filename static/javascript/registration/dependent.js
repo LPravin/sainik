@@ -40,8 +40,6 @@ $("#add_dependent").on("submit", ".dep-add-form", function () {
     return false;
   });
 
-
-
    function load_deps(){
    const url = 'ajax/load_dependent';
         $.ajax({
