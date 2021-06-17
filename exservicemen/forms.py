@@ -44,7 +44,7 @@ class Login(forms.Form):
 #             'mobile': forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}),
 #         }
 #
-#     # def __init__(self, *args, **kwargs):
+    # def __init__(self, *args, **kwargs):
 #     #     super().__init__(*args, **kwargs)
 #     #     self.fields['record_office'].queryset = RecordOffice.objects.none()
 #     #     self.fields['trade'].queryset = Trade.objects.none()
@@ -371,3 +371,11 @@ class WidowForm(ModelForm):
             'spouse_esm_no': forms.TextInput(attrs={'maxlenght': '4'}),
             'widow_expiry_date': forms.DateInput(attrs={'type': 'date'})
         }
+
+
+# class FilterService(ModelForm):
+#     service = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple(), queryset=Service.objects.all())
+#
+#     class Meta:
+#         model = ServiceDetail
+#         fields = ['name', 'dob', 'enrollment_date', 'trade', 'service', 'rank_category']

@@ -1,0 +1,66 @@
+{% extends 'exservicemen/trail.html' %}
+
+
+{% load static %}
+{% block content %}
+    <div class="container1">
+    <br>
+     <br>
+             <div class="title">
+                <i class="fas fa-pencil-alt fa-2x"></i>
+                 <h4>ESM DETAILS</h4><br></div>
+              <br>
+    <div class="content">
+      <div class="form-outer">
+<form action="#" method="post" autocomplete="off">
+          {% csrf_token %}
+  <div class="tab">
+        <div class="detailname" style="overflow: hidden;
+          border: none;
+          background-color:transparent;">
+{#            <h4>ESM DETAILS</h4>#}
+            <div class="box">
+            <div class="search-box">
+                <input type="text" placeholder="Search Here..." id="search_input">
+                <br><br>
+                <select id="search_by">
+              <option value="1" selected>ESM NO</option>
+              <option value="2">ESM NAME</option>
+            </select>
+               <input type="button" value="Search" class="edit_dep" name="search" id="search" style="margin-right: 2px;">
+{#                <label for="" class="icon">#}
+{#                    <i class="fas fa-search"></i>#}
+{#                </label>#}
+            </div>
+            </div>
+            </div>
+       <div class="user-details" id="form">
+           </div>
+       </div>
+    <div class="table-responsive">
+<table class="table table-hover">
+              <thead >
+                <tr >
+                  <th>NAME</th>
+                  <th>ESM NO</th>
+                  <th>SERVICE NO</th>
+                  <th>ACTION</th>
+                </tr>
+              </thead>
+            <tbody id="esm_list">
+            </tbody>
+</table>
+    </div>
+<br><br>
+     <div class="btn-box" style="margin-top:10%;">
+   <button type="button" class="Next">BACK</button>
+   <button type="submit" class="Next">NEXT</button>
+  </div>
+      </form>
+      </div>
+    </div>
+ </div>
+{% endblock %}
+{% block script %}
+    <script src="{% static "javascript/registration/crud.js" %}"></script>
+{% endblock %}

@@ -2,7 +2,21 @@
 {% load static %}
     {% block title %} APPLY FOR REGISTRATION {% endblock %}
 {% block content %}
+     <div class="container">
+     <div class="title">
+         <h4>ADD NEW ESM DETAILS</h4><br></div>
 
+         <div class="list-unstyled multi-steps" >
+                <p class="li is-active">Service</p>
+                <p class="li" >Pension</p>
+                <p class="li">Personal</p>
+                <p class="li">Contact</p>
+                <p class="li">Employment</p>
+                <p class="li">Family</p>
+                <p class="li">Dependent</p>
+           </div><br>
+     <div class="content">
+      <div class="form-outer">
  <form enctype="multipart/form-data" id="addesmform" name="addesmform" autocomplete="on"
                   data-records-url="{% url 'ajax_load_records' %}"
                   data-trades-url="{% url 'ajax_load_trades' %}"
@@ -111,6 +125,9 @@
 			<button type="submit" name="Next" value="submit" class="Next">Next</Button>
             </div>
      </form>
+      </div>
+     </div>
+     </div>
 {% endblock %}
 {% block script %}
     <script src="{% static "javascript/registration/service.js" %}"></script>

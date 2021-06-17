@@ -1,13 +1,14 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
 
 urlpatterns = [
     path('', views.homeview, name='home'),
-    # path('apply/', views.applyview, name="apply"),
+    path('apply/', views.applyview, name="apply"),
     # path('registration/', views.serviceformview, name="service details"),
     path('crud/', views.crud, name='crud'),
     path('crud/ajax/load_esm_list', views.load_esm_list, name='crud'),
-    path('crud/update-esm/', views.update_esm, name='update esm'),
+    path('crud/ajax/search_esm', views.search_esm, name='search esm'),
+    path('crud/update/<str:pk>', views.update_esm, name='update esm'),
     path('registration/pension-info', views.pensionformview, name="pension details"),
     path('registration/personal-info', views.personalformview, name="personal details"),
     path('registration/employment-info', views.employmentformview, name='employment details'),
@@ -33,4 +34,6 @@ urlpatterns = [
     path('addesm/service-info', views.serviceformview, name='service details'),
     path('addesm/widow-info', views.widowformview, name='widow details'),
     path('addesm/submit', views.submit, name='submit form'),
+    path('filter/', views.filter, name='filter view'),
+    path('verification/', include('verify_email.urls')),
 ]

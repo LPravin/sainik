@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'exservicemen',
+    "verify_email.apps.VerifyEmailConfig",
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -124,3 +125,12 @@ STATICFILES_DIRS = [
 AUTH_USER_MODEL = 'exservicemen.MyUser'
 
 LOGIN_URL = 'user-login/'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '18352040@pondiuni.ac.in'
+EMAIL_HOST_PASSWORD = 'thelazy73'
+
+DEFAULT_FROM_EMAIL = 'noreply<no_reply@domain.com>'

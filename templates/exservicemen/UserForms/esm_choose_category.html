@@ -1,9 +1,8 @@
-{% extends 'exservicemen/usertemplates/basic.html' %}
+{% extends 'exservicemen/trail.html' %}
 {% load static %}
     {% block title %} ADD NEW ESM {% endblock %}
-{% block content %}
-    <div class="flex">
-     <div class="container">
+{% block add_users_home %}
+    <div class="container">
      <div class="title">
          <h4>ADD NEW ESM DETAILS</h4><br></div>
          <br>
@@ -39,34 +38,7 @@
       </div>
      </div>
      </div>
-    <div class="pending">
-       <div class="title">
-         <h4 style="font-size:20px">INCOMPLETE DETAILS</h4><br></div>
-          <ul class="w3-ul w3-card-4">
-
-
-        {% if pendings %}
-        {% for esm in pendings %}
-      <li class="w3-bar">
-      <!--<span onclick="this.parentElement.style.display='none'" class="w3-bar-item w3-button w3-white w3-xlarge w3-right">Continue</span>-->
-
-            <h3 class="w3-bar-item w3-hide-small" style="width:85px">{{ esm.esm_no }}</h3>
-           <div class="w3-bar-item">
-{#                <span class="w3-large">{{ esm.servicedetail__name }}</span><br>#}
-
-{#                <span>Army</span>#}
-                </div>
-                 <span> <input type="button" class="w3-bar-item w3-button w3-blue w3-medium w3-right" onclick="location.href='{% url "add ESM" esm.pk %}'" value="Continue" class="edit_dep" name="Edit" style="margin-right: 2px;"></span>
-
-        {% endfor %}
-<!--{#           #}-->
-
-    {% endif %}
-      </li>
-  </ul>
-    </div>
-    </div>
-{% endblock %}
+    {% endblock %}
 {% block script %}
     <script src="{% static "javascript/registration/add_users_home.js" %}"></script>
 {% endblock %}

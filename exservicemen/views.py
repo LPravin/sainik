@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
+from django.views.generic import ListView
+from verify_email.email_handler import send_verification_email
 from .forms import *
 from .models import *
 from django.contrib.auth import authenticate, login, logout
@@ -25,8 +27,12 @@ def homeview(request):
             return render(request, "exservicemen/usertemplates/home.html", {'zboard': zboard, 'name': name,
                                                                             'total_users':total_users})
         if user.role == 1:
-            profile = ServiceDetail.objects.get(ref=user)
-            name = profile.name
+            name = user.email
+            try:
+                check = LinkUserEsm.objects.get(ref_user=user)
+
+            except LinkUserEsm.DoesNotExist:
+                personalform = PersonalForm()
             return render(request, "exservicemen/usertemplates/home.html", {'name': name})
     return render(request, "exservicemen/usertemplates/home.html")
 
@@ -74,7 +80,7 @@ def userlogout(request):
 
 @login_required()
 def crud(request):
-    return render(request, 'exservicemen/UserForms/crud.html')
+    return render(request, 'exservicemen/officertemplates/crud.html')
 
 
 @login_required()
@@ -282,7 +288,6 @@ def contactformview(request):
 
 
 @login_required()
-@user_passes_test(wo_check)
 def addesm(request, pk):
     unregistered = ExServiceMen.objects.get(pk=pk)
     request.session['esm_no'] = unregistered.esm_no
@@ -371,7 +376,7 @@ def serviceformview(request):
             serviceform = ServiceForm()
         else:
             serviceform = ServiceForm(instance=check)
-    return render(request, "exservicemen/UserForms/service.html",{'serviceform': serviceform})
+    return render(request, "exservicemen/UserForms/service.html", {'serviceform': serviceform})
 
 
 def load_record_office(request):
@@ -476,12 +481,30 @@ def delete_dependent(request, pk):
 
 def load_esm_list(request):
     zboard = request.session['zboard']
-    esm_list = ExServiceMen.objects.filter(zila_board_id=zboard)
+    # esm_list = ServiceDetail.objects.select_related('servicedetail__').filter(ref__zila_board_id=zboard).all()
+    # eee = ServiceDetail.objects.select_related()
+    esm_list = ExServiceMen.objects.select_related('servicedetail').values('esm_no',
+                                                   'servicedetail__name', 'servicedetail__service_no')[:5]
+    # esm_list.select_related('servicedetail')
     return render(request, 'exservicemen/UserForms/esm_list.html', {'esm_list': esm_list})
+
 
 def update_esm(request, pk):
     user = ExServiceMen.objects.get(esm_no=pk)
+    request.session['esm_no'] = user.esm_no
+    return redirect('service details')
 
+
+def search_esm(request):
+    search_id = request.GET.get('sb')
+    search_input = request.GET.get('search_input')
+    if search_id == "1":
+        esm_list = ExServiceMen.objects.filter(esm_no= search_input).select_related('servicedetail').values('esm_no',
+                                      'servicedetail__name','servicedetail__service_no')
+    else:
+        esm_list = ExServiceMen.objects.filter(servicedetail__name=search_input).select_related('servicedetail').\
+                   values('esm_no', 'servicedetail__name','servicedetail__service_no')
+    return render(request, 'exservicemen/UserForms/esm_list.html', {'esm_list': esm_list})
 
 
 def widowformview(request):
@@ -496,3 +519,24 @@ def widowformview(request):
     else:
         widowform = WidowForm
     return render(request, 'exservicemen/UserForms/widow.html', {'form': widowform})
+
+
+def filter(request):
+    esmbasic = ESMBasic
+    service = ServiceForm
+    employment = EmploymentForm
+    personal = PersonalForm
+    spouse = SpouseForm
+    context = {'service': service, "employment": employment, 'personal': personal, 'spouse': spouse, 'esmbasic': esmbasic}
+    return render(request, 'exservicemen/officertemplates/filter_esm.html', context=context)
+
+
+def applyview(request):
+    if request.method == "POST":
+        loginform = CustomUserCreationForm(request.POST)
+        if loginform.is_valid():
+            inactive_user = send_verification_email(request, loginform)
+            loginform.save()
+    else:
+        loginform = CustomUserCreationForm
+    return render(request, 'exservicemen/usertemplates/apply.html',{'loginform': loginform})

@@ -274,6 +274,11 @@ class ExServiceMen(models.Model):
         return self.esm_no
 
 
+class LinkUserEsm(models.Model):
+    ref_user = models.OneToOneField(MyUser, on_delete=models.CASCADE)
+    ref_Esm = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE)
+
+
 class WidowDetail(models.Model):
     ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE)
     spouse_esm_no = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE, related_name='esm_reference')

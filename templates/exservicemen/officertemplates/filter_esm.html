@@ -1,0 +1,97 @@
+{% extends 'exservicemen/trail.html' %}
+
+
+{% load static %}
+{% block content %}
+    <div class="container2" style="width:90%;align-items:center;justify-content:center;margin-left:5%;">
+    <br>
+     <br>
+             <div class="title" style="display:flex;flex-direction:row;">
+                <i class="fas fa-filter fa-2x" style="margin-top:5px;"></i>
+                 <h4>SEARCH ESM DETAILS</h4><br></div>
+              <br>
+             <br>
+             <div class ="items" style="display:flex;flex-direction:row;">
+          <div class ="user-details"style="flex-direction:column; margin-right:5px;">
+          <div class="input-box" >
+                <span class="details">Service</span>
+           {{service.service}}
+            </div>
+            <div class="input-box">
+                <span class="details">Name Starts with</span>
+           {{service.name}}
+            </div>
+            </div>
+
+             <div class ="user-details" style="flex-direction:column; margin-right:5px;">
+                  <div class="input-box">
+                <span class="details">Registration Type</span>
+           {{esmbasic.reg_category}}
+            </div>
+          <div class="input-box"style="margin-right:5px;">
+                <span class="details">Trade</span>
+           {{service.trade}}
+            </div>
+            </div>
+
+             <div class ="user-details" style="flex-direction:column; margin-right:5px;">
+            <div class="input-box">
+                <span class="details">Rank Category</span>
+           {{service.rank_category}}
+            </div>
+
+            <div class="input-box">
+                <span class="details">Civil Qualification</span>
+           {{employment.civil_qualification}}
+            </div>
+            </div>
+
+             <div class ="user-details" style="margin-right:5px;flex-direction:column;">
+            <div class="input-box">
+                <span class="details">Rank Category</span>
+           {{employment.security_job}}
+            </div>
+
+            <div class="input-box" style="margin-top:17px;">
+               <button style=" background:#677eff;
+                    color:#fff;
+                    border:1px solid #808080;
+                    border-radius:4px;
+                    outline:none;
+                    padding:11px;">Filter</button>
+            </div>
+            </div>
+
+            </div>
+        <br>
+    <div class="content">
+      <div class="form-outer">
+<form action="#" method="post" autocomplete="off">
+          {% csrf_token %}
+
+
+
+    <div class="table-responsive">
+<table class="table table-hover">
+              <thead >
+                <tr >
+                  <th>ESM NO</th>
+                  <th>NAME</th>
+                  <th>REGISTRATION TYPE </th>
+                    <th>TRADE</th>
+                  <th>RANK CATEGORY</th>
+                  <th>CIVIL QUALIFICATION</th>
+                    <th>WILLINGNESS FOR WATCH AND WARD AND SECURITY JOB</th>
+                </tr>
+              </thead>
+            <tbody id="dep_list">
+            </tbody>
+</table>
+    </div>
+<br><br>
+      </form>
+      </div>
+    </div>
+ </div>
+
+{% endblock %}
