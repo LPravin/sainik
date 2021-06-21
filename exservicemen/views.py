@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.views.generic import ListView
-from verify_email.email_handler import send_verification_email
 from .forms import *
 from .models import *
 from django.contrib.auth import authenticate, login, logout
@@ -479,6 +478,48 @@ def delete_dependent(request, pk):
     return JsonResponse(data)
 
 
+def filter_esm(request):
+    zboard = request.session['zboard']
+    name = request.GET.get('name')
+    rc = request.GET.get('rc')
+    rcat = request.GET.get('rcat')
+    ro = request.GET.get('ro')
+    sj = request.GET.get('sj')
+    service = request.GET.get('service')
+    trade = request.GET.get('trade')
+    cq = request.GET.get('cq')
+    es = request.GET.get('es')
+    a = ExServiceMen.objects.filter(zila_board_id=zboard)
+    if name != "":
+        a = a.filter(servicedetail__name__icontains=name)
+    if rc != "":
+        a = a.filter(reg_category=rc)
+    if rcat != "":
+        a = a.filter(servicedetail__rank_category=rcat)
+    if ro != "":
+        a = a.filter(servicedetail__record_office_id=ro)
+    if sj != "":
+        a = a.filter(employmentdetail__security_job=sj)
+    if service != "":
+        a = a.filter(servicedetail__service_id=service)
+    if trade != "":
+        a = a.filter(servicedetail__trade_id=trade)
+    if cq != "":
+        a = a.filter(employmentdetail__civil_qualification_id=cq)
+    if es != "":
+        a = a.filter(employmentdetail__employment_status__exact=es)
+    return render(request, 'exservicemen/officertemplates/filter_esm_list.html', {'esm_list': a})
+
+
+def filter_esm_list(request):
+    zboard = request.session['zboard']
+    # esm_list = ServiceDetail.objects.select_related('servicedetail__').filter(ref__zila_board_id=zboard).all()
+    # eee = ServiceDetail.objects.select_related()
+    esm_list = ExServiceMen.objects.select_related('servicedetail').only('servicedetail__name')
+    # esm_list.select_related('servicedetail')
+    return render(request, 'exservicemen/officertemplates/filter_esm_list.html', {'esm_list': esm_list})
+
+
 def load_esm_list(request):
     zboard = request.session['zboard']
     # esm_list = ServiceDetail.objects.select_related('servicedetail__').filter(ref__zila_board_id=zboard).all()
@@ -531,12 +572,14 @@ def filter(request):
     return render(request, 'exservicemen/officertemplates/filter_esm.html', context=context)
 
 
-def applyview(request):
-    if request.method == "POST":
-        loginform = CustomUserCreationForm(request.POST)
-        if loginform.is_valid():
-            inactive_user = send_verification_email(request, loginform)
-            loginform.save()
-    else:
-        loginform = CustomUserCreationForm
-    return render(request, 'exservicemen/usertemplates/apply.html',{'loginform': loginform})
+# def applyview(request):
+#     if request.method == "POST":
+#         loginform = CustomUserCreationForm(request.POST)
+#         if loginform.is_valid():
+#             inactive_user = send_verification_email(request, loginform)
+#     else:
+#         loginform = CustomUserCreationForm
+#     return render(request, 'exservicemen/usertemplates/apply.html',{'loginform': loginform})
+
+def detailview(request):
+    return render(request, 'exservicemen/officertemplates/esm_info_view.html')

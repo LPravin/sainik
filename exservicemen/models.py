@@ -314,7 +314,7 @@ class ServiceDetail(models.Model):
 
 
 class PensionDetail(models.Model):
-    ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE)
+    ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE, related_name='pensiondetail')
     unit_last_served = models.CharField(max_length=50)
     discharge_date = models.DateField()
     discharge_reason = models.ForeignKey(DischargeReason, on_delete=models.CASCADE, default=None)
@@ -354,7 +354,7 @@ class PersonalDetail(PersonalRef):
         ('F', 'Female')
     ]
 
-    ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE)
+    ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE, related_name='personaldetail')
     gender = models.CharField(max_length=1, choices=Genders, default=None)
     mother = models.CharField(max_length=100)
     father = models.CharField(max_length=100)
@@ -410,7 +410,7 @@ class EmploymentDetail(models.Model):
         ('S', 'State Government'),
         ('P', 'Private'),
     ]
-    ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE)
+    ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE, related_name='employmentdetail')
     civil_qualification = models.ForeignKey(CivilQualification, on_delete=models.CASCADE)
     specialization = models.ForeignKey(Specialization, on_delete=models.CASCADE, null=True, blank=True)
     test_passed = models.CharField(max_length=40, null=True, blank=True)
@@ -447,7 +447,7 @@ class SpouseDetail(PersonalRef):
         ('E', 'Employed'),
         ('U', 'UnEmployed')
     ]
-    ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE)
+    ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE, related_name='spousedetail')
     spouse_name = models.CharField(max_length=100, null=True, blank=True)
     dob = models.DateField(verbose_name="Date Of Birth", null=True, blank=True)
     marital_status = models.CharField(max_length=1, choices=MaritalStates, default=None)
@@ -489,7 +489,7 @@ class DependentDetail(models.Model):
         ('E', 'Employed'),
         ('U', 'UnEmployed')
     ]
-    ref = models.ForeignKey(ExServiceMen, on_delete=models.CASCADE)
+    ref = models.ForeignKey(ExServiceMen, on_delete=models.CASCADE, related_name='dependentdetail')
     dep_name = models.CharField(max_length=50, verbose_name="Name")
     dep_relation = models.CharField(max_length=1, choices=Dependents, default=None, verbose_name='Dependent Relation')
     dep_dob = models.DateField(verbose_name='Date of Birth')

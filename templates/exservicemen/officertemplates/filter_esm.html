@@ -4,23 +4,21 @@
 {% load static %}
 {% block content %}
     <div class="container2" style="width:90%;align-items:center;justify-content:center;margin-left:5%;">
-    <br>
-     <br>
              <div class="title" style="display:flex;flex-direction:row;">
                 <i class="fas fa-filter fa-2x" style="margin-top:5px;"></i>
-                 <h4>SEARCH ESM DETAILS</h4><br></div>
+                 <h4>FILTER</h4><br></div>
               <br>
-             <br>
              <div class ="items" style="display:flex;flex-direction:row;">
           <div class ="user-details"style="flex-direction:column; margin-right:5px;">
-          <div class="input-box" >
+            <div class="input-box">
+                <span class="details">Name Contains</span>
+           {{service.name}}
+            </div>
+              <div class="input-box" >
                 <span class="details">Service</span>
            {{service.service}}
             </div>
-            <div class="input-box">
-                <span class="details">Name Starts with</span>
-           {{service.name}}
-            </div>
+
             </div>
 
              <div class ="user-details" style="flex-direction:column; margin-right:5px;">
@@ -45,10 +43,21 @@
            {{employment.civil_qualification}}
             </div>
             </div>
+                 <div class ="user-details" style="flex-direction:column; margin-right:5px;">
+            <div class="input-box">
+                <span class="details">Record Office</span>
+           {{service.record_office}}
+            </div>
+
+            <div class="input-box">
+                <span class="details">Employment Status</span>
+           {{employment.employment_status}}
+            </div>
+            </div>
 
              <div class ="user-details" style="margin-right:5px;flex-direction:column;">
             <div class="input-box">
-                <span class="details">Rank Category</span>
+                <span class="details">Whether willing for security job</span>
            {{employment.security_job}}
             </div>
 
@@ -58,7 +67,7 @@
                     border:1px solid #808080;
                     border-radius:4px;
                     outline:none;
-                    padding:11px;">Filter</button>
+                    padding:11px;" id="filter">Filter</button>
             </div>
             </div>
 
@@ -74,17 +83,15 @@
     <div class="table-responsive">
 <table class="table table-hover">
               <thead >
-                <tr >
+                <tr>
                   <th>ESM NO</th>
                   <th>NAME</th>
                   <th>REGISTRATION TYPE </th>
-                    <th>TRADE</th>
-                  <th>RANK CATEGORY</th>
-                  <th>CIVIL QUALIFICATION</th>
-                    <th>WILLINGNESS FOR WATCH AND WARD AND SECURITY JOB</th>
+                    <th>MOBILE NO</th>
+                    <th>ACTION</th>
                 </tr>
               </thead>
-            <tbody id="dep_list">
+            <tbody id="esm_list">
             </tbody>
 </table>
     </div>
@@ -93,5 +100,7 @@
       </div>
     </div>
  </div>
-
+{% endblock %}
+{% block script %}
+    <script src="{% static "javascript/registration/filter_esm.js" %}"></script>
 {% endblock %}

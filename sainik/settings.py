@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'exservicemen',
-    "verify_email.apps.VerifyEmailConfig",
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -126,11 +125,24 @@ AUTH_USER_MODEL = 'exservicemen.MyUser'
 
 LOGIN_URL = 'user-login/'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = '18352040@pondiuni.ac.in'
-EMAIL_HOST_PASSWORD = 'thelazy73'
 
-DEFAULT_FROM_EMAIL = 'noreply<no_reply@domain.com>'
+# def verified_callback(user):
+#     user.is_active = True
+
+
+# EMAIL_VERIFIED_CALLBACK = verified_callback
+# EMAIL_FROM_ADDRESS = 'noreply@aliasaddress.com'
+# EMAIL_MAIL_SUBJECT = 'Confirm your email'
+# EMAIL_MAIL_HTML = 'mail_body.html'
+# EMAIL_MAIL_PLAIN = 'mail_body.txt'
+# EMAIL_TOKEN_LIFE = 60 * 60
+# EMAIL_PAGE_TEMPLATE = 'confirm_template.html'
+# EMAIL_PAGE_DOMAIN = 'http://mydomain.com/'
+#
+# # For Django Email Backend
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_HOST_USER = '18352040@pondiuni.ac.in'
+# EMAIL_HOST_PASSWORD = 'mYC00lP4ssw0rd'  # os.environ['password_key'] suggested
+# EMAIL_USE_TLS = True

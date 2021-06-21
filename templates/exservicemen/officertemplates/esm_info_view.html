@@ -1,0 +1,188 @@
+{% extends 'exservicemen/usertemplates/basic.html' %}
+{% block content %}
+<div class="container" style="max-width:100%;height:500vh;">
+
+
+ <div class="w3-bar w3-white">
+    <button class="w3-bar-item w3-button tablink w3-blue" onclick="openCity(event,'Service')">Service</button>
+    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Pension')">Pension</button>
+    <button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Personal')">Personal</button>
+<button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Contact')">Contact</button>
+<button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Employement')">Employement</button>
+<button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Family')">Family</button>
+<button class="w3-bar-item w3-button tablink" onclick="openCity(event,'Dependent')">Dependent</button>
+  </div>
+
+
+      <div class="w3-container w3-border city" id="Service">
+        <h3 style="text-align: center;margin-bottom: 20px;">SERVICE DETAILS</h3>
+ <table class="w3-table-all w3-card-4">
+    <tr>
+      <th>ESM Name</th>
+      <th>Date Of Birth</th>
+      <th>Mobile No</th>
+ <th>Enrollment Date </th>
+ <th>ESM Type</th>
+ <th>Service</th>
+ <th>Record Office</th>
+ <th>Rank Category</th>
+ <th>Rank</th>
+ <th>Service No</th>
+ <th>Group</th>
+<th>Trade</th>
+<th>Date of ESM Registration</th>
+ <th>World War II</th>
+ <th>Operations attended</th>
+ <th>Decorations</th>
+
+    </tr>
+
+  </table>
+</div>
+  <div class="w3-container w3-border city" id="Pension" style="display:none;">
+        <h3 style="text-align: center;margin-bottom: 20px;">PENSION DETAILS</h3>
+ <table class="w3-table-all w3-card-4">
+    <tr>
+      <th>Unit Last Served</th>
+      <th>Date of Discharge</th>
+      <th>Reason for Discharge</th>
+ <th>Medical category while discharge</th>
+ <th>Character while discharge</th>
+ <th>Discharge Book No</th>
+ <th>Service Number</th>
+ <th>Pensioner</th>
+ <th>PPO No</th>
+ <th>Pension Sanctioned</th>
+ <th>Present Pension</th>
+ <th>Person with disability</th>
+ <th>Disability pension</th>
+ <th>Percentage of Disability</th>
+
+    </tr>
+
+  </table>
+</div>
+  <div class="w3-container w3-border city" id="Personal"style="display:none;">
+        <h3 style="text-align: center;margin-bottom: 20px;">Contact DETAILS</h3>
+ <table class="w3-table-all w3-card-4">
+    <tr>
+      <th>Gender</th>
+      <th>Father Name</th>
+      <th>Mother Name</th>
+ <th>Religion </th>
+ <th>Caste category</th>
+ <th>Birth Place</th>
+ <th>Birth state</th>
+ <th>Birth District</th>
+ <th>Aadhaar No</th>
+ <th>Voter ID No</th>
+ <th>PAN No</th>
+ <th>CSD No</th>
+ <th>ECHS No</th>
+ <th>Identification Mark 1</th>
+ <th>Identification Mark 2</th>
+
+
+    </tr>
+
+  </table>
+</div>
+  <div class="w3-container w3-border city" id="Employement" style="display:none;">
+        <h3 style="text-align: center;margin-bottom: 20px;">EMPLOYEMENT DETAILS</h3>
+ <table class="w3-table-all w3-card-4">
+    <tr>
+      <th>Civil Qualification</th>
+      <th>Equivalent Test Passed</th>
+      <th>Employement Status</th>
+ <th>Sector </th>
+ <th>Monthly Income</th>
+ <th>Department</th>
+
+
+    </tr>
+
+  </table>
+</div>
+  <div class="w3-container w3-border city" id="Contact" style="display:none;">
+        <h3 style="text-align: center;margin-bottom: 20px;">MARIED DETAILS</h3>
+ <table class="w3-table-all w3-card-4">
+    <tr>
+      <th>House No</th>
+      <th>House Name</th>
+      <th>Street</th>
+ <th>District </th>
+ <th>Pincode</th>
+ <th>Telephone No</th>
+
+
+    </tr>
+
+  </table>
+</div>
+<div class="w3-container w3-border city" id="Family" style="display:none;">
+        <h3 style="text-align: center;margin-bottom: 20px;">FAMILY DETAILS</h3>
+ <table class="w3-table-all w3-card-4">
+    <tr>
+      <th>Name of the Kin</th>
+      <th>Relation to the ESM</th>
+      <th>Marital Status</th>
+ <th>Spouse Name</th>
+ <th>Date of Marriage</th>
+ <th>Spouse Relation</th>
+ <th>Spouse DOB</th>
+ <th>Spouse Qualification</th>
+ <th>Spouse Employement Status</th>
+ <th>Spouse Employement Profession</th>
+ <th>Date of Retirement…
+
+ spouse</th>
+ <th>Spouse Aadhaar No</th>
+ <th>Spouse Voter ID No</th>
+ <th>Spouse PAN Card No</th>
+<th>Spouse CSD No</th>
+ <th>Spouse ECHS No</th>
+ <th>Spouse Identification Mark 1</th>
+ <th>Spouse Identification Mark 2</th>
+
+    </tr>
+
+  </table>
+</div>
+<div class="w3-container w3-border city" id="Dependent" style="display:none;">
+        <h3 style="text-align: center;margin-bottom: 20px;">PENSION DETAILS</h3>
+ <table class="w3-table-all w3-card-4">
+    <tr>
+      <th>Name</th>
+      <th>Relation</th>
+      <th>DOB</th>
+ <th>Aadhaar No</th>
+ <th>Qualification</th>
+ <th>Academic Year</th>
+ <th>Employed</th>
+ <th>Married</th>
+ <th>Action</th>
+
+
+    </tr>
+
+  </table>
+</div>
+</div>
+{% endblock %}
+
+
+   <script>
+function openCity(evt, cityName) {
+  var i, x, tablinks;
+  x = document.getElementsByClassName("city");
+  for (i = 0; i < x.length; i++) {
+    x[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < x.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" w3-blue", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " w3-blue";
+}
+</script>
