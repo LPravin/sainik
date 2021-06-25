@@ -5,7 +5,7 @@
 {% block content %}
 
 
- <div class="container">
+ <div class="container1">
      <div class="title">
          <h4>WIDOW REGISTRATION FORM</h4><br></div>
          <br>
@@ -23,30 +23,48 @@
       <div class="input"  style="display:flex; flex-direction: row;">
         <input type="text" style="width:30%; margin-right: 3px;" value="{{ rsbcode }}" disabled >
           <input type="text" style="width:20%; margin-right: 3px;" value="{{ zsbcode }}" disabled>
-       {{ esmbasic.esm_no }}
+       {{ form.spouse_esm_no }}
           <p class ="errorlist">{{ esmbasic.esm_no.errors.as_text }}</p>
+			<button type="button" class="Next" id="get_esm_data">GET</Button>
           </div>
+
     </div>
-            <div class="input-box" id="div_id_spouse_csd_id">
-      <span class="details">EXPIRY DATE OF ESM</span>
-      {{ form.expiry_date }}
-    </div>
-             <div class="input-box" id="div_id_spouse_csd_id">
-      <span class="details">WIDOW NEXT OF KIN</span>
-      {{ form.widow_next_of_kin }}
-    </div>
-             <div class="input-box" id="div_id_spouse_csd_id">
-      <span class="details">WIDOW NEXT OF KIN RELATION</span>
-      {{ form.widow_next_of_kin_relation }}
-    </div>
-            <div class="input-box" id="div_id_spouse_csd_id">
-      <span class="details">FAMILY PENSION</span>
-      {{ form.family_pension }}
-    </div>
-        <div class="input-box" id="div_id_spouse_csd_id">
-      <span class="details">WIDOW EXPIRY DATE</span>
-      {{ form.widow_expiry_date }}
-    </div>
+            <table class="table table-hover">
+              <thead >
+                <tr >
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">ESM NAME</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">ESM DOB</th>
+                    <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">MARITAL STATUS</th>
+                    <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">SPOUSE NAME</th>
+                  <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">SPOUSE DOB</th>
+                    <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">ESM EXPIRY DATE</th>
+                    <th scope="col" style="text-align: left; padding:20px 8px;background: #808080; color:#fff;">DEATH CERTIFICATE</th>
+                </tr>
+              </thead>
+            <tbody id="esm_list">
+
+            </tbody>
+</table>
+{#            <div class="input-box" id="div_id_spouse_csd_id">#}
+{#      <span class="details">EXPIRY DATE OF ESM</span>#}
+{#      {{ form.expiry_date }}#}
+{#    </div>#}
+{#             <div class="input-box" id="div_id_spouse_csd_id">#}
+{#      <span class="details">WIDOW NEXT OF KIN</span>#}
+{#      {{ form.widow_next_of_kin }}#}
+{#    </div>#}
+{#             <div class="input-box" id="div_id_spouse_csd_id">#}
+{#      <span class="details">WIDOW NEXT OF KIN RELATION</span>#}
+{#      {{ form.widow_next_of_kin_relation }}#}
+{#    </div>#}
+{#            <div class="input-box" id="div_id_spouse_csd_id">#}
+{#      <span class="details">FAMILY PENSION</span>#}
+{#      {{ form.family_pension }}#}
+{#    </div>#}
+{#        <div class="input-box" id="div_id_spouse_csd_id">#}
+{#      <span class="details">WIDOW EXPIRY DATE</span>#}
+{#      {{ form.widow_expiry_date }}#}
+{#    </div>#}
             </div>
         <div class="btn-box">
 			<button type="button" class="Next" onclick="">BACK</Button>

@@ -243,11 +243,6 @@ class Specialization(models.Model):
         return self.specialization
 
 
-class BasicDocument(models.Model):
-    ref = models.OneToOneField(MyUser, on_delete=models.CASCADE)
-    discharge_book = models.FileField(upload_to='documents')
-
-
 class ExServiceMen(models.Model):
     statuses = (
         (1, 'ACTIVE'),
@@ -350,8 +345,8 @@ class PersonalRef(models.Model):
 class PersonalDetail(PersonalRef):
     Genders = [
         ('', '---------'),
-        ('M', 'Male'),
-        ('F', 'Female')
+        ('M', 'MALE'),
+        ('F', 'FEMALE')
     ]
 
     ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE, related_name='personaldetail')
@@ -401,14 +396,14 @@ class PresentAddress(Address):
 class EmploymentDetail(models.Model):
     EStates = [
         ('', '---------'),
-        ('E', 'Employed'),
-        ('U', 'Unemployed'),
-        ('R', 'Retired')
+        ('E', 'EMPLOYED'),
+        ('U', 'UNEMPLOYED'),
+        ('R', 'RETIRED')
     ]
     Sectors = [
-        ('C', 'Central Government'),
-        ('S', 'State Government'),
-        ('P', 'Private'),
+        ('C', 'CENTRAL GOVERNMENT'),
+        ('S', 'STATE GOVERNMENT'),
+        ('P', 'PRIVATE'),
     ]
     ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE, related_name='employmentdetail')
     civil_qualification = models.ForeignKey(CivilQualification, on_delete=models.CASCADE)
@@ -429,23 +424,33 @@ class EmploymentDetail(models.Model):
         return self.ref.esm_no
 
 
-class SpouseDetail(PersonalRef):
+class BasicDocument(models.Model):
+    aadhaar_card = models.ImageField(null=True)
+    pan_card = models.ImageField(null=True)
+    echs_card = models.ImageField(null=True)
+    voter_id = models.ImageField(null=True)
+
+    class Meta:
+        abstract = True
+
+
+class SpouseDetail(PersonalRef, BasicDocument):
     MaritalStates = [
         ('', '---------'),
-        ('S', 'Single'),
-        ('M', 'Married'),
-        ('D', 'Divorced'),
-        ('W', 'Widower')
+        ('S', 'SINGLE'),
+        ('M', 'MARRIED'),
+        ('D', 'DIVORCED'),
+        ('W', 'WIDOWER')
     ]
     SpouseRelation = [
         ('', '---------'),
-        ('W', 'Wife'),
-        ('H', 'Husband')
+        ('W', 'WIFE'),
+        ('H', 'HUSBAND')
     ]
     EmploymentStatus = [
         ('', '---------'),
-        ('E', 'Employed'),
-        ('U', 'UnEmployed')
+        ('E', 'EMPLOYED'),
+        ('U', 'UNEMPLOYED')
     ]
     ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE, related_name='spousedetail')
     spouse_name = models.CharField(max_length=100, null=True, blank=True)
@@ -469,25 +474,25 @@ class SpouseDetail(PersonalRef):
         return self.ref.esm_no
 
 
-class DependentDetail(models.Model):
+class DependentDetail(BasicDocument):
     MaritalState = [
         ('', '---------'),
-        ('U', 'Unmarried'),
-        ('M', 'Married'),
+        ('U', 'UNMARRIED'),
+        ('M', 'MARRIED'),
     ]
     Dependents = [
         ('', '---------'),
-        ('W', 'Wife'),
-        ('S', 'Son'),
-        ('D', 'Daughter'),
-        ('H', 'Husband'),
-        ('F', 'Father'),
-        ('M', 'Mother'),
+        ('W', 'WIFE'),
+        ('S', 'SON'),
+        ('D', 'DAUGHTER'),
+        ('H', 'HUSBAND'),
+        ('F', 'FATHER'),
+        ('M', 'MOTHER'),
     ]
     EmploymentStatus = [
         ('', '---------'),
-        ('E', 'Employed'),
-        ('U', 'UnEmployed')
+        ('E', 'EMPLOYED'),
+        ('U', 'UUEMPLOYED')
     ]
     ref = models.ForeignKey(ExServiceMen, on_delete=models.CASCADE, related_name='dependentdetail')
     dep_name = models.CharField(max_length=50, verbose_name="Name")
@@ -506,12 +511,15 @@ class DependentDetail(models.Model):
         return self.dep_name
 
 
-class Profile(models.Model):
-    profile_user = models.OneToOneField(MyUser, on_delete=models.CASCADE)
-    profile_esm = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.profile_esm.esm_no
+class ESMDocument(BasicDocument):
+    ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE, related_name='esmdocument')
+    dc_book = models.FileField(null=True)
+    PPO = models.FileField(null=True)
+    id_card = models.ImageField(null=True)
+    bank_pass_book = models.ImageField(null=True)
+    self_photo = models.ImageField(null=True)
+    group_photo = models.ImageField(null=True)
+    esm_death_certificate = models.ImageField(null=True)
 
 
 class OfficerDetail(models.Model):

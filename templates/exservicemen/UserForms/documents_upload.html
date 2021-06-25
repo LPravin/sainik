@@ -1,0 +1,105 @@
+{% extends 'exservicemen/usertemplates/basic.html' %}
+{% load static %}
+    {% block title %} APPLY FOR REGISTRATION {% endblock %}
+{% block content %}
+     <div class="container">
+     <div class="title">
+         <h4>ADD NEW ESM DETAILS</h4><br></div>
+
+         <div class="list-unstyled multi-steps" >
+                <p class="li">Service</p>
+                <p class="li" >Pension</p>
+                <p class="li">Personal</p>
+                <p class="li">Contact</p>
+                <p class="li">Employment</p>
+                <p class="li">Family</p>
+                <p class="li">Dependent</p>
+             <p class="li is-active">Documents</p>
+           </div><br>
+     <div class="content">
+      <div class="form-outer">
+ <form enctype="multipart/form-data" id="addesmform" name="addesmform" autocomplete="on"
+                  method="post" action="">
+ {% csrf_token %}
+        <div class="detailname" style="overflow: hidden;
+          border: 1px solid #ccc;
+          background-color: #f1f1f1;">
+            <h4>ESM NO: {{ request.session.esm_no }}</h4>
+            </div>
+     <h4>Ex-Servicemen DOCUMENTS</h4>
+               <div class="user-details">
+                   <div class="input-box">
+              <span class="details">Aadhaar Card</span>
+                {{ edoc.aadhaar_card }}
+                   </div>
+                   <div class="input-box">
+            <span class="details">PAN Card</span>
+            {{ edoc.pan_card }}
+                   </div>
+                   <div class="input-box">
+      <span class="details">ECHS Card</span>
+     {{ edoc.echs_card }}
+                   </div>
+                   <div class="input-box">
+            <span class="details">Voter ID</span>
+            {{ edoc.voter_id }}
+                   </div>
+                   <div class="input-box">
+                   <span class="details">Discharge Book</span>
+            {{ edoc.dc_book }}
+                   </div>
+                   <div class="input-box">
+                   <span class="details">PPO</span>
+            {{ edoc.PPO }}
+                   </div>
+                   <div class="input-box">
+                   <span class="details">ZSB ID card</span>
+            {{ edoc.id_card }}
+                   </div>
+                   <div class="input-box">
+                   <span class="details">Bank Pass Book</span>
+            {{ edoc.bank_pass_book }}
+                   </div>
+                   <div class="input-box">
+                   <span class="details">Self Photo</span>
+            {{ edoc.self_photo }}
+                   </div>
+                   <div class="input-box">
+                   <span class="details">Group Photo</span>
+            {{ edoc.group_photo }}
+                   </div>
+
+      </div>
+     <h4>Spouse DOCUMENTS</h4>
+     <div class="user-details">
+                   <div class="input-box">
+              <span class="details">Aadhaar Card</span>
+                {{ sdoc.aadhaar_card }}
+                   </div>
+                   <div class="input-box">
+            <span class="details">PAN Card</span>
+            {{ sdoc.pan_card }}
+                   </div>
+                   <div class="input-box">
+      <span class="details">ECHS Card</span>
+     {{ sdoc.echs_card }}
+                   </div>
+                   <div class="input-box">
+            <span class="details">Voter ID</span>
+            {{ sdoc.voter_id }}
+                   </div>
+      </div>
+     <h4>Dependent DOCUMENTS</h4>
+     <div class="user-details">
+     </div>
+            <div class="btn-box">
+			<button type="submit" name="Next" value="submit" class="Next">Next</Button>
+            </div>
+     </form>
+      </div>
+     </div>
+     </div>
+{% endblock %}
+{#{% block script %}#}
+{#    <script src="{% static "javascript/registration/service.js" %}"></script>#}
+{#{% endblock %}#}

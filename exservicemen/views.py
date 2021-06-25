@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
+import xlwt
 
 
 def wo_check(user):
@@ -286,6 +287,20 @@ def contactformview(request):
     return render(request, 'exservicemen/UserForms/contact.html', {'form1': form1, 'form2': form2})
 
 
+def documentformview(request):
+    esm_no = request.session['esm_no']
+    user = ExServiceMen.objects.get(esm_no=esm_no)
+    if request.method == "POST":
+        esmdocform = ESMDocumentForm
+        spousedocform = SpouseDocumentForm
+        dependentdocform = DependentDocumentForm
+    else:
+        esmdocform = ESMDocumentForm
+        spousedocform = SpouseDocumentForm
+        dependentdocform = DependentDocumentForm
+    return render(request, 'exservicemen/UserForms/documents_upload.html', {'edoc': esmdocform,
+                                                        'sdoc': spousedocform, 'ddoc': dependentdocform})
+
 @login_required()
 def addesm(request, pk):
     unregistered = ExServiceMen.objects.get(pk=pk)
@@ -340,7 +355,7 @@ def addbasicinfo(request):
             if regcat != 2:
                 return redirect('service details')
             else:
-                return redirect('home')
+                return redirect('widow details')
 
     else:
         esmbasic = ESMBasic
@@ -508,6 +523,7 @@ def filter_esm(request):
         a = a.filter(employmentdetail__civil_qualification_id=cq)
     if es != "":
         a = a.filter(employmentdetail__employment_status__exact=es)
+    # a = a.select_related('servicedetail').values('servicedetail__name')
     return render(request, 'exservicemen/officertemplates/filter_esm_list.html', {'esm_list': a})
 
 
@@ -551,6 +567,11 @@ def search_esm(request):
 def widowformview(request):
     esm_no = request.session['esm_no']
     user = ExServiceMen.objects.get(esm_no=esm_no)
+    wo = request.user
+    zboard = WelfareOfficer.objects.get(ref=wo).zila_board
+    zsbcode = zboard.code
+    state = zboard.state
+    rsbcode = RajyaSainikBoard.objects.get(state=state).code
     if request.method == "POST":
         widowform = WidowForm(request.POST)
         if widowform.is_valid():
@@ -559,7 +580,16 @@ def widowformview(request):
             form.save()
     else:
         widowform = WidowForm
-    return render(request, 'exservicemen/UserForms/widow.html', {'form': widowform})
+    return render(request, 'exservicemen/UserForms/widow.html', {'form': widowform, 'zsbcode':zsbcode, 'rsbcode': rsbcode})
+
+
+def get_spouse_info(request):
+    s_esm_no = request.GET.get('s_esm_no')
+    try:
+        esm = ExServiceMen.objects.get(esm_no=s_esm_no)
+    except ExServiceMen.DoesNotExist:
+        esm = None
+    return render(request, 'exservicemen/UserForms/get_spouse_info.html', {'esm': esm})
 
 
 def filter(request):
@@ -570,6 +600,57 @@ def filter(request):
     spouse = SpouseForm
     context = {'service': service, "employment": employment, 'personal': personal, 'spouse': spouse, 'esmbasic': esmbasic}
     return render(request, 'exservicemen/officertemplates/filter_esm.html', context=context)
+
+
+def xlexport(request):
+    # zboard = request.session['zboard']
+    # name = request.GET.get('name')
+    # rc = request.GET.get('rc')
+    # rcat = request.GET.get('rcat')
+    # ro = request.GET.get('ro')
+    # sj = request.GET.get('sj')
+    # service = request.GET.get('service')
+    # trade = request.GET.get('trade')
+    # cq = request.GET.get('cq')
+    # es = request.GET.get('es')
+    # a = ExServiceMen.objects.filter(zila_board_id=zboard)
+    # if name != "":
+    #     a = a.filter(servicedetail__name__icontains=name)
+    # if rc != "":
+    #     a = a.filter(reg_category=rc)
+    # if rcat != "":
+    #     a = a.filter(servicedetail__rank_category=rcat)
+    # if ro != "":
+    #     a = a.filter(servicedetail__record_office_id=ro)
+    # if sj != "":
+    #     a = a.filter(employmentdetail__security_job=sj)
+    # if service != "":
+    #     a = a.filter(servicedetail__service_id=service)
+    # if trade != "":
+    #     a = a.filter(servicedetail__trade_id=trade)
+    # if cq != "":
+    #     a = a.filter(employmentdetail__civil_qualification_id=cq)
+    # if es != "":
+    #     a = a.filter(employmentdetail__employment_status__exact=es)
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename="users.xls"'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Report')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['Username', 'First name', 'Last name', 'Email address', ]
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+    font_style = xlwt.XFStyle()
+
+    rows = ServiceDetail.objects.all().values_list('name', 'dob', 'world_war_2', 'rank')
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, row[col_num], font_style)
+    wb.save(response)
+    return response
 
 
 # def applyview(request):

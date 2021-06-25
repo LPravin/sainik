@@ -1,11 +1,3 @@
-::-webkit-scrollbar{width:20px;height:20px;background: #004A77;}
-::-webkit-scrollbar-button{width:2px;height:2px;background: #000000;}
-div::-webkit-scrollbar-thumb {
-  background-color: #f3f0dd;
-  border-radius: 6px;
-  border: 3px solid #154734;
-}
-
 
 .flex{
     display:flex;
@@ -23,6 +15,17 @@ div::-webkit-scrollbar-thumb {
   border-radius: 5px;
   overflow-y: scroll;
   box-shadow: 0 5px 10px rgba(0,0,0,0.15);
+}
+
+
+.pending .title h5{
+  font-size: 20;
+  font-weight: 800;
+  position: relative;
+  color: #1D1E89;
+}
+.pending .card{
+    bottom: 10px;
 }
 
 .container{
@@ -157,12 +160,14 @@ float:left;
   top:0;
   left:50px;
 }
+.items .user-details,
 .content form .user-details{
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   margin: 20px 0 12px 0;
 }
+
 form h4{
    text-align: left;
     margin-bottom: 20px;
@@ -408,7 +413,9 @@ th, td {
 	 border-style: solid;
 	 border-color: #677eff;
 	 border-radius: 50%;
+
 }
+
  .multi-steps > .li::after {
   content: "";
   height: 3px;
@@ -436,21 +443,15 @@ th, td {
 	 border-color: #ededed;
 }
 @media (max-width:460px){
+   .container2 .items{
+        display:flex;
+        flex-direction:column;
+
+}
 	 .multi-steps .li{
 		 color:white;
 	 }
 	.multi-steps > .li.is-active ~ .li {
 	 color: #fff;
 }
-}
-.container2{
-  max-width: 1500px;
-  width: 100%;
-  margin-top: 30px;
-  left:1%;
-  position:absolute;
-  background-color: #fff;
-  padding: 25px 30px;
-  border-radius: 5px;
-  box-shadow: 0 5px 10px rgba(0,0,0,0.15);
 }

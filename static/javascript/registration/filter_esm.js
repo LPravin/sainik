@@ -36,6 +36,18 @@ $("#filter").click(function (){
             }
         });
 });
+$("#export").click(function (){
+    const url = 'ajax/export_filtered_esm';
+    $.ajax({
+            url: url,
+            data: {
+
+            },
+            success: function (data) {
+
+            }
+        });
+});
 $(document).ready(function(){
 load_esm_list();
  });

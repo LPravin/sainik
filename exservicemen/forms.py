@@ -297,7 +297,7 @@ class DependentForm(ModelForm):
 
     class Meta:
         model = DependentDetail
-        exclude = ['ref', 'dep_no']
+        exclude = ['ref']
 
         widgets = {
             'dep_dob': forms.DateInput(attrs={'type': 'date'}),
@@ -363,15 +363,35 @@ class TransferForm(ModelForm):
 
 class WidowForm(ModelForm):
     expiry_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}))
+    spouse_esm_no = forms.CharField(max_length=4, widget=forms.TextInput(attrs={'onkeydown': "return numOnly(event)"}))
 
     class Meta:
         model = WidowDetail
         exclude = ['ref']
         widgets = {
-            'spouse_esm_no': forms.TextInput(attrs={'maxlenght': '4'}),
             'widow_expiry_date': forms.DateInput(attrs={'type': 'date'})
         }
 
+
+class ESMDocumentForm(ModelForm):
+
+    class Meta:
+        model = ESMDocument
+        exclude = ['ref']
+
+
+class SpouseDocumentForm(ModelForm):
+
+    class Meta:
+        model = SpouseDetail
+        fields = ['aadhaar_card', 'pan_card', 'echs_card', 'voter_id']
+
+
+class DependentDocumentForm(ModelForm):
+
+    class Meta:
+        model = DependentDetail
+        fields = ['aadhaar_card', 'pan_card', 'echs_card', 'voter_id']
 
 # class FilterService(ModelForm):
 #     service = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple(), queryset=Service.objects.all())

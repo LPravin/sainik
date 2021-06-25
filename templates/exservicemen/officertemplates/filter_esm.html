@@ -26,7 +26,7 @@
                 <span class="details">Registration Type</span>
            {{esmbasic.reg_category}}
             </div>
-          <div class="input-box"style="margin-right:5px;">
+          <div class="input-box" style="margin-right:5px;">
                 <span class="details">Trade</span>
            {{service.trade}}
             </div>
@@ -57,6 +57,21 @@
 
              <div class ="user-details" style="margin-right:5px;flex-direction:column;">
             <div class="input-box">
+                <span class="details">Whether willing for job</span>
+           {{employment.security_job}}
+            </div>
+            <div class="input-box" style="margin-top:17px;">
+               <button style=" background:#677eff;
+                    color:#fff;
+                    border:1px solid #808080;
+                    border-radius:4px;
+                    outline:none;
+                    padding:11px;" id="filter">Filter</button>
+            </div>
+            </div>
+                 <div class ="user-details" style="margin-right:5px;flex-direction:column;">
+
+                     <div class="input-box">
                 <span class="details">Whether willing for security job</span>
            {{employment.security_job}}
             </div>
@@ -67,7 +82,7 @@
                     border:1px solid #808080;
                     border-radius:4px;
                     outline:none;
-                    padding:11px;" id="filter">Filter</button>
+                    padding:11px;" id="export" onclick="location.href='{% url "export" %}'">Export to Excel</button>
             </div>
             </div>
 
