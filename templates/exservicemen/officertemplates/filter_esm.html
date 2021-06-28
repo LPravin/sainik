@@ -1,64 +1,96 @@
 {% extends 'exservicemen/trail.html' %}
-
-
 {% load static %}
 {% block content %}
+    <form action="#"  name="form"  id="form" method="post">
     <div class="container2" style="width:90%;align-items:center;justify-content:center;margin-left:5%;">
              <div class="title" style="display:flex;flex-direction:row;">
                 <i class="fas fa-filter fa-2x" style="margin-top:5px;"></i>
                  <h4>FILTER</h4><br></div>
               <br>
-             <div class ="items" style="display:flex;flex-direction:row;">
-          <div class ="user-details"style="flex-direction:column; margin-right:5px;">
-            <div class="input-box">
+             <div class ="items">
+          <div class ="user-details">
+            <div class="input-box1">
                 <span class="details">Name Contains</span>
-           {{service.name}}
+           {{form.name_contains}}
             </div>
-              <div class="input-box" >
-                <span class="details">Service</span>
-           {{service.service}}
-            </div>
-
-            </div>
-
-             <div class ="user-details" style="flex-direction:column; margin-right:5px;">
-                  <div class="input-box">
+              <div class="input-box1">
                 <span class="details">Registration Type</span>
-           {{esmbasic.reg_category}}
+           {{form.registration_types}}
             </div>
-          <div class="input-box" style="margin-right:5px;">
+              <div class="input-box1">
+                <span class="details">Service</span>
+           {{form.services}}
+            </div>
+              <div class="input-box1">
+                <span class="details">ESM Type</span>
+           {{form.esm_type}}
+            </div>
+          <div class="input-box1">
                 <span class="details">Trade</span>
-           {{service.trade}}
+           {{form.trades}}
             </div>
-            </div>
-
-             <div class ="user-details" style="flex-direction:column; margin-right:5px;">
-            <div class="input-box">
+              <div class="input-box1">
                 <span class="details">Rank Category</span>
-           {{service.rank_category}}
-            </div>
-
-            <div class="input-box">
-                <span class="details">Civil Qualification</span>
-           {{employment.civil_qualification}}
+           {{form.rank_categories}}
             </div>
             </div>
-                 <div class ="user-details" style="flex-direction:column; margin-right:5px;">
-            <div class="input-box">
+             <div class ="user-details">
+                 <div class="input-box1">
                 <span class="details">Record Office</span>
-           {{service.record_office}}
+           {{form.record_offices}}
             </div>
-
-            <div class="input-box">
+            <div class="input-box1">
+                <span class="details">Civil Qualification</span>
+           {{form.civil_qualifications}}
+            </div>
+            <div class="input-box1">
                 <span class="details">Employment Status</span>
-           {{employment.employment_status}}
+           {{form.employment_status}}
+            </div>
+                 <div class="input-box1">
+                <span class="details">Registered for Employment</span>
+           {{form.employment_registration}}
+            </div>
+                 <div class="input-box1">
+                <span class="details">Willing for Security job</span>
+           {{form.security_job}}
+            </div>
+                 <div class="input-box1">
+                <span class="details">Marital Status</span>
+           {{form.marital_status}}
             </div>
             </div>
-
-             <div class ="user-details" style="margin-right:5px;flex-direction:column;">
-            <div class="input-box">
-                <span class="details">Whether willing for job</span>
-           {{employment.security_job}}
+            <div class ="user-details">
+            <div class="input-box1">
+                <span class="details">Age</span>
+           {{form.age_completed}}
+                <span class="details">As of</span>
+           {{form.dob_date}}
+            </div>
+                 <div class="input-box1">
+                <span class="details">Enrollment Date</span>
+           {{form.enrollment_date}}
+                <span class="details">Condition</span>
+           {{form.ed_conditions}}
+            </div>
+                 <div class="input-box1">
+                <span class="details">Date of discharge</span>
+           {{form.date_of_discharge}}
+                <span class="details">Condition</span>
+           {{form.dod_conditions}}
+            </div>
+                <div class="input-box1">
+                <span class="details">City</span>
+           {{form.city}}
+            </div>
+                 <div class="input-box1">
+                <span class="details">District</span>
+           {{form.district}}
+            </div>
+                 <div class="input-box1">
+                <span class="details">State</span>
+           {{form.state}}
+            </div>
             </div>
             <div class="input-box" style="margin-top:17px;">
                <button style=" background:#677eff;
@@ -66,26 +98,20 @@
                     border:1px solid #808080;
                     border-radius:4px;
                     outline:none;
-                    padding:11px;" id="filter">Filter</button>
+                    padding:11px;" id="filter" type="button">Filter</button>
             </div>
             </div>
                  <div class ="user-details" style="margin-right:5px;flex-direction:column;">
-
-                     <div class="input-box">
-                <span class="details">Whether willing for security job</span>
-           {{employment.security_job}}
-            </div>
-
             <div class="input-box" style="margin-top:17px;">
                <button style=" background:#677eff;
                     color:#fff;
                     border:1px solid #808080;
                     border-radius:4px;
                     outline:none;
-                    padding:11px;" id="export" onclick="location.href='{% url "export" %}'">Export to Excel</button>
+                    padding:11px;" id="export" type="submit" >Export to Excel</button>
             </div>
             </div>
-
+{#onclick="location.href='{% url "export" %}'"#}
             </div>
         <br>
     <div class="content">
@@ -115,6 +141,7 @@
       </div>
     </div>
  </div>
+    </form>
 {% endblock %}
 {% block script %}
     <script src="{% static "javascript/registration/filter_esm.js" %}"></script>

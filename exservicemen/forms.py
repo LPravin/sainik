@@ -393,6 +393,61 @@ class DependentDocumentForm(ModelForm):
         model = DependentDetail
         fields = ['aadhaar_card', 'pan_card', 'echs_card', 'voter_id']
 
+
+class FilterForm(forms.Form):
+    reg_categories = (
+        ('', '---------'),
+        (1, 'ESM'),
+        (2, 'WIDOW'),
+        (3, 'WIDOW IN SERVICE / UNREGISTERED')
+    )
+    EStates = [
+        ('', '---------'),
+        ('E', 'EMPLOYED'),
+        ('U', 'UNEMPLOYED'),
+        ('R', 'RETIRED')
+    ]
+    date_choices = [
+        ('', '---------'),
+        (1, 'ON'),
+        (2, 'AFTER'),
+        (3, 'BEFORE'),
+        (4, 'ON OR AFTER'),
+        (5, 'ON OR BEFORE')
+    ]
+    YesNo = [
+        ('', '---------'),
+        ('Y', 'Yes'),
+        ('N', 'No')
+    ]
+    MaritalStates = [
+        ('', '---------'),
+        ('S', 'SINGLE'),
+        ('M', 'MARRIED'),
+        ('D', 'DIVORCED'),
+        ('W', 'WIDOWER')
+    ]
+    name_contains = forms.CharField(widget=forms.TextInput, required=False)
+    registration_types = forms.ChoiceField(widget=forms.Select, choices=reg_categories, required=False)
+    services = forms.ModelChoiceField(queryset=Service.objects.all(), required=False)
+    esm_type = forms.ModelChoiceField(queryset=ESMType.objects.all(), required=False)
+    trades = forms.ModelChoiceField(queryset=Trade.objects.all(), required=False)
+    rank_categories = forms.ModelChoiceField(queryset=RankCategory.objects.all(), required=False)
+    record_offices = forms.ModelChoiceField(queryset=RecordOffice.objects.all(),required=False)
+    employment_status = forms.ChoiceField(widget=forms.Select, choices=EStates, required=False)
+    employment_registration = forms.ChoiceField(widget=forms.Select, choices=YesNo, required=False)
+    security_job = forms.ChoiceField(widget=forms.Select, choices=YesNo, required=False)
+    civil_qualifications = forms.ModelChoiceField(queryset=CivilQualification.objects.all(), required=False)
+    dob_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
+    age_completed = forms.CharField(widget=forms.NumberInput, required=False)
+    enrollment_date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
+    ed_conditions = forms.ChoiceField(widget=forms.Select, choices=date_choices, required=False)
+    date_of_discharge = forms.DateField(widget=forms.DateInput(attrs={'type': 'date'}), required=False)
+    dod_conditions = forms.ChoiceField(widget=forms.Select, choices=date_choices, required=False)
+    marital_status = forms.ChoiceField(widget=forms.Select, choices=MaritalStates, required=False)
+    city = forms.CharField(widget=forms.TextInput, required=False)
+    district = forms.ModelChoiceField(queryset=District.objects.all(), required=False)
+    state = forms.ModelChoiceField(queryset=State.objects.all(), required=False)
 # class FilterService(ModelForm):
 #     service = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple(), queryset=Service.objects.all())
 #

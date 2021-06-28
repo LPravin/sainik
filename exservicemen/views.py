@@ -1,3 +1,5 @@
+import datetime
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.views.generic import ListView
@@ -9,6 +11,7 @@ from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import user_passes_test
 import xlwt
+from django.utils.dateparse import parse_date
 
 
 def wo_check(user):
@@ -493,40 +496,6 @@ def delete_dependent(request, pk):
     return JsonResponse(data)
 
 
-def filter_esm(request):
-    zboard = request.session['zboard']
-    name = request.GET.get('name')
-    rc = request.GET.get('rc')
-    rcat = request.GET.get('rcat')
-    ro = request.GET.get('ro')
-    sj = request.GET.get('sj')
-    service = request.GET.get('service')
-    trade = request.GET.get('trade')
-    cq = request.GET.get('cq')
-    es = request.GET.get('es')
-    a = ExServiceMen.objects.filter(zila_board_id=zboard)
-    if name != "":
-        a = a.filter(servicedetail__name__icontains=name)
-    if rc != "":
-        a = a.filter(reg_category=rc)
-    if rcat != "":
-        a = a.filter(servicedetail__rank_category=rcat)
-    if ro != "":
-        a = a.filter(servicedetail__record_office_id=ro)
-    if sj != "":
-        a = a.filter(employmentdetail__security_job=sj)
-    if service != "":
-        a = a.filter(servicedetail__service_id=service)
-    if trade != "":
-        a = a.filter(servicedetail__trade_id=trade)
-    if cq != "":
-        a = a.filter(employmentdetail__civil_qualification_id=cq)
-    if es != "":
-        a = a.filter(employmentdetail__employment_status__exact=es)
-    # a = a.select_related('servicedetail').values('servicedetail__name')
-    return render(request, 'exservicemen/officertemplates/filter_esm_list.html', {'esm_list': a})
-
-
 def filter_esm_list(request):
     zboard = request.session['zboard']
     # esm_list = ServiceDetail.objects.select_related('servicedetail__').filter(ref__zila_board_id=zboard).all()
@@ -592,46 +561,141 @@ def get_spouse_info(request):
     return render(request, 'exservicemen/UserForms/get_spouse_info.html', {'esm': esm})
 
 
+def filter_result(name, rt, rc, ro, service, trade, cq, es, et, er, sj, ms, ac, dd, ed, edc, dod, dc, city, dis, st):
+    a = ExServiceMen.objects.all()
+    if name:
+        a = a.filter(servicedetail__name__icontains=name)
+    if rt:
+        a = a.filter(reg_category=rt)
+    if rc:
+        a = a.filter(servicedetail__rank_category=rc)
+    if ro:
+        a = a.filter(servicedetail__record_office_id=ro)
+    if sj:
+        a = a.filter(employmentdetail__security_job=sj)
+    if service:
+        a = a.filter(servicedetail__service_id=service)
+    if trade:
+        a = a.filter(servicedetail__trade_id=trade)
+    if cq:
+        a = a.filter(employmentdetail__civil_qualification_id=cq)
+    if es:
+        a = a.filter(employmentdetail__employment_status__exact=es)
+    if et:
+        a = a.filter(servicedetail__reg_type__esm_type=et)
+    if er:
+        a = a.filter(employmentdetail__willing_for_job=er)
+    if ms:
+        a = a.filter(spousedetail__marital_status=ms)
+    if ac:
+        dd = parse_date(dd)
+        t = datetime.date(dd.year - int(ac), dd.month, dd.day)
+        a = a.filter(servicedetail__dob__lte=t)
+    if edc:
+        print('hello')
+        ed = parse_date(ed)
+        if edc == '1':
+            a = a.filter(servicedetail__enrollment_date=ed)
+        elif edc == '2':
+            a = a.filter(servicedetail__enrollment_date__gt=ed)
+        elif edc == '3':
+            a = a.filter(servicedetail__enrollment_date__lt=ed)
+        elif edc == '4':
+            a = a.filter(servicedetail__enrollment_date__gte=ed)
+        elif edc == '5':
+            a = a.filter(servicedetail__enrollment_date__lte=ed)
+    if dc:
+        dod = parse_date(dod)
+        if dc == '1':
+            a = a.filter(pensiondetail__discharge_date__exact=dod)
+        elif dc == '2':
+            a = a.filter(pensiondetail__discharge_date__gt=dod)
+        elif dc == '3':
+            a = a.filter(pensiondetail__discharge_date__lt=dod)
+        elif dc == '4':
+            a = a.filter(pensiondetail__discharge_date__gte=dod)
+        elif dc == '5':
+            a = a.filter(pensiondetail__discharge_date__lte=dod)
+    if city:
+        a = a.filter(presentaddress__city=city)
+    if dis:
+        a = a.filter(presentaddress__district=dis)
+    if st:
+        a = a.filter(presentaddress__state=st)
+    return a
+
+
 def filter(request):
-    esmbasic = ESMBasic
-    service = ServiceForm
-    employment = EmploymentForm
-    personal = PersonalForm
-    spouse = SpouseForm
-    context = {'service': service, "employment": employment, 'personal': personal, 'spouse': spouse, 'esmbasic': esmbasic}
-    return render(request, 'exservicemen/officertemplates/filter_esm.html', context=context)
+    if request.method == "POST":
+        # form = FilterForm(request.POST)
+        a = ExServiceMen.objects.all()
+        name = request.POST.get('name_contains')
+        service = request.POST.get('services')
+        if name:
+            a = a.filter(servicedetail__name__icontains=name)
+        if service:
+            a = a.filter(servicedetail__service_id=service)
+        response = HttpResponse(content_type='application/ms-excel')
+        response['Content-Disposition'] = 'attachment; filename="users.xls"'
+        wb = xlwt.Workbook(encoding='utf-8')
+        ws = wb.add_sheet('Report')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        columns = ['ESM NO', 'Name', 'Service No', 'Date of Birth', 'world_war_2']
+        for col_num in range(len(columns)):
+            ws.write(row_num, col_num, columns[col_num], font_style)
+        font_style = xlwt.XFStyle()
+        rows = a.values_list('esm_no', 'servicedetail__name', 'servicedetail__service_no', 'servicedetail__dob')
+        for row in rows:
+            row_num += 1
+            for col_num in range(len(row)):
+                ws.write(row_num, col_num, row[col_num], font_style)
+        wb.save(response)
+        return response
+
+    else:
+        form = FilterForm
+        return render(request, 'exservicemen/officertemplates/filter_esm.html', {'form':form})
+
+
+def filter_esm(request):
+    name = request.GET.get('name')
+    rt = request.GET.get('rt')
+    rc = request.GET.get('rc')
+    ro = request.GET.get('ro')
+    service = request.GET.get('service')
+    trade = request.GET.get('trade')
+    cq = request.GET.get('cq')
+    es = request.GET.get('es')
+    et = request.GET.get('et')
+    er = request.GET.get('er')
+    sj = request.GET.get('sj')
+    ms = request.GET.get('ms')
+    ac = request.GET.get('ac')
+    dd = request.GET.get('dd')
+    ed = request.GET.get('ed')
+    edc = request.GET.get('edc')
+    dod = request.GET.get('dod')
+    dc = request.GET.get('dc')
+    city = request.GET.get('city')
+    dis = request.GET.get('dis')
+    st = request.GET.get('st')
+    a = filter_result(name, rt, rc, ro, service, trade, cq, es, et, er, sj, ms, ac, dd, ed, edc, dod, dc, city, dis, st)
+    return render(request, 'exservicemen/officertemplates/filter_esm_list.html', {'esm_list': a})
 
 
 def xlexport(request):
-    # zboard = request.session['zboard']
-    # name = request.GET.get('name')
-    # rc = request.GET.get('rc')
-    # rcat = request.GET.get('rcat')
-    # ro = request.GET.get('ro')
-    # sj = request.GET.get('sj')
-    # service = request.GET.get('service')
-    # trade = request.GET.get('trade')
-    # cq = request.GET.get('cq')
-    # es = request.GET.get('es')
-    # a = ExServiceMen.objects.filter(zila_board_id=zboard)
-    # if name != "":
-    #     a = a.filter(servicedetail__name__icontains=name)
-    # if rc != "":
-    #     a = a.filter(reg_category=rc)
-    # if rcat != "":
-    #     a = a.filter(servicedetail__rank_category=rcat)
-    # if ro != "":
-    #     a = a.filter(servicedetail__record_office_id=ro)
-    # if sj != "":
-    #     a = a.filter(employmentdetail__security_job=sj)
-    # if service != "":
-    #     a = a.filter(servicedetail__service_id=service)
-    # if trade != "":
-    #     a = a.filter(servicedetail__trade_id=trade)
-    # if cq != "":
-    #     a = a.filter(employmentdetail__civil_qualification_id=cq)
-    # if es != "":
-    #     a = a.filter(employmentdetail__employment_status__exact=es)
+    name = request.GET.get('name')
+    rc = request.GET.get('rc')
+    rcat = request.GET.get('rcat')
+    ro = request.GET.get('ro')
+    sj = request.GET.get('sj')
+    service = request.GET.get('service')
+    trade = request.GET.get('trade')
+    cq = request.GET.get('cq')
+    es = request.GET.get('es')
+    a = filter_result(name, rc, rcat, ro, service, trade, cq, es)
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename="users.xls"'
     wb = xlwt.Workbook(encoding='utf-8')
@@ -639,18 +703,18 @@ def xlexport(request):
     row_num = 0
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
-    columns = ['Username', 'First name', 'Last name', 'Email address', ]
+    columns = ['ESM NO', 'Name', 'Service No', 'Date of Birth', ]
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
     font_style = xlwt.XFStyle()
-
-    rows = ServiceDetail.objects.all().values_list('name', 'dob', 'world_war_2', 'rank')
+    rows = a.values_list('esm_no','servicedetail__name', 'servicedetail__service_no', 'servicedetail__dob')
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
             ws.write(row_num, col_num, row[col_num], font_style)
     wb.save(response)
     return response
+
 
 
 # def applyview(request):

@@ -293,11 +293,13 @@ class ServiceDetail(models.Model):
     record_office = models.ForeignKey(RecordOffice, on_delete=models.CASCADE)
     group = models.ForeignKey(TradeGroup, on_delete=models.CASCADE)
     trade = models.ForeignKey(Trade, on_delete=models.DO_NOTHING)
+    other_trade = models.CharField(max_length=50, blank=True, null=True)
     prefix = models.ForeignKey(ServiceNoPrefix, on_delete=models.CASCADE, blank=True, null=True)
     service_no = models.CharField(max_length=9)
     suffix = models.ForeignKey(ServiceNoSuffix, on_delete=models.CASCADE, blank=True, null=True)
     rank_category = models.ForeignKey(RankCategory, on_delete=models.DO_NOTHING)
     rank = models.ForeignKey(Rank, on_delete=models.DO_NOTHING, default=None)
+    other_rank = models.CharField(max_length=50, blank=True, null=True)
     reg_date = models.DateField()
     enrollment_date = models.DateField()
     world_war_2 = models.CharField(max_length=1, choices=YesNo, default=None)
@@ -387,7 +389,7 @@ class PermanentAddress(Address):
 
 
 class PresentAddress(Address):
-    ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE, default=None)
+    ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE, default=None, related_name='presentaddress')
 
     def __str__(self):
         return self.ref.esm_no
