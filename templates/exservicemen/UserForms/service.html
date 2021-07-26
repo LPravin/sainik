@@ -47,12 +47,12 @@
      {{ serviceform.mobile }}
           <p class ="errorlist"> {{ serviceform.mobile.errors.as_text }}</p>
     </div>
-      <div class="input-box" id="div_id_rank">
+      <div class="input-box" id="div_id_enrollment_date">
             <span class="details">Enrollment Date</span>
             {{ serviceform.enrollment_date }}
               <p class ="errorlist">{{ serviceform.enrollment_date.errors.as_text }}</p>
           </div>
-            <div class="input-box" id="div_id_service">
+            <div class="input-box" id="div_esm_type">
                         <span class="details">ESM Type</span>
                         {{ serviceform.reg_type }}
                 <p class ="errorlist">{{ serviceform.reg_type.errors.as_text }}</p>
@@ -106,17 +106,17 @@
             {{ serviceform.reg_date }}
               <p class ="errorlist">{{ serviceform.reg_date.errors.as_text }}</p>
           </div>
-           <div class="input-box" id="div_id_rank">
+           <div class="input-box" id="div_id_world_war_2">
             <span class="details">Whether World War II Veteran?</span>
             {{ serviceform.world_war_2 }}
                <p class ="errorlist"> {{ serviceform.world_war_2.errors.as_text}}</p>
           </div>
-           <div class="input-box" id="div_id_rank">
+           <div class="input-box" id="div_id_operations">
             <span class="details">Operations Attended</span>
             {{ serviceform.operations }}
                <p class ="errorlist"> {{ serviceform.operations.errors.as_text }}</p>
           </div>
-           <div class="input-box" id="div_id_rank">
+           <div class="input-box" id="div_id_decorations">
             <span class="details">Decorations</span>
             {{ serviceform.decorations }}
                <p class ="errorlist">{{ serviceform.decorations.errors.as_text }}</p>

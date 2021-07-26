@@ -180,6 +180,10 @@ class ServiceForm(ModelForm):
                                                                                datetime.date.today().day)}),
             'mobile': forms.TextInput(attrs={'onkeydown': "return numOnly(event)",
                                              'onpaste': "return false"}),
+            'other_rank': forms.TextInput(attrs={"style": "text-transform: uppercase;",
+                                                 'onkeydown': "return alphaOnly(event)"}),
+            'other_trade': forms.TextInput(attrs={"style": "text-transform: uppercase;",
+                                                  'onkeydown': "return alphaOnly(event)"}),
             "prefix": forms.Select(attrs={'style': "width:40%; margin-right: 3px;"}),
             "suffix": forms.Select(attrs={'style': "width:30%; margin-right: 3px;"}),
             'service_no': forms.TextInput(attrs={'onkeydown': "return numOnly(event)",
@@ -234,7 +238,9 @@ class PensionForm(ModelForm):
 
     class Meta:
         model = PensionDetail
-        exclude = ['ref']
+        fields = ['unit_last_served', 'discharge_date', 'discharge_reason', 'medical_category', 'character',
+                  'discharge_book_no', 'ppo_no', 'pensioner_status', 'pension_sanctioned', 'present_pension',
+                  'whether_pwd', 'disability_pension', 'disability_percent', 'family_pension']
 
         widgets = {
             'discharge_date': forms.DateInput(attrs={'type': 'date'}),
@@ -248,10 +254,38 @@ class PensionForm(ModelForm):
 
     # def clean_ppo_no(self):
     #     p_status = self.cleaned_data['pensioner_status']
+    #     ppo_number = self.cleaned_data['ppo_no']
     #     if p_status == 'Y':
-    #         ppo_number = self.cleaned_data['ppo_no']
     #         if not ppo_number:
     #             raise ValidationError('PPO Number cannot be blank')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        p = cleaned_data.get("pensioner_status")
+        pwd_s = cleaned_data.get('whether_pwd')
+        ppo = cleaned_data.get("ppo_no")
+        ps = cleaned_data.get('pension_sanctioned')
+        pp = cleaned_data.get('present_pension')
+        dp = cleaned_data.get('disability_pension')
+        dper = cleaned_data.get('disability_percent')
+
+        if p == "Y":
+            if not ppo:
+                msg = 'PPO Number cannot be blank'
+                self.add_error('ppo_no', msg)
+            elif not ps:
+                msg = 'This field is required'
+                self.add_error('pension_sanctioned', msg)
+            elif not pp:
+                msg = 'This field is required'
+                self.add_error('present_pension', msg)
+        if pwd_s == "Y":
+            if not dp:
+                msg = 'This field is required'
+                self.add_error('disability_pension', msg)
+            elif not dper:
+                msg = 'This field is required'
+                self.add_error('disability_percent', msg)
 
 
 class EmploymentForm(ModelForm):
@@ -433,7 +467,7 @@ class FilterForm(forms.Form):
     esm_type = forms.ModelChoiceField(queryset=ESMType.objects.all(), required=False)
     trades = forms.ModelChoiceField(queryset=Trade.objects.all(), required=False)
     rank_categories = forms.ModelChoiceField(queryset=RankCategory.objects.all(), required=False)
-    record_offices = forms.ModelChoiceField(queryset=RecordOffice.objects.all(),required=False)
+    record_offices = forms.ModelChoiceField(queryset=RecordOffice.objects.all(), required=False)
     employment_status = forms.ChoiceField(widget=forms.Select, choices=EStates, required=False)
     employment_registration = forms.ChoiceField(widget=forms.Select, choices=YesNo, required=False)
     security_job = forms.ChoiceField(widget=forms.Select, choices=YesNo, required=False)

@@ -292,12 +292,12 @@ class ServiceDetail(models.Model):
     corps = models.ForeignKey(Corp, on_delete=models.DO_NOTHING, blank=True, null=True)
     record_office = models.ForeignKey(RecordOffice, on_delete=models.CASCADE)
     group = models.ForeignKey(TradeGroup, on_delete=models.CASCADE)
-    trade = models.ForeignKey(Trade, on_delete=models.DO_NOTHING)
+    trade = models.ForeignKey(Trade, on_delete=models.SET_NULL, blank=True, null=True)
     other_trade = models.CharField(max_length=50, blank=True, null=True)
     prefix = models.ForeignKey(ServiceNoPrefix, on_delete=models.CASCADE, blank=True, null=True)
     service_no = models.CharField(max_length=9)
     suffix = models.ForeignKey(ServiceNoSuffix, on_delete=models.CASCADE, blank=True, null=True)
-    rank_category = models.ForeignKey(RankCategory, on_delete=models.DO_NOTHING)
+    rank_category = models.ForeignKey(RankCategory, on_delete=models.SET_NULL, blank=True, null=True)
     rank = models.ForeignKey(Rank, on_delete=models.DO_NOTHING, default=None)
     other_rank = models.CharField(max_length=50, blank=True, null=True)
     reg_date = models.DateField()
@@ -380,7 +380,7 @@ class Address(models.Model):
 
 
 class PermanentAddress(Address):
-    ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE, default=None)
+    ref = models.OneToOneField(ExServiceMen, on_delete=models.CASCADE, default=None, related_name='permanentaddress')
     telephone = models.CharField(max_length=12, blank=True, null=True)
     is_address_same = models.BooleanField(default=False)
 
@@ -427,10 +427,10 @@ class EmploymentDetail(models.Model):
 
 
 class BasicDocument(models.Model):
-    aadhaar_card = models.ImageField(null=True)
-    pan_card = models.ImageField(null=True)
-    echs_card = models.ImageField(null=True)
-    voter_id = models.ImageField(null=True)
+    aadhaar_card = models.ImageField(null=True, blank=True)
+    pan_card = models.ImageField(null=True, blank=True)
+    echs_card = models.ImageField(null=True, blank=True)
+    voter_id = models.ImageField(null=True, blank=True)
 
     class Meta:
         abstract = True

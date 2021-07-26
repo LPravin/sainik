@@ -50,6 +50,13 @@
              if (mm < 10) {
             mm = '0' + mm;
             }
+             if (yyyy > 1945){
+                 $("#id_world_war_2")[0].selectedIndex = 2;
+                 $("#div_id_world_war_2").attr('hidden',true);
+             }
+             else{
+                 $("#div_id_world_war_2").attr('hidden',false);
+             }
            esm_reg_date.attr('min',(yyyy + '-' + mm + '-' + dd));
         });
 
@@ -58,7 +65,6 @@
                alert("Please select Enrollment Date");
            }
         });
-
         service.change(function () {
         const serviceid = $(this).val();
         if (serviceid !== '1') {
@@ -214,10 +220,4 @@ corps.change(function (){
                 // ro.val($("#id_record_office")[0].selectedIndex = 1);
             }
         });
-});
-
-ert.change(function (){
-   if (servicee === "ARMY"){
-
-   }
 });

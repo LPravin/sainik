@@ -1,5 +1,4 @@
 import datetime
-
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import render_to_string
 from django.views.generic import ListView
@@ -31,12 +30,8 @@ def homeview(request):
                                                                             'total_users':total_users})
         if user.role == 1:
             name = user.email
-            try:
-                check = LinkUserEsm.objects.get(ref_user=user)
 
-            except LinkUserEsm.DoesNotExist:
-                personalform = PersonalForm()
-            return render(request, "exservicemen/usertemplates/home.html", {'name': name})
+            return redirect('service details')
     return render(request, "exservicemen/usertemplates/home.html")
 
 
@@ -592,7 +587,6 @@ def filter_result(name, rt, rc, ro, service, trade, cq, es, et, er, sj, ms, ac, 
         t = datetime.date(dd.year - int(ac), dd.month, dd.day)
         a = a.filter(servicedetail__dob__lte=t)
     if edc:
-        print('hello')
         ed = parse_date(ed)
         if edc == '1':
             a = a.filter(servicedetail__enrollment_date=ed)
@@ -617,49 +611,187 @@ def filter_result(name, rt, rc, ro, service, trade, cq, es, et, er, sj, ms, ac, 
         elif dc == '5':
             a = a.filter(pensiondetail__discharge_date__lte=dod)
     if city:
-        a = a.filter(presentaddress__city=city)
+        a = a.filter(permanentaddress__city=city)
     if dis:
-        a = a.filter(presentaddress__district=dis)
+        a = a.filter(permanentaddress__district=dis)
     if st:
-        a = a.filter(presentaddress__state=st)
+        a = a.filter(permanentaddress__state=st)
     return a
 
 
 def filter(request):
     if request.method == "POST":
-        # form = FilterForm(request.POST)
-        a = ExServiceMen.objects.all()
         name = request.POST.get('name_contains')
+        rt = request.POST.get('registration_types')
+        rc = request.POST.get('rank_categories')
+        ro = request.POST.get('record_offices')
         service = request.POST.get('services')
-        if name:
-            a = a.filter(servicedetail__name__icontains=name)
-        if service:
-            a = a.filter(servicedetail__service_id=service)
+        trade = request.POST.get('trades')
+        cq = request.POST.get('civil_qualifications')
+        es = request.POST.get('employment_status')
+        et = request.POST.get('esm_type')
+        er = request.POST.get('employment_registration')
+        sj = request.POST.get('security_job')
+        ms = request.POST.get('martial_status')
+        ac = request.POST.get('age_completed')
+        dd = request.POST.get('dob_date')
+        ed = request.POST.get('enrollment_date')
+        edc = request.POST.get('ed_conditions')
+        dod = request.POST.get('date_of_discharge')
+        dc = request.POST.get('dod_conditions')
+        city = request.POST.get('city')
+        dis = request.POST.get('district')
+        st = request.POST.get('state')
+        a = filter_result(name, rt, rc, ro, service, trade, cq, es, et, er, sj, ms, ac, dd, ed, edc, dod, dc, city, dis,
+                          st)
         response = HttpResponse(content_type='application/ms-excel')
         response['Content-Disposition'] = 'attachment; filename="users.xls"'
         wb = xlwt.Workbook(encoding='utf-8')
-        ws = wb.add_sheet('Report')
+        ws = wb.add_sheet('Service Detail')
         row_num = 0
         font_style = xlwt.XFStyle()
         font_style.font.bold = True
-        columns = ['ESM NO', 'Name', 'Service No', 'Date of Birth', 'world_war_2']
+        columns = ['ESM NO', 'Name', 'Service No', 'Date of Birth', 'Mobile', 'ESM Type', 'Service', 'Corps', 'Record office',
+                   'Group', 'Trade', 'Rank Category', 'Rank', 'Registration Date', 'Enrollment Date']
         for col_num in range(len(columns)):
             ws.write(row_num, col_num, columns[col_num], font_style)
         font_style = xlwt.XFStyle()
-        rows = a.values_list('esm_no', 'servicedetail__name', 'servicedetail__service_no', 'servicedetail__dob')
+        rows = a.values_list('esm_no', 'servicedetail__name', 'servicedetail__service_no', 'servicedetail__dob',
+                             'servicedetail__mobile', 'servicedetail__reg_type__esm_type',
+                             'servicedetail__service__service_name', 'servicedetail__corps__corps_name',
+                             'servicedetail__record_office__record_office_name', 'servicedetail__group__trade_group',
+                             'servicedetail__trade__trade_name', 'servicedetail__rank_category__rank_category',
+                             'servicedetail__rank__rank', 'servicedetail__reg_date', 'servicedetail__enrollment_date')
         for row in rows:
             row_num += 1
             for col_num in range(len(row)):
                 ws.write(row_num, col_num, row[col_num], font_style)
+        wp = wb.add_sheet('Pension Detail')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        columns = ['ESM NO', 'Name', 'Service No', 'Unit last served', 'Discharge Date', 'Discharge_reason',
+                   'Medical Category', 'Character', 'Dishcarge Book No', 'PPO No', 'Pension Status', 'Pension Sanctioned',
+                   'Present pension', 'Whether PWD', 'Disability Pension', 'Disability percent', 'Family Pension']
+        for col_num in range(len(columns)):
+            wp.write(row_num, col_num, columns[col_num], font_style)
+        font_style = xlwt.XFStyle()
+        rows = a.values_list('esm_no', 'servicedetail__name', 'servicedetail__service_no',
+                             'pensiondetail__unit_last_served', 'pensiondetail__discharge_date',
+                             'pensiondetail__discharge_reason__reason', 'pensiondetail__medical_category__mc_name',
+                             'pensiondetail__character__character', 'pensiondetail__discharge_book_no',
+                             'pensiondetail__ppo_no','pensiondetail__pensioner_status',
+                             'pensiondetail__pension_sanctioned', 'pensiondetail__present_pension',
+                             'pensiondetail__whether_pwd', 'pensiondetail__disability_pension',
+                             'pensiondetail__disability_percent', 'pensiondetail__family_pension')
+        for row in rows:
+            row_num += 1
+            for col_num in range(len(row)):
+                wp.write(row_num, col_num, row[col_num], font_style)
+        wa = wb.add_sheet('Personal Detail')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        columns = ['ESM NO', 'Name', 'Service No', 'Gender', 'Mother', 'Father',
+                   'Religion', 'Caste category', 'Birth Place', 'Birth District', 'Birth State',
+                   'Expiry Date', 'Aadhaar No', 'Voter ID No', 'PAN No', 'CSD No', 'ECHS No', 'Identification Mark 1', 'Identification Mark 2']
+        for col_num in range(len(columns)):
+            wa.write(row_num, col_num, columns[col_num], font_style)
+        font_style = xlwt.XFStyle()
+        rows = a.values_list('esm_no', 'servicedetail__name', 'servicedetail__service_no',
+                             'personaldetail__gender',
+                             'personaldetail__mother', 'personaldetail__father',
+                             'personaldetail__religion__religion_name',
+                             'personaldetail__caste_category__caste_category_name', 'personaldetail__birth_place',
+                             'personaldetail__birth_district__district_name', 'personaldetail__birth_state__state_name',
+                             'personaldetail__expiry_date',
+                             'personaldetail__aadhaar_no', 'personaldetail__voter_id_no',
+                             'personaldetail__pan_no',
+                             'personaldetail__csd_no', 'personaldetail__echs_no', 'personaldetail__ident_mark_1',
+                             'personaldetail__ident_mark_2')
+        for row in rows:
+            row_num += 1
+            for col_num in range(len(row)):
+                wa.write(row_num, col_num, row[col_num], font_style)
+        wc = wb.add_sheet('Permanent Address')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        columns = ['ESM NO', 'Name', 'Service No', 'House No', 'House Name', 'Street Name',
+                   'City', 'District', 'State', 'Pincode', 'Telephone', 'Is present address same']
+        for col_num in range(len(columns)):
+            wc.write(row_num, col_num, columns[col_num], font_style)
+        font_style = xlwt.XFStyle()
+        rows = a.values_list('esm_no', 'servicedetail__name', 'servicedetail__service_no',
+                             'permanentaddress__house_no',
+                             'permanentaddress__house_name', 'permanentaddress__street_name',
+                             'permanentaddress__city',
+                             'permanentaddress__district__district_name', 'permanentaddress__state__state_name',
+                             'permanentaddress__pincode', 'permanentaddress__telephone',
+                             'permanentaddress__is_address_same',)
+        for row in rows:
+            row_num += 1
+            for col_num in range(len(row)):
+                wc.write(row_num, col_num, row[col_num], font_style)
+        wd = wb.add_sheet('Employment Details')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        columns = ['ESM NO', 'Name', 'Service No', 'Civil qualification', 'Specialization', 'Test passed',
+                   'Employment Status', 'Registered for Employment', 'Willing for security job', 'Sector', 'Monthly income',
+                   'Department', "Civil retirement date", 'Civil ppo no']
+        for col_num in range(len(columns)):
+            wd.write(row_num, col_num, columns[col_num], font_style)
+        font_style = xlwt.XFStyle()
+        rows = a.values_list('esm_no', 'servicedetail__name', 'servicedetail__service_no',
+                             'employmentdetail__civil_qualification__qualification',
+                             'employmentdetail__specialization__specialization', 'employmentdetail__test_passed',
+                             'employmentdetail__employment_status',
+                             'employmentdetail__willing_for_job', 'employmentdetail__security_job','employmentdetail__sector',
+                             'employmentdetail__monthly_income', 'employmentdetail__department__dep_name',
+                             'employmentdetail__civil_retirement_date', 'employmentdetail__civil_ppo_no')
+        for row in rows:
+            row_num += 1
+            for col_num in range(len(row)):
+                wd.write(row_num, col_num, row[col_num], font_style)
+        we = wb.add_sheet('Spouse Details')
+        row_num = 0
+        font_style = xlwt.XFStyle()
+        font_style.font.bold = True
+        columns = ['ESM NO', 'Name', 'Service No', 'Marital Status', 'Spouse Name', 'Spouse DOB',
+                   'Marriage Date', 'Spouse Relation', 'Spouse Qualification', 'Specialization',
+                   'Spouse employment status',
+                   'Spouse profession', 'Aadhaar No', 'Voter ID No', 'PAN No',
+                   'CSD No', 'ECHS No', 'Identification Mark 1', 'Identification Mark 2']
+        for col_num in range(len(columns)):
+            we.write(row_num, col_num, columns[col_num], font_style)
+        font_style = xlwt.XFStyle()
+        rows = a.values_list('esm_no', 'servicedetail__name', 'servicedetail__service_no',
+                             'spousedetail__marital_status',
+                             'spousedetail__spouse_name', 'spousedetail__dob',
+                             'spousedetail__marriage_date',
+                             'spousedetail__spouse_relation', 'spousedetail__spouse_qualification__qualification',
+                             'spousedetail__specialization__specialization',
+                             'spousedetail__spouse_employment_status', 'spousedetail__spouse_profession',
+                             'spousedetail__aadhaar_no','spousedetail__voter_id', 'spousedetail__pan_no',
+                             'spousedetail__csd_no', 'spousedetail__echs_no', 'spousedetail__ident_mark_1',
+                             'spousedetail__ident_mark_2')
+        for row in rows:
+            row_num += 1
+            for col_num in range(len(row)):
+                we.write(row_num, col_num, row[col_num], font_style)
         wb.save(response)
         return response
 
     else:
         form = FilterForm
-        return render(request, 'exservicemen/officertemplates/filter_esm.html', {'form':form})
+        return render(request, 'exservicemen/officertemplates/filter_esm.html', {'form': form})
 
 
 def filter_esm(request):
+    wo = request.user
+    zboard = WelfareOfficer.objects.get(ref=wo).zila_board
+    zsbcode = zboard.code
     name = request.GET.get('name')
     rt = request.GET.get('rt')
     rc = request.GET.get('rc')
@@ -682,6 +814,7 @@ def filter_esm(request):
     dis = request.GET.get('dis')
     st = request.GET.get('st')
     a = filter_result(name, rt, rc, ro, service, trade, cq, es, et, er, sj, ms, ac, dd, ed, edc, dod, dc, city, dis, st)
+    a = a.filter(zila_board=zboard)
     return render(request, 'exservicemen/officertemplates/filter_esm_list.html', {'esm_list': a})
 
 

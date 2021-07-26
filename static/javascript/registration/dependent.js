@@ -17,6 +17,16 @@ $(document).on("submit", "#dep_update_form", function () {
     });
     return false;
   });
+function load_deps(){
+   const url = 'ajax/load_dependent';
+        $.ajax({
+            url: url,
+            success: function (data) {
+                $('#dep_list').html(data);
+
+            }
+        });
+    }
 $(document).ready(function(){
 load_deps();
  });
@@ -40,16 +50,6 @@ $("#add_dependent").on("submit", ".dep-add-form", function () {
     return false;
   });
 
-   function load_deps(){
-   const url = 'ajax/load_dependent';
-        $.ajax({
-            url: url,
-            success: function (data) {
-                $('#dep_list').html(data);
-
-            }
-        });
-    }
 
 
    $("#add_dep").click(function(){
@@ -81,20 +81,18 @@ $(document).on('click','.edit_dep', function (event){
             }
         })
     });
-
-$(document).on("click", ".delete", function () {
-    var form = $(this);
-    $.ajax({
-      url: form.attr('data-url'),
-      success: function (data) {
-            $('#dep_list').html(data);
-    }})
-  });
-
 $(document).on("click", "#cancel", function () {
     $(".add-popup").removeClass('active');
   });
 
 $(document).on("click", "#cancell", function () {
     $(".popup").removeClass('active');
+  });
+$(document).on("click", ".delete", function () {
+    var form = $(this);
+    $.ajax({
+      url: form.attr('data-url'),
+      success: function (data) {
+            load_deps();
+    }})
   });

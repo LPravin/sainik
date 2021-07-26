@@ -66,14 +66,17 @@
           <div class="input-box" id="div_id_ppo_no">
             <span class="details">PPO No</span>
             {{ form.ppo_no }}
+              {{ form.ppo_no.errors }}
           </div>
           <div class="input-box" id="div_id_pension_sanctioned">
             <span class="details">Pension Sanctioned</span>
             {{ form.pension_sanctioned }}
+              {{ form.pension_sanctioned.errors }}
           </div>
           <div class="input-box" id="div_id_present_pension">
             <span class="details">Present Pension</span>
             {{ form.present_pension }}
+              {{ form.present_pension.errors }}
           </div>
         <div class="input-box" id="div_id_whether_pwd">
             <span class="details">Whether Person with Disability?</span>
@@ -82,10 +85,12 @@
           <div class="input-box" id="div_id_disability_pension">
             <span class="details">Disability Pension</span>
             {{ form.disability_pension }}
+              {{ form.disability_pension.errors }}
           </div>
           <div class="input-box" id="div_id_disability_percent">
             <span class="details">Percentage of Disability</span>
             {{ form.disability_percent }}
+              {{ form.disability_percent.errors }}
           </div>
         </div>
         <div class="btn-box">

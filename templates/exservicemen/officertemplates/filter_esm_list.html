@@ -1,9 +1,9 @@
 {% if esm_list %}
 {% for esm in esm_list %}
-                <tr>
+                <tr bgcolor="#1e90ff">
 
                     <td style="text-align: left; padding:20px 8px;"> {{ esm.esm_no }}</td>
-                    <td style="text-align: left; padding:20px 8px;">{{ esm.servicedetail.name }}</td>
+                  <td style="text-align: left; padding:20px 8px; color: navy; font-size: 32px">{{ esm.servicedetail.name }}</td>
                     <td style="text-align: left; padding:20px 8px;"> {{ esm.get_reg_category_display }}</td>
                     <td style="text-align: left; padding:20px 8px;">{{ esm.servicedetail.mobile }}</td>
                   <td style="text-align: left; padding:20px 8px;">
